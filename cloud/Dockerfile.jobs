@@ -1,0 +1,19 @@
+# syntax=docker/dockerfile:1
+FROM python:3.10-slim
+ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1 OMP_NUM_THREADS=8
+RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg libsndfile1 && rm -rf /var/lib/apt/lists/*
+WORKDIR /srv
+COPY requirements.txt ./
+RUN pip install pip==25.0.1 && pip install torch==2.0.1+cpu torchaudio==2.0.2+cpu --extra-index-url https://download.pytorch.org/whl/cpu && pip install -r requirements.txt requests==2.32.3 librosa==0.11.0 soundfile==0.13.1
+RUN python -c "from demucs.pretrained import get_model; get_model('htdemucs_ft'); get_model('htdemucs_6s')"
+# MuScriptor needs torch>=2.3 and numpy>=2, so it gets its own interpreter.
+RUN python -m venv /opt/muscriptor && /opt/muscriptor/bin/pip install pip==25.0.1 && /opt/muscriptor/bin/pip install torch==2.5.1+cpu --extra-index-url https://download.pytorch.org/whl/cpu && /opt/muscriptor/bin/pip install muscriptor==0.4.0
+# Gated CC BY-NC 4.0 weights: the build reads a Hugging Face token secret; it is not stored in the image.
+ARG MUSCRIPTOR_MODEL=large
+RUN --mount=type=secret,id=hf_token HF_TOKEN="$(cat /run/secrets/hf_token)" /opt/muscriptor/bin/python -c "import sys; from huggingface_hub import hf_hub_download as get; [get('MuScriptor/muscriptor-'+sys.argv[1], f, local_dir='/opt/muscriptor-weights') for f in ('model.safetensors', 'config.json')]" "$MUSCRIPTOR_MODEL"
+ENV MUSCRIPTOR_PYTHON=/opt/muscriptor/bin/python MUSCRIPTOR_WEIGHTS=/opt/muscriptor-weights/model.safetensors MUSCRIPTOR_MODEL=${MUSCRIPTOR_MODEL}
+COPY install_chordino.sh ./
+RUN sh install_chordino.sh
+ENV VAMP_PATH=/usr/local/lib/vamp
+COPY full_song.py music.py objects.py harmony.py muscriptor_runner.py ./
+CMD ["python", "full_song.py"]

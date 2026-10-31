@@ -16,13 +16,16 @@ import yt_dlp
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field, SecretStr
+from pydantic import BaseModel, Field, SecretStr, model_validator
 
 from app.tablature import to_tab
 from app.intro_refinement import refine_intro
 from app.vocal_timing import beat_grid, refine_vocal_timing
 from app.fingerstyle_evidence import analyze_backing as analyze_fingerstyle_backing
 from app.ai_fingerstyle import request_review, ReviewError
+from app.song_store import SongStore
+from app.song_manager import SongManager
+from app.song_api import make_router
 
 ROOT = Path(__file__).resolve().parent.parent
 RUNTIME = ROOT / '.runtime'
@@ -32,14 +35,57 @@ app.mount('/static', StaticFiles(directory=ROOT / 'app/static'), name='static')
 jobs = {}
 fingerstyle_cache = {}
 lock = threading.Lock()
+song_store = SongStore(RUNTIME)
+song_manager = SongManager(song_store, lambda job_id: find_job(job_id))
+app.include_router(make_router(song_store, song_manager))
+
+
+@app.on_event('startup')
+def recover_song_tasks():
+    song_manager.start()
+
+
+@app.on_event('shutdown')
+def stop_song_queue():
+    song_manager.stop_event.set()
+
+
+@app.get('/v2')
+def song_workspace():
+    return FileResponse(ROOT / 'app/static/song.html')
+
+
+@app.get('/api/video-info')
+def video_info(url: str):
+    try:
+        if not valid_youtube_url(url): raise ValueError('Invalid URL')
+    except ValueError:
+        raise HTTPException(400, '请输入有效的 YouTube 视频链接。') from None
+    try:
+        with yt_dlp.YoutubeDL({'quiet': True, 'no_warnings': True, 'noplaylist': True,
+                              'socket_timeout': 20, 'retries': 1, 'js_runtimes': {'node': {}}}) as downloader:
+            info = downloader.extract_info(url, download=False)
+        return {'title': info.get('title'), 'duration': info.get('duration'),
+                'is_live': bool(info.get('is_live') or info.get('live_status') in ('is_live', 'is_upcoming')),
+                'full_song_allowed': bool(info.get('duration') and info['duration'] <= 600 and not info.get('is_live'))}
+    except yt_dlp.utils.DownloadError:
+        raise HTTPException(400, '无法读取视频信息，请检查链接和网络。') from None
 
 
 class JobRequest(BaseModel):
     url: str
     start: float = Field(default=0, ge=0, le=86400, allow_inf_nan=False)
-    duration: float = Field(default=30, ge=5, le=60, allow_inf_nan=False)
+    duration: float = Field(default=30, ge=5, le=600, allow_inf_nan=False)
+    pipeline_version: int = Field(default=1, ge=1, le=2)
+    mode: str = Field(default='segment', pattern='^(segment|full)$')
     include_intro: bool = True
     reuse_job_id: str | None = None
+
+    @model_validator(mode='after')
+    def legacy_limit(self):
+        if self.pipeline_version == 1 and (self.duration > 60 or self.mode != 'segment'):
+            raise ValueError('旧版仅支持 5–60 秒片段。')
+        return self
 
 
 def valid_youtube_url(url):
@@ -58,6 +104,9 @@ def update(job_id, **fields):
 def find_job(job_id):
     if not re.fullmatch(r'[0-9a-f]{32}', job_id):
         return None
+    song = song_store.get(job_id)
+    if song:
+        return song
     with lock:
         job = jobs.get(job_id)
         if job:
@@ -194,6 +243,17 @@ def create_job(req: JobRequest):
         valid = False
     if not valid:
         raise HTTPException(400, '请输入有效的 YouTube 视频链接。')
+    if req.pipeline_version == 2:
+        if req.reuse_job_id:
+            prior = find_job(req.reuse_job_id)
+            if not prior or prior.get('stage') not in ('done', 'partial') or prior.get('source_url') != req.url:
+                raise HTTPException(400, '只能复用同一视频的已完成结果。')
+        try:
+            return song_manager.create(req)
+        except RuntimeError as exc:
+            raise HTTPException(400, str(exc)) from None
+    if req.duration > 60 or req.mode != 'segment':
+        raise HTTPException(400, '旧版仅支持 5–60 秒片段，整曲请使用新版试用入口。')
     if req.reuse_job_id:
         previous = find_job(req.reuse_job_id)
         if not previous or previous.get('stage') != 'done' or not previous.get('notes'):
@@ -399,7 +459,7 @@ def delete_fingerstyle_review(job_id: str,request: Request):
 @app.get('/api/jobs/{job_id}/{kind}')
 def reference_audio(job_id: str, kind: str):
     job = find_job(job_id)
-    if not job or job.get('stage') != 'done' or kind not in ('original', 'backing'):
+    if not job or job.get('stage') not in ('done', 'partial') or kind not in ('original', 'backing'):
         raise HTTPException(404, '对照音频不存在。')
     path = RUNTIME / job_id / f'{kind}.wav'
     if not path.is_file():
@@ -412,6 +472,8 @@ def edit_notes(job_id: str, edits: PitchEdits):
     job = find_job(job_id)
     if not job or job.get('stage') != 'done':
         raise HTTPException(404, '结果不存在。')
+    if job.get('schema_version') == 2:
+        raise HTTPException(409, '请使用新版工作台按音符 ID 编辑，避免覆盖修订。')
     old = job.get('notes', [])
     if len(edits.pitches) != len(old) or any(p < 40 or p > 84 for p in edits.pitches):
         raise HTTPException(400, '音符数量或音高不正确。')
