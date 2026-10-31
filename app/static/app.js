@@ -325,6 +325,7 @@ async function shiftNote(amount) {
 }
 $('lower-note').onclick=()=>shiftNote(-1); $('raise-note').onclick=()=>shiftNote(1);
 function renderResult(job) {
+  let upgrade=$('upgrade-song');if(!upgrade){upgrade=document.createElement('a');upgrade.id='upgrade-song';upgrade.className='practice-button';$('result').prepend(upgrade);}upgrade.hidden=!!job.practice;upgrade.href=`/v2?reuse=${encodeURIComponent(job.id)}`;upgrade.textContent='创建整曲新版结果，保留这份旋律';
   const newlyLoaded=currentJob?.id!==job.id;
   currentJob=job;
   if(newlyLoaded)$('other-accompaniment').open=!!job.practice;
@@ -358,6 +359,7 @@ async function poll(id) {
   try {
     const response=await fetch(`/api/jobs/${encodeURIComponent(id)}`); if(!response.ok) throw Error('无法读取任务状态，请刷新页面。');
     const job=await response.json();
+    if(job.schema_version===2){location.replace(`/v2?job=${encodeURIComponent(job.id)}`);return;}
     if(job.stage==='done') {
       $('progress-title').textContent='核对伴奏并加载吉他音色';
       const evidence=job.notes.length && job.accompaniment ? fetch(`/api/jobs/${encodeURIComponent(job.id)}/fingerstyle-evidence`).then(r=>r.ok?r.json():{roots:[]}).catch(()=>({roots:[]})) : Promise.resolve({roots:[]});

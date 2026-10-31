@@ -1,5 +1,69 @@
 # 弦迹 · YouTube 旋律转吉他谱
 
+## 整曲分轨与指弹工作台（v2 试用）
+
+打开 [整曲工作台](http://127.0.0.1:8000/v2)。支持最长 10 分钟的整曲或 5–600 秒片段。四声部 `htdemucs_ft` 与六声部 `htdemucs_6s` 分别识别，人声、器乐和贝斯保留独立音符及来源；鼓仅用于节奏参考。按 30 秒核心区间、两侧各 3 秒上下文处理，检查点保存在私有 Cloud Storage。
+
+默认自动旋律使用四声部证据。六声部钢琴、吉他候选可按段试听、手动选择；通过真实歌曲质量验收后才能启用双模型自动选轨。旋律与指弹分开保存，指弹在本机后端生成并检查同弦、品距和同时发声限制。分离与识谱仍有误差，见 [质量验收记录](docs/song-v2-quality.md)。
+
+### MuScriptor 器乐识谱
+
+整曲任务在 Demucs 分轨之后，再用 [MuScriptor](https://github.com/muscriptor/muscriptor)（Kyutai × Mirelo，0.4.0）转录两遍：整曲混音一遍，输出按乐器分组的 `muscriptor-吉他/钢琴/贝斯/人声/其他` 轨；六声部吉他分轨限定为吉他再转一遍，得到 `muscriptor_stem-guitar`。它们与 Demucs + Basic Pitch 的同名声部互相交叉核对。MuScriptor 不给逐音分数，所以用音符前三个泛音相对本音区最强频点的比例检查音频支持，和弦内音不会因整帧最响音而被压低。它在独立的 Python 环境里运行，因为它要求 torch≥2.3、numpy≥2，与 Basic Pitch 冲突。
+
+- 权重按 CC BY-NC 4.0 授权，只能非商业使用，并且需要先在 Hugging Face 上接受 [模型许可](https://huggingface.co/MuScriptor/muscriptor-large)。部署前，把有读取权限的 token 存进 Secret Manager。构建时读取，不写入镜像：
+
+  ```sh
+  printf %s "$HF_TOKEN" | gcloud secrets create muscriptor-hf-token --data-file=- --project 你的项目ID
+  ```
+
+- `deploy_song.py --muscriptor-model small|medium|large` 选择权重，默认 `large`（1.4B 参数、约 5.5 GB，准确率最高）。large 每个规格都要单独在 Hugging Face 页面接受许可。官方建议 large 使用 GPU；当前 Job 为 8 vCPU / 32 GiB，纯 CPU 下整曲可能接近 6 小时任务上限，耗时需在真实部署中记录，必要时改用 `medium`。
+- `SONG_MUSCRIPTOR_VALIDATED=0`（默认）时，MuScriptor 轨只作为可手选的候选。设为 `1` 后，新任务的器乐自动选轨和指弹加花改用 MuScriptor 整曲轨，人声仍使用四声部 pYIN。是否开启以 `scripts/evaluate_song.py` 的 `muscriptor_auto` 门槛为准。
+
+### 部署独立整曲任务
+
+需要项目计费开启及创建 Cloud Run Jobs、存储桶、Artifact Registry 和 Cloud Build 的权限。不会修改旧版 Cloud Run 服务。部署脚本创建专用 Job 服务账号和 7 天生命周期的私有存储桶；CPU 任务配置 8 vCPU / 32 GiB、6 小时超时、单任务、一次自动重试。只有运行时使用计算资源，模型构建、存储和执行仍按 Google Cloud 计费。
+
+```powershell
+gcloud auth login
+.venv-win/Scripts/python.exe scripts/deploy_song.py 你的项目ID --write-env
+```
+
+脚本成功后向 `.env` 写入 `SONG_BUCKET`、`SONG_JOB_RESOURCE` 和 `SONG_DUAL_VALIDATED=0`。Linux/macOS 同样可用对应虚拟环境 Python 执行此脚本。当前项目若报 `UREQ_PROJECT_BILLING_NOT_OPEN`，需恢复计费后重跑；此错误发生在资源构建前。
+
+运行本机服务（Windows）：
+
+```powershell
+.venv-win/Scripts/python.exe -m uvicorn app.main:app --env-file .env --host 127.0.0.1 --port 8000
+```
+
+本机登录用户需要该 Job 的执行、带参数执行及取消权限，以及专用桶的对象读写权限。部署用户通常已有；权限受限账号需管理员授予 Job 级 `roles/run.developer`、Job 服务账号的 `roles/iam.serviceAccountUser` 及桶级 `roles/storage.objectAdmin`。浏览器不会收到 Google 凭证。不要将本机服务暴露到公网。
+
+### 任务、编辑和导出
+
+- 任务记录和修订保存在 `.runtime/jobs.sqlite3`；关页不取消任务，本机重启后自动恢复查询。下载尚未完成时关闭本机服务会在重启后继续准备；云端已开始的分析独立运行。
+- 音频产物单独下载并校验 SHA-256。任务失败可恢复已有检查点；提交结果不明确时仅查询现有执行，不盲目重复启动。可取消任务，云端执行与区间间的取消检查共同停止计算。
+- 旋律来源面板允许指定区间使用某轨、休止或恢复自动；该区间的逐音修正会被替换，外部修改保留。可补音、删音、改音及撤销。修订号过期会返回 409，防止多页覆盖。
+- 导出原音高主旋律 MIDI、吉他指弹 MIDI、多轨 MIDI、单独分轨 MIDI 及带 JSON 的 ZIP。MIDI Type 1 使用 120 BPM / 960 PPQ 按秒映射，不强制量化；滑音与弦品信息保存在 JSON。双模型重复轨是候选，不能全部同时作为成品播放。
+- AI 审阅只在用户点击时处理指定最长 30 秒，密钥不落盘；选择或编配改变后旧建议不再应用。AI 建议、试听、谱面和指弹 MIDI 共享当前修订。
+- 旧结果继续在旧版页面打开，可使用 `/v2?reuse=旧任务ID` 创建覆盖开头至旧片段结尾的新结果并保留旧谱旋律和指位。
+- 清理入口删除该任务本机音频和分析文件，保留修订记录；清理后不能继续试听、编辑或导出，需要重新处理。云端对象按 7 天生命周期回收。
+
+新增接口详见 `app/song_api.py`。创建任务传 `pipeline_version:2`、`mode:full|segment`；旧调用保持默认 v1。AI 的新版区间接口为 `POST/DELETE /api/jobs/{id}/ai-review-range`，与旧版整段审阅隔离。新结果从旧地址打开时自动转到新版。
+
+### 开发验证与回滚
+
+```powershell
+.venv-win/Scripts/python.exe -m pip install -r requirements-dev.txt
+.venv-win/Scripts/python.exe -m pytest -q
+node tests/test_accompaniment.cjs
+node tests/test_fingerstyle.cjs
+node tests/test_legato.cjs
+```
+
+和弦音频集成测试需要 Vamp Host 和 Chordino 插件，本机不具备时会报依赖缺失；云端镜像通过原有安装脚本安装。v2 模型推理需要在构建后的 Linux 镜像上验证，普通单元测试不下载模型。
+
+回滚时移除首页整曲试用入口或切回旧页面即可，旧任务 API 和云端服务独立运行；不要删除 SQLite 和 v2 本机产物。`SONG_DUAL_VALIDATED=0` 可关闭新任务的双模型自动选择，不会删除六声部候选。
+
 本机网页 + 私有 Google Cloud Run 服务。提取视频中的一段人声旋律，生成吉他六线谱，并根据分离后的伴奏估计和弦、节拍和上下扫弦。可试听分离人声、旋律、扫弦和旋律与扫弦合奏。识谱是自动生成的草稿，需要听音核对。
 
 ## 运行本机网页
