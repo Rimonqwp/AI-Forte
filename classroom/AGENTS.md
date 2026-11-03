@@ -51,3 +51,7 @@ Clicking or focusing the hero search field opens a panel directly below it. Keep
 Search suggestion rows show the song title and artist, without instrument labels such as piano or guitar on the right.
 
 Opening and closing search suggestions must keep the hero illustration and surrounding page stationary. Keep the hero's overflow behavior stable; clip only the illustration in its own non-scrolling frame, rather than toggling the hero between hidden and visible overflow.
+
+## Score library reference
+
+The score search page follows `design-reference/score-library.png`: a shallow illustrated banner, 250px filter sidebar, five-column score grid at the reference desktop width, and related forum recommendations below. Keep each illustration and thumbnail as a separate asset under `public/assets/score-library/`; do not flatten the page into a screenshot. Preserve the existing home page design. Counts must reflect the actual available demo data.
