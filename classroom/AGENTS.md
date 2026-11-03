@@ -22,9 +22,9 @@ Use one responsive content container for the header, five learning entries, scor
 
 Scores and community panel titles need visible space above them. Match the actual visible gap above the title row to the left and right content inset at every breakpoint. Use the shared panel inset for top padding and let title rows size to their contents with bottom padding, rather than vertically centering them in fixed-height rows that add extra space above the title.
 
-The user removed the entire popular learning recommendation strip from the hero. Keep it absent and retain the five learning entry cards. Preserve the original hero height (480px desktop, 520px tablet, 640px compact tablet, 633px phone); do not shorten the hero when removing the strip. Center the heading, promises and search panel together vertically in the area above the learning cards, using a flex container rather than independent top offsets.
+The user removed the entire popular learning recommendation strip from the hero. Keep it absent and retain the five learning entry cards. The latest home-banner feedback supersedes the original tall hero: use the same banner component, dimensions, illustration, heading, search panel, popular terms and note card as the score library. Place the five learning cards in their own section directly below this shared banner.
 
-The hero search panel order is: heading, popular search chips, search input/button, then supported-input help text. Keep a consistent 10px vertical gap on desktop and 8px on phone, with content-sized panel height and no extra child margins. Preserve vertical centering of the whole hero introduction.
+The shared banner follows the score library order: title and callout, then search input/button with popular terms below it. Preserve search suggestions, local search history and link handling without changing the banner dimensions when suggestions open.
 
 ## Footer
 
@@ -54,4 +54,4 @@ Opening and closing search suggestions must keep the hero illustration and surro
 
 ## Score library reference
 
-The score search page follows `design-reference/score-library.png`: a shallow illustrated banner, 250px filter sidebar, five-column score grid at the reference desktop width, and related forum recommendations below. Keep each illustration and thumbnail as a separate asset under `public/assets/score-library/`; do not flatten the page into a screenshot. Preserve the existing home page design. Counts must reflect the actual available demo data.
+The score search page follows `design-reference/score-library.png`: a shallow illustrated banner, 250px filter sidebar, five-column score grid at the reference desktop width, and related forum recommendations below. Keep each illustration and thumbnail as a separate asset under `public/assets/score-library/`; do not flatten the page into a screenshot. Home and the score library now share the exact banner; keep the remaining home sections intact. Counts must reflect the actual available demo data.

@@ -25,7 +25,9 @@ function Highlight({ text, query }) {
   return <>{text.slice(0, index)}<mark>{text.slice(index, index + term.length)}</mark>{text.slice(index + term.length)}</>;
 }
 
-export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
+export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink, variant = 'default' }) {
+  const banner = variant === 'banner';
+  const searches = banner ? [...popularSearches, '起风了'] : popularSearches;
   const [expanded, setExpanded] = useState(false);
   const [history, setHistory] = useState(readHistory);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -111,13 +113,15 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
     }
   };
 
-  return <div className="search-panel" ref={panel} onBlur={event => {
+  const hotSearch = <div className={banner ? 'hot-search results-hot-search' : 'hot-search'}><b><Fire size={banner ? 21 : 18} weight="duotone"/>热门搜索：</b>{searches.map(text => <button key={text} onClick={() => submit(text)}>{text}</button>)}</div>;
+
+  return <div className={banner ? 'search-panel results-search-panel' : 'search-panel'} ref={panel} onBlur={event => {
     if (!event.currentTarget.contains(event.relatedTarget)) setExpanded(false);
   }}>
-    <h2><MagnifyingGlass size={32}/>搜索你想学习的歌曲或乐谱</h2>
-    <div className="hot-search"><b><Fire size={18} weight="duotone"/>热门搜索：</b>{popularSearches.map(text => <button key={text} onClick={() => submit(text)}>{text}</button>)}</div>
+    {!banner && <h2><MagnifyingGlass size={32}/>搜索你想学习的歌曲或乐谱</h2>}
+    {!banner && hotSearch}
     <div className="search-control">
-      <form className={`search-form${expanded ? ' is-expanded' : ''}`} onClick={() => setExpanded(true)} onSubmit={event => {
+      <form className={`search-form${banner ? ' results-search-form' : ''}${expanded ? ' is-expanded' : ''}`} onClick={() => setExpanded(true)} onSubmit={event => {
         event.preventDefault();
         if (!composing.current) submit(query);
       }}>
@@ -128,7 +132,7 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
           setExpanded(true);
         }} onFocus={() => setExpanded(true)} onKeyDown={handleKeyDown}
           onCompositionStart={() => { composing.current = true; }} onCompositionEnd={() => { composing.current = false; }}
-          placeholder="搜索歌曲、歌手、谱子，或粘贴音乐 URL..." autoComplete="off" spellCheck={false}
+          placeholder={banner ? '搜索歌曲、歌手或乐谱' : '搜索歌曲、歌手、谱子，或粘贴音乐 URL...'} autoComplete="off" spellCheck={false}
           aria-label="搜索歌曲或乐谱" role="combobox" aria-autocomplete="list" aria-expanded={expanded}
           aria-controls={expanded ? 'music-search-results' : undefined} aria-activedescendant={expanded && activeIndex >= 0 ? `music-search-option-${activeIndex}` : undefined}/>
         {query && <button type="button" className="search-clear" aria-label="清空搜索内容" onClick={() => {
@@ -140,7 +144,7 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
       {expanded && <div className="search-suggestions" aria-label="搜索建议">
         <section className="suggestion-section" aria-labelledby="popular-search-heading">
           <div className="suggestion-heading"><h3 id="popular-search-heading"><Fire size={17} weight="duotone"/>热门搜索</h3><button className="suggestion-close" aria-label="关闭搜索建议" onClick={() => setExpanded(false)}><X size={17}/></button></div>
-          <div className="suggestion-chips popular-chips">{popularSearches.map((text, index) => <button key={text} onClick={() => submit(text)}><span>{index + 1}</span>{text}</button>)}</div>
+          <div className="suggestion-chips popular-chips">{searches.map((text, index) => <button key={text} onClick={() => submit(text)}><span>{index + 1}</span>{text}</button>)}</div>
         </section>
         <section className="suggestion-section" aria-labelledby="search-history-heading">
           <div className="suggestion-heading"><h3 id="search-history-heading"><ClockCounterClockwise size={17}/>搜索历史</h3>{history.length > 0 && <button className="clear-history" onClick={() => {
@@ -166,6 +170,7 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
         </section>
       </div>}
     </div>
-    <p className="search-help">支持歌曲名、歌手、乐器或粘贴音乐链接（如 YouTube / Bilibili 等）</p>
+    {banner && hotSearch}
+    {!banner && <p className="search-help">支持歌曲名、歌手、乐器或粘贴音乐链接（如 YouTube / Bilibili 等）</p>}
   </div>;
 }
