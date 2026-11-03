@@ -1,0 +1,311 @@
+{
+  "url": "http://127.0.0.1:4173/static/classroom/",
+  "checks": [
+    {
+      "check": "Title live match",
+      "pass": true
+    },
+    {
+      "check": "Artist live match",
+      "pass": true
+    },
+    {
+      "check": "Instrument live match",
+      "pass": true
+    },
+    {
+      "check": "Suggestion applies search and closes popup",
+      "pass": true
+    },
+    {
+      "check": "Selected query appears in history",
+      "pass": true
+    },
+    {
+      "check": "Escape closes popup",
+      "pass": true
+    },
+    {
+      "check": "Click outside closes popup",
+      "pass": true
+    },
+    {
+      "check": "History persists after reload",
+      "pass": true
+    },
+    {
+      "check": "Popular term fills field and searches",
+      "pass": true
+    },
+    {
+      "check": "History term repeats search",
+      "pass": true
+    },
+    {
+      "check": "Repeated searches are deduplicated and recent first",
+      "pass": true
+    },
+    {
+      "check": "Delete single history term",
+      "pass": true
+    },
+    {
+      "check": "Clear history shows empty state",
+      "pass": true
+    },
+    {
+      "check": "No matching results state",
+      "pass": true
+    },
+    {
+      "check": "Clearing input restores recommendations",
+      "pass": true
+    },
+    {
+      "check": "Arrow keys and Enter select matching song",
+      "pass": true
+    },
+    {
+      "check": "Search button trims input and applies artist matching",
+      "pass": true
+    },
+    {
+      "check": "Music links preserve the existing workbench flow",
+      "pass": true
+    },
+    {
+      "check": "History clearing persists after reload",
+      "pass": true
+    },
+    {
+      "check": "360px mobile panel stays within viewport and scrolls internally",
+      "pass": true
+    },
+    {
+      "check": "Mobile score-type matching",
+      "pass": true
+    },
+    {
+      "check": "Mobile result selection applies search",
+      "pass": true
+    },
+    {
+      "check": "Suggestion rows show titles and artists without instrument labels",
+      "pass": true
+    },
+    {
+      "check": "Opening and closing keep hero art and all surrounding content at identical positions",
+      "pass": true
+    },
+    {
+      "check": "Three repeated open-close cycles remain stationary",
+      "pass": true
+    }
+  ],
+  "stationaryHero": {
+    "closed": {
+      "art": {
+        "bottom": 542,
+        "height": 496,
+        "left": 0,
+        "right": 1469,
+        "top": 46,
+        "width": 1469,
+        "x": 0,
+        "y": 46
+      },
+      "bodyHeight": 1466.09375,
+      "content": {
+        "bottom": 415,
+        "height": 361,
+        "left": 0,
+        "right": 1469,
+        "top": 54,
+        "width": 1469,
+        "x": 0,
+        "y": 54
+      },
+      "features": {
+        "bottom": 522,
+        "height": 107,
+        "left": 100.5,
+        "right": 1368.5,
+        "top": 415,
+        "width": 1268,
+        "x": 100.5,
+        "y": 415
+      },
+      "frame": {
+        "bottom": 534,
+        "height": 480,
+        "left": 0,
+        "right": 1469,
+        "top": 54,
+        "width": 1469,
+        "x": 0,
+        "y": 54
+      },
+      "overflow": "visible",
+      "scores": {
+        "bottom": 886.09375,
+        "height": 352.09375,
+        "left": 75.5,
+        "right": 1393.5,
+        "top": 534,
+        "width": 1318,
+        "x": 75.5,
+        "y": 534
+      },
+      "scrollTop": 0,
+      "scrollY": 0,
+      "viewport": {
+        "height": 1255,
+        "width": 1480
+      }
+    },
+    "open": {
+      "art": {
+        "bottom": 542,
+        "height": 496,
+        "left": 0,
+        "right": 1469,
+        "top": 46,
+        "width": 1469,
+        "x": 0,
+        "y": 46
+      },
+      "bodyHeight": 1466.09375,
+      "content": {
+        "bottom": 415,
+        "height": 361,
+        "left": 0,
+        "right": 1469,
+        "top": 54,
+        "width": 1469,
+        "x": 0,
+        "y": 54
+      },
+      "features": {
+        "bottom": 522,
+        "height": 107,
+        "left": 100.5,
+        "right": 1368.5,
+        "top": 415,
+        "width": 1268,
+        "x": 100.5,
+        "y": 415
+      },
+      "frame": {
+        "bottom": 534,
+        "height": 480,
+        "left": 0,
+        "right": 1469,
+        "top": 54,
+        "width": 1469,
+        "x": 0,
+        "y": 54
+      },
+      "overflow": "visible",
+      "scores": {
+        "bottom": 886.09375,
+        "height": 352.09375,
+        "left": 75.5,
+        "right": 1393.5,
+        "top": 534,
+        "width": 1318,
+        "x": 75.5,
+        "y": 534
+      },
+      "scrollTop": 0,
+      "scrollY": 0,
+      "viewport": {
+        "height": 1255,
+        "width": 1480
+      }
+    },
+    "closedAgain": {
+      "art": {
+        "bottom": 542,
+        "height": 496,
+        "left": 0,
+        "right": 1469,
+        "top": 46,
+        "width": 1469,
+        "x": 0,
+        "y": 46
+      },
+      "bodyHeight": 1466.09375,
+      "content": {
+        "bottom": 415,
+        "height": 361,
+        "left": 0,
+        "right": 1469,
+        "top": 54,
+        "width": 1469,
+        "x": 0,
+        "y": 54
+      },
+      "features": {
+        "bottom": 522,
+        "height": 107,
+        "left": 100.5,
+        "right": 1368.5,
+        "top": 415,
+        "width": 1268,
+        "x": 100.5,
+        "y": 415
+      },
+      "frame": {
+        "bottom": 534,
+        "height": 480,
+        "left": 0,
+        "right": 1469,
+        "top": 54,
+        "width": 1469,
+        "x": 0,
+        "y": 54
+      },
+      "overflow": "visible",
+      "scores": {
+        "bottom": 886.09375,
+        "height": 352.09375,
+        "left": 75.5,
+        "right": 1393.5,
+        "top": 534,
+        "width": 1318,
+        "x": 75.5,
+        "y": 534
+      },
+      "scrollTop": 0,
+      "scrollY": 0,
+      "viewport": {
+        "height": 1255,
+        "width": 1480
+      }
+    },
+    "cycles": [
+      {
+        "cycle": 1,
+        "openingDiff": {},
+        "closingDiff": {}
+      },
+      {
+        "cycle": 2,
+        "openingDiff": {},
+        "closingDiff": {}
+      },
+      {
+        "cycle": 3,
+        "openingDiff": {},
+        "closingDiff": {}
+      }
+    ]
+  },
+  "build": "npm run build: passed",
+  "packaging": "npm run test:sites: 4 passed",
+  "consoleErrors": [],
+  "screenshots": [
+    "search-suggestions-desktop.png",
+    "search-suggestions-mobile.png"
+  ]
+}
