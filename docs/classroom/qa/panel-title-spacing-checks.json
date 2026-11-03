@@ -1,0 +1,82 @@
+[
+  {
+    "overflow": false,
+    "panels": [
+      {
+        "id": "scores",
+        "leftGap": 25,
+        "paddingLeft": "24px",
+        "paddingTop": "24px",
+        "topGap": 25
+      },
+      {
+        "id": "community",
+        "leftGap": 25,
+        "paddingLeft": "24px",
+        "paddingTop": "24px",
+        "topGap": 25
+      }
+    ],
+    "width": 1362
+  },
+  {
+    "overflow": false,
+    "panels": [
+      {
+        "id": "scores",
+        "leftGap": 19,
+        "paddingLeft": "18px",
+        "paddingTop": "18px",
+        "topGap": 19
+      },
+      {
+        "id": "community",
+        "leftGap": 19,
+        "paddingLeft": "18px",
+        "paddingTop": "18px",
+        "topGap": 19
+      }
+    ],
+    "width": 1024
+  },
+  {
+    "overflow": false,
+    "panels": [
+      {
+        "id": "scores",
+        "leftGap": 15,
+        "paddingLeft": "14px",
+        "paddingTop": "14px",
+        "topGap": 15
+      },
+      {
+        "id": "community",
+        "leftGap": 15,
+        "paddingLeft": "14px",
+        "paddingTop": "14px",
+        "topGap": 15
+      }
+    ],
+    "width": 768
+  },
+  {
+    "overflow": false,
+    "panels": [
+      {
+        "id": "scores",
+        "leftGap": 11,
+        "paddingLeft": "10px",
+        "paddingTop": "10px",
+        "topGap": 11
+      },
+      {
+        "id": "community",
+        "leftGap": 11,
+        "paddingLeft": "10px",
+        "paddingTop": "10px",
+        "topGap": 11
+      }
+    ],
+    "width": 390
+  }
+]

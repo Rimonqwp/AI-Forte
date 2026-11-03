@@ -1,0 +1,57 @@
+[
+  {
+    "bottomSpace": 57.765625,
+    "cardsInsideHero": true,
+    "features": 5,
+    "headingSearchGap": 10,
+    "heroHeight": 480,
+    "overflow": false,
+    "recommendationBars": 0,
+    "topSpace": 57.765625,
+    "width": 1600
+  },
+  {
+    "bottomSpace": 57.765625,
+    "cardsInsideHero": true,
+    "features": 5,
+    "headingSearchGap": 10,
+    "heroHeight": 480,
+    "overflow": false,
+    "recommendationBars": 0,
+    "topSpace": 57.765625,
+    "width": 1024
+  },
+  {
+    "bottomSpace": 80.171875,
+    "cardsInsideHero": true,
+    "features": 5,
+    "headingSearchGap": 10,
+    "heroHeight": 520,
+    "overflow": false,
+    "recommendationBars": 0,
+    "topSpace": 80.15625,
+    "width": 768
+  },
+  {
+    "bottomSpace": 80.171875,
+    "cardsInsideHero": true,
+    "features": 5,
+    "headingSearchGap": 10,
+    "heroHeight": 640,
+    "overflow": false,
+    "recommendationBars": 0,
+    "topSpace": 80.15625,
+    "width": 640
+  },
+  {
+    "bottomSpace": 68.0625,
+    "cardsInsideHero": true,
+    "features": 5,
+    "headingSearchGap": 10,
+    "heroHeight": 633,
+    "overflow": false,
+    "recommendationBars": 0,
+    "topSpace": 68.0625,
+    "width": 390
+  }
+]

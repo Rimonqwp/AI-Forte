@@ -1,0 +1,53 @@
+{
+  "generation_mode": "built-in image_gen",
+  "reference": "docs/classroom/reference/design.png",
+  "used_assets": [
+    "hero-classroom-v3.png",
+    "page-paper.png",
+    "feature-reading-handdrawn-v2.png",
+    "feature-rhythm-handdrawn-v2.png",
+    "feature-sing-handdrawn-v2.png",
+    "feature-trophy-handdrawn-v2.png",
+    "feature-community-handdrawn-v2.png",
+    "score-star.png",
+    "score-sunny.png",
+    "score-confession.png",
+    "score-night.png",
+    "score-castle.png",
+    "score-rice.png",
+    "community-piano.png",
+    "community-guitar.png",
+    "community-vocal.png",
+    "avatar-musician.png"
+  ],
+  "retained_hero_variants": [
+    "hero-classroom.png",
+    "hero-classroom-v2.png"
+  ],
+  "prompt_files": [
+    "community-assets.prompts.md",
+    "feature-community-handdrawn-v2.prompt.md",
+    "feature-community.prompt.md",
+    "feature-reading-handdrawn-v2.prompt.md",
+    "feature-reading.prompt.md",
+    "feature-rhythm-handdrawn-v2.prompt.md",
+    "feature-rhythm.prompt.md",
+    "feature-sing-handdrawn-v2.prompt.md",
+    "feature-sing.prompt.md",
+    "feature-trophy-handdrawn-v2.prompt.md",
+    "feature-trophy.prompt.md",
+    "hero-classroom-v2.prompt.md",
+    "hero-classroom-v3.prompt.md",
+    "hero-classroom.prompt.md",
+    "page-paper.prompt.md",
+    "score-assets.prompts.md"
+  ],
+  "retained_feature_variants": [
+    "feature-reading.png",
+    "feature-rhythm.png",
+    "feature-sing.png",
+    "feature-trophy.png",
+    "feature-community.png"
+  ],
+  "feature_icon_style": "flat hand-drawn doodles, warm brown outlines, sparse pastel accents, transparent"
+}

@@ -1,0 +1,42 @@
+[
+  {
+    "cardsInsideHero": true,
+    "features": 5,
+    "heroHeight": 416,
+    "missingImages": 0,
+    "overflow": false,
+    "recommendationBars": 0,
+    "searchAndCardsSeparated": true,
+    "width": 1362
+  },
+  {
+    "cardsInsideHero": true,
+    "features": 5,
+    "heroHeight": 452,
+    "missingImages": 0,
+    "overflow": false,
+    "recommendationBars": 0,
+    "searchAndCardsSeparated": true,
+    "width": 768
+  },
+  {
+    "cardsInsideHero": true,
+    "features": 5,
+    "heroHeight": 572,
+    "missingImages": 0,
+    "overflow": false,
+    "recommendationBars": 0,
+    "searchAndCardsSeparated": true,
+    "width": 640
+  },
+  {
+    "cardsInsideHero": true,
+    "features": 5,
+    "heroHeight": 563,
+    "missingImages": 0,
+    "overflow": false,
+    "recommendationBars": 0,
+    "searchAndCardsSeparated": true,
+    "width": 390
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "bottomSpace": 47.265625,
+    "gaps": [
+      10,
+      10,
+      10
+    ],
+    "heroHeight": 480,
+    "order": [
+      "H2",
+      "hot-search",
+      "search-form",
+      "search-help"
+    ],
+    "overflow": false,
+    "rowsContained": true,
+    "searchBeforeCards": true,
+    "topSpace": 47.265625,
+    "width": 1362
+  },
+  {
+    "bottomSpace": 69.671875,
+    "gaps": [
+      10,
+      10,
+      10
+    ],
+    "heroHeight": 520,
+    "order": [
+      "H2",
+      "hot-search",
+      "search-form",
+      "search-help"
+    ],
+    "overflow": false,
+    "rowsContained": true,
+    "searchBeforeCards": true,
+    "topSpace": 69.65625,
+    "width": 768
+  },
+  {
+    "bottomSpace": 67.0625,
+    "gaps": [
+      8,
+      8,
+      8
+    ],
+    "heroHeight": 633,
+    "order": [
+      "H2",
+      "hot-search",
+      "search-form",
+      "search-help"
+    ],
+    "overflow": false,
+    "rowsContained": true,
+    "searchBeforeCards": true,
+    "topSpace": 67.0625,
+    "width": 360
+  },
+  {
+    "bottomSpace": 67.0625,
+    "gaps": [
+      8,
+      8,
+      8
+    ],
+    "heroHeight": 633,
+    "order": [
+      "H2",
+      "hot-search",
+      "search-form",
+      "search-help"
+    ],
+    "overflow": false,
+    "rowsContained": true,
+    "searchBeforeCards": true,
+    "topSpace": 67.0625,
+    "width": 390
+  }
+]
