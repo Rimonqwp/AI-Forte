@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { CheckSquare, MagnifyingGlass } from '@phosphor-icons/react';
+import { CheckCircle, CheckSquare, Heart, MusicNotes } from '@phosphor-icons/react';
 import { MusicSearch } from './MusicSearch.jsx';
-import './search-results.css';
 
 const assets = import.meta.env.BASE_URL + 'assets/';
 
@@ -12,22 +11,22 @@ export function SearchBanner({ term, locationHash, songs, onSearch, onLink }) {
   const [draft, setDraft] = useState(currentTerm);
   useEffect(() => { setDraft(currentTerm); }, [currentTerm]);
 
-  return <div className="score-search-page shared-search-banner">
-    <section className="results-hero" aria-labelledby="shared-search-title">
-      <div className="shared-banner-art-frame">
-        <img className="results-hero-art" src={assets + 'search-hero.png'} alt="暖阳里的音乐教室，女孩弹着尤克里里，小猫在窗边熟睡"/>
+  return <section className="hero library-home-hero" aria-label="音乐学习与乐谱搜索">
+    <div className="hero-art-frame">
+      <img className="hero-art" src={assets + 'hero-classroom-v3.png'} alt="阳光洒进音乐教室，戴耳机的女孩抱着尤克里里，身旁的小猫安静地睡着"/>
+    </div>
+    <div className="hero-content">
+      <div className="hero-heading">
+        <MusicNotes className="hero-note-decoration" size={42} weight="duotone" aria-hidden="true"/>
+        <Heart className="hero-heart-decoration" size={24} aria-hidden="true"/>
+        <h1><span className="hero-title-lead">跟着乐谱学音乐，</span><span className="hero-title-end"><em>轻松唱奏</em>一首歌</span></h1>
+        <div className="hero-promises">{['从识谱到演奏', '步骤清晰易懂', '零基础也能上手'].map(text => <span key={text}><CheckCircle size={20} weight="bold"/>{text}</span>)}</div>
       </div>
-      <div className="results-hero-content">
-        <div className="results-title-row">
-          <h1 id="shared-search-title"><MagnifyingGlass size={45}/>乐谱搜索结果</h1>
-          <p>找到你想学的曲谱，开始轻松练习吧！</p>
-        </div>
-        <MusicSearch variant="banner" query={draft} onQueryChange={setDraft} songs={songs} onSearch={onSearch} onLink={onLink}/>
-      </div>
-      <aside className="results-note">
-        <h2>为什么选择小谱的乐谱？</h2>
-        {['多种谱型，覆盖主流乐器', '难度分级，循序渐进学习', '高清排版，清晰易练习'].map(text => <p key={text}><CheckSquare size={18}/>{text}</p>)}
+      <aside className="learning-note">
+        <h2>在这里你将学会：<Heart size={20}/></h2>
+        {['认识五线谱与简谱', '掌握节奏与拍子', '和弦弹唱 / 尤克里里演奏', '边学边练一首完整作品'].map(text => <p key={text}><CheckSquare size={18}/>{text}</p>)}
       </aside>
-    </section>
-  </div>;
+      <MusicSearch query={draft} onQueryChange={setDraft} songs={songs} onSearch={onSearch} onLink={onLink}/>
+    </div>
+  </section>;
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { matchesSong } from './MusicSearch.jsx';
+import { MusicSearch, matchesSong } from './MusicSearch.jsx';
 import { SearchBanner } from './SearchBanner.jsx';
 import { MusicNotes, MagnifyingGlass, Bell, CaretDown, CaretRight, CheckCircle, CheckSquare, PianoKeys, Guitar, GraduationCap, Star, Fire, Play, Pause, Heart, UsersThree, ChatsCircle, ChatCircle, CloudArrowUp, Trophy, Microphone, X, ArrowUp, ArrowLeft, Metronome, List, Headphones, BookOpen, SpeakerHigh, Check } from '@phosphor-icons/react';
 
@@ -36,7 +36,7 @@ function Instrument({name, ...props}) { const Icon = name === '钢琴' ? PianoKe
 function Rating({level}) { return <span className="rating" aria-label={`难度 ${level} 星`}>{Array.from({length:5},(_,i)=><Star key={i} size={13} weight={i<level?'fill':'regular'} className={i<level?'filled':''}/>)}</span>; }
 
 export function App() {
-  const [query,setQuery]=useState('周杰伦'); const [search,setSearch]=useState(''); const [filter,setFilter]=useState('全部');
+  const [query,setQuery]=useState(''); const [search,setSearch]=useState(''); const [filter,setFilter]=useState('全部');
   const [tab,setTab]=useState('推荐'); const [saved,setSaved]=useState([]); const [liked,setLiked]=useState([]);
   const [modal,setModal]=useState(null); const [menu,setMenu]=useState(null); const [checkedIn,setCheckedIn]=useState(false);
   const [posts,setPosts]=useState(initialPosts); const [toast,setToast]=useState(''); const [completed,setCompleted]=useState([]);
@@ -80,9 +80,15 @@ export function App() {
         <div className="header-actions"><button className="icon-button search-shortcut" aria-label="搜索乐谱" onClick={()=>document.getElementById('music-search').focus()}><MagnifyingGlass size={23}/></button><button className="icon-button notification" aria-label="学习通知" onClick={()=>open({type:'notification'})}><Bell size={23}/><span>1</span></button><div className="dropdown-wrap"><button className="profile" onClick={()=>setMenu(menu==='profile'?null:'profile')} aria-expanded={menu==='profile'}><img src={assets+'avatar-musician.png'} alt="我的头像"/><span>我的学习</span><CaretDown size={13}/></button>{menu==='profile'&&<div className="dropdown profile-menu"><strong>你好，音乐同学</strong><small>每天一点点，音乐近一点</small><button onClick={()=>open({type:'saved'})}><Heart size={18}/>我的收藏（{saved.length}）</button><button onClick={()=>open({type:'lesson',title:'我的学习计划'})}><BookOpen size={18}/>我的学习计划</button><button onClick={()=>{setCheckedIn(true);setMenu(null);notify('今日打卡完成，继续加油！');}}><CheckCircle size={18}/>{checkedIn?'今日已打卡':'完成今日打卡'}</button></div>}</div><button className="icon-button mobile-toggle" aria-label="展开导航" onClick={()=>setMobileNav(!mobileNav)}><List size={25}/></button></div>
       </div>
     </header>
-    <SearchBanner term={query} locationHash={window.location.hash} songs={songs} onSearch={find} onLink={url=>open({type:'link',url})}/>
+    {window.location.hash.startsWith('#scores')&&<SearchBanner term={query} locationHash={window.location.hash} songs={songs} onSearch={find} onLink={url=>open({type:'link',url})}/>}
     <main>
-      <section className="home-learning" aria-label="音乐学习入口">
+      <section className="hero" aria-label="音乐学习与乐谱搜索">
+        <div className="hero-art-frame"><img className="hero-art" src={assets+'hero-classroom-v3.png'} alt="阳光洒进音乐教室，戴耳机的女孩抱着尤克里里，身旁的小猫安静地睡着"/></div>
+        <div className="hero-content">
+        <div className="hero-heading"><MusicNotes className="hero-note-decoration" size={42} weight="duotone" aria-hidden="true"/><Heart className="hero-heart-decoration" size={24} aria-hidden="true"/><h1><span className="hero-title-lead">跟着乐谱学音乐，</span><span className="hero-title-end"><em>轻松唱奏</em>一首歌</span></h1><div className="hero-promises">{['从识谱到演奏','步骤清晰易懂','零基础也能上手'].map(t=><span key={t}><CheckCircle size={20} weight="bold"/>{t}</span>)}</div></div>
+        <aside className="learning-note"><h2>在这里你将学会：<Heart size={20}/></h2>{['认识五线谱与简谱','掌握节奏与拍子','和弦弹唱 / 尤克里里演奏','边学边练一首完整作品'].map(t=><p key={t}><CheckSquare size={18}/>{t}</p>)}</aside>
+        <MusicSearch query={query} onQueryChange={setQuery} songs={songs} onSearch={find} onLink={url=>open({type:'link',url})}/>
+        </div>
         <div className="feature-grid">{features.map(f=><button key={f.id} className={`feature-card ${f.color}`} onClick={()=>f.id==='community'?scrollTo('community'):open({type:'lesson',feature:f})}><img src={assets+`feature-${f.id}-handdrawn-v2.png`} alt=""/><h2>{f.title}</h2><p>{f.desc}<CaretRight size={12}/></p></button>)}</div>
       </section>
       <div className="content-shell">
