@@ -1,0 +1,24 @@
+.language-trigger { min-width: 28px; min-height: 32px; }
+.language-menu { min-width: 164px; }
+.language-menu button { justify-content: space-between; }
+.language-menu button[aria-pressed="true"] { background: #ffebde; color: #a44330; }
+.profile-menu strong { overflow-wrap: anywhere; max-width: 260px; }
+html[lang="en"] .header-inner { gap: 22px; }
+html[lang="en"] .header-inner nav { gap: 18px; }
+html[lang="en"] .hero-heading h1 { font-size: clamp(24px, 3.2vw, 42px); }
+html[lang="en"] .feature-card p { white-space: normal; font-size: 11px; }
+html[lang="en"] .section-heading { flex-wrap: wrap; }
+html[lang="en"] .search-panel > h2 { font-size: 24px; }
+@media (max-width: 600px) {
+  .header-actions { gap: 8px; }
+  .language-menu { right: -42px; }
+  html[lang="en"] .brand strong { font-size: 18px; }
+  html[lang="en"] .hero-heading h1 { font-size: 24px; white-space: normal; }
+  html[lang="en"] .search-panel > h2 { font-size: 16px; }
+  html[lang="en"] .feature-card h2 { font-size: 13px; letter-spacing: 0; }
+  html[lang="en"] .feature-card p { font-size: 8px; line-height: 11px; }
+  html[lang="en"] .section-heading h2 { font-size: 15px; }
+}
+
+html[lang="en"] .learning-note p { white-space: normal; line-height: 1.4; }
+html[lang="en"] .search-help { white-space: normal; line-height: 1.5; }
