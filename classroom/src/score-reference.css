@@ -88,11 +88,11 @@
 .score-search-page .results-score-grid,
 .score-search-page .results-panel > .empty-state { grid-column: 1 / -1; }
 .score-search-page .results-score-grid { gap: 12px 15px; }
-.score-search-page .results-score-grid .score-info { padding: 3px 11px 8px; min-height: 108px; }
+.score-search-page .results-score-grid .score-info { padding: 11px 11px 14px; }
 .score-search-page .results-score-grid .score-title { min-height: 24px; margin: 0; }
 .score-search-page .results-score-grid .score-title h3 { font-size: 18px; font-weight: 700; line-height: 25px; }
-.score-search-page .results-score-grid .score-artist { margin: 0 0 3px; font-size: 12px; line-height: 18px; color: #a16e5c; }
-.score-search-page .results-score-grid .score-meta { min-height: 21px; margin: 0 0 5px; }
+.score-search-page .results-score-grid .score-artist { margin: 2px 0 6px; font-size: 12px; line-height: 18px; color: #a16e5c; }
+.score-search-page .results-score-grid .score-meta { min-height: 21px; margin: 0 0 8px; }
 .score-search-page .results-score-grid .difficulty { font-size: 10px; font-weight: 600; }
 .score-search-page .results-score-grid .rating { color: #c7bcaa; }
 .score-search-page .results-score-grid .rating .filled { color: #ffb316; }
@@ -136,7 +136,7 @@
 .score-search-page .results-community-layout .post-meta > button { color: #b4534e; }
 @media (min-width: 1400px) {
   .score-search-page .results-sidebar { min-height: 694px; }
-  .score-search-page .results-score-grid .score-card { height: 207px; }
+  .score-search-page .results-score-grid .score-card { height: auto; }
   .score-search-page .results-score-grid .score-cover { height: 96px; }
 }
 @media (max-width: 1430px) {
