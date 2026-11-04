@@ -115,3 +115,5 @@ Clicking an arrangement card replaces the content area INSIDE the existing song 
 The practice header (Return to Score List, song title, performer, version metadata and favorite) belongs in the existing top 52px dialog toolbar beside the close button. Do not show a second song header below it.
 
 Keep difficulty text and stars out of the practice top toolbar, and omit its favorite button. Place the performer at the right, immediately before the practice count. Keep the bottom-player favorite control.
+
+Show the selected arrangement author prominently in the practice top toolbar next to the song/version metadata, labeled 编配, including on narrow screens. Derive this credit from the chosen version rather than the original performer.

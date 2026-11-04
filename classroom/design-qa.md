@@ -150,3 +150,10 @@ final result: passed
 Removed difficulty text, stars and the top favorite action. Moved performer into the right metadata group immediately before practice count; kept the bottom favorite action. Verified the rendered header text and DOM order in the existing 1830 × 1255 in-app preview. Source: three current user annotations. Screenshot: `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-header-simplified.png`. Production build passes.
 
 final result: passed
+
+
+### Arrangement author credit
+
+Added “编配：{selected version author}” beside song/version facts in the existing top toolbar. Kept original-performer metadata at the right. Verified current piano version renders 编配：小谱老师, visible on desktop and narrow screens. Source: current user annotation; screenshot: `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-arranger-credit.png`. Production build passes.
+
+final result: passed
