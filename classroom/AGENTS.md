@@ -130,3 +130,8 @@ Learning notifications open in a paper-style popover anchored below the header b
 On desktop, center the main navigation as one compact group in the header, sized to its labels with consistent gaps. Do not stretch it across the available header width or distribute links with space-between. Keep account actions aligned to the right and retain the mobile navigation layout.
 
 The site brand is 谱芽岛 and its tagline is 让喜欢的歌，在指尖靠岸。. Apply this identity consistently to the header, footer, browser title, metadata and welcome notices, including language variants.
+
+
+## Account login
+
+The user requested account login from the header profile entry, backed by the existing Firebase project. Google (including Gmail) is enabled first; keep GitHub and Apple visibly unavailable until their developer credentials are configured. Preserve anonymous favorites and progress when upgrading or merging into an existing account. Show the real signed-in name and avatar, provide logout, isolate all caches by UID, and never carry signed-out account data into a new guest session. Keep the login dialog consistent with the warm paper theme and accessible on phones and with the keyboard.

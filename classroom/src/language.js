@@ -31,6 +31,28 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  '登录 / 注册':['Sign in','登入 / 註冊'], '我的账号':['My account','我的帳號'], '退出登录':['Sign out','登出'],
+  '已登录 · 学习记录随账号同步':['Signed in · Learning records sync with your account','已登入 · 學習紀錄隨帳號同步'],
+  '关闭登录窗口':['Close sign-in window','關閉登入視窗'], '让每一次练习，都留下足迹':['Keep every step of your music journey','讓每一次練習，都留下足跡'],
+  '完成账号同步':['Complete account sync','完成帳號同步'],
+  '登录后，在不同设备上找回你的收藏和学习进度。':['Sign in to access your saved scores and learning progress across devices.','登入後，在不同裝置上找回你的收藏和學習進度。'],
+  '正在同步…':['Syncing…','正在同步…'], '重试账号同步':['Retry account sync','重試帳號同步'],
+  '正在连接 Google…':['Connecting to Google…','正在連接 Google…'], '使用 Google 继续':['Continue with Google','使用 Google 繼續'],
+  '支持 Gmail 和其他 Google 账号':['Gmail and other Google accounts','支援 Gmail 和其他 Google 帳號'], '暂未开放':['Coming later','暫未開放'],
+  '仅用于身份验证，不读取你的邮件或代码仓库。':['Used only to sign you in. We do not read your emails or code repositories.','僅用於身分驗證，不讀取你的郵件或程式碼儲存庫。'],
+  '当前访客的收藏与进度会随登录保留。':['Your guest favorites and progress will be kept when you sign in.','目前訪客的收藏與進度會隨登入保留。'],
+  '先逛逛，稍后登录':['Keep exploring','先逛逛，稍後登入'],
+  '登录窗口已关闭，你可以重新选择登录。':['The sign-in window was closed. You can try again.','登入視窗已關閉，你可以重新選擇登入。'],
+  '请在已打开的登录窗口中继续。':['Continue in the sign-in window that is already open.','請在已開啟的登入視窗中繼續。'],
+  '浏览器阻止了登录窗口，请允许此网站弹出窗口后重试。':['Allow pop-ups for this website, then try again.','瀏覽器阻止了登入視窗，請允許此網站彈出視窗後重試。'],
+  '网络连接不稳定，请检查网络后重试。':['Check your internet connection and try again.','網路連線不穩定，請檢查網路後重試。'],
+  '此邮箱已通过其他方式注册，请使用原来的登录方式。':['This email is registered with another sign-in method. Please use that method.','此信箱已透過其他方式註冊，請使用原來的登入方式。'],
+  '此登录方式暂未开放，请选择其他方式。':['This sign-in method is unavailable. Please choose another.','此登入方式暫未開放，請選擇其他方式。'],
+  '当前网址暂未开通登录，请从 puyadao.top 打开。':['Please open puyadao.top to sign in.','目前網址暫未開通登入，請從 puyadao.top 開啟。'],
+  '账号已登录，但部分访客记录尚未合并。请保留当前页面并重试同步。':['You are signed in, but some guest records still need to sync. Keep this page open and retry.','帳號已登入，但部分訪客紀錄尚未合併。請保留目前頁面並重試同步。'],
+  '访客记录尚未同步，请联网后重试，避免遗漏收藏和进度。':['Guest records have not synced yet. Connect to the internet and try again.','訪客紀錄尚未同步，請連網後重試，避免遺漏收藏和進度。'],
+  '操作暂未完成，请检查网络后重试。':['Please check your connection and try again.','操作暫未完成，請檢查網路後重試。'],
+
   '谱芽岛':['Puya Island','譜芽島'],
   '让喜欢的歌，在指尖靠岸。':['Songs you love, at your fingertips.','讓喜歡的歌，在指尖靠岸。'],
   '首页':['Home','首頁'], '乐谱':['Scores','樂譜'], '乐谱练习':['Practice','樂譜練習'],

@@ -1,4 +1,5 @@
 import { useCloudState } from './useCloudState.js';
+import { AccountShortcut } from './AccountShortcut.jsx';
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Bell, CaretDown, ChatCircle, Check, CheckSquare, FileText, Fire, GraduationCap, Guitar, Heart, Lightbulb, List, MagnifyingGlass, Microphone, MusicNote, MusicNotes, Pause, PianoKeys, Plant, Play, SpeakerHigh, Sparkle, Star, Target, UsersThree, X } from '@phosphor-icons/react';
 import { App } from './App.jsx';
@@ -123,7 +124,7 @@ function SongDetail({song,modal=false,onClose}) {
     {!modal&&!selected&&<><header className="site-header detail-site-header"><div className="header-inner">
       <a className="brand" href="#" onClick={event=>{event.preventDefault();home();}} aria-label="谱芽岛首页"><MusicNotes size={39} weight="duotone"/><span><strong>谱芽岛</strong><small>让喜欢的歌，在指尖靠岸。 <MusicNotes size={10}/></small></span></a>
       <nav aria-label="主导航" className={mobileNav?'open':''}><button className="nav-active" onClick={home}>首页</button><button onClick={()=>notify('零基础入门课程 · 演示')}>零基础入门</button><button onClick={back}>乐谱练习</button><button onClick={()=>notify('课程尚未接入，敬请期待。')}>乐器课程 <CaretDown size={12}/></button><button onClick={()=>notify('课程尚未接入，敬请期待。')}>声乐课程</button><button onClick={()=>notify('今日练习打卡已完成 · 演示')}>每日打卡</button><button onClick={()=>chooseSection('comments')}>社区问答</button></nav>
-      <div className="header-actions"><button className="icon-button" aria-label="搜索乐谱" onClick={back}><MagnifyingGlass size={23}/></button><button className="icon-button notification" aria-label="学习通知" onClick={()=>notify('今天也来选一个适合自己的版本练习吧！')}><Bell size={23}/><span>1</span></button><button className="profile" onClick={()=>notify(`本页已收藏 ${saved.length} 个乐谱版本 · 演示`)}><img src={assets+'avatar-musician.png'} alt="我的头像"/><span>我的学习</span><CaretDown size={12}/></button><button className="mobile-toggle icon-button" aria-label="展开导航" onClick={()=>setMobileNav(!mobileNav)}><List size={24}/></button></div>
+      <div className="header-actions"><button className="icon-button" aria-label="搜索乐谱" onClick={back}><MagnifyingGlass size={23}/></button><button className="icon-button notification" aria-label="学习通知" onClick={()=>notify('今天也来选一个适合自己的版本练习吧！')}><Bell size={23}/><span>1</span></button><AccountShortcut assets={assets}/><button className="mobile-toggle icon-button" aria-label="展开导航" onClick={()=>setMobileNav(!mobileNav)}><List size={24}/></button></div>
     </div></header>
     <section className="detail-hero" aria-label="选择歌曲编配版本"><img className="detail-hero-art" src={detailAssets+'detail-hero-v2.png'} alt="阳光洒进音乐教室，女孩抱着尤克里里，钢琴旁摆着乐谱"/>
       <div className="detail-hero-content"><h1><MusicNotes size={26}/>同一首歌，也有不同玩家的编配版本 <Sparkle size={24} weight="fill"/></h1><p className="detail-hero-promise">选择你想练习的乐谱版本，让练习更适合你的水平与需求！<Sparkle size={14} weight="fill"/></p>

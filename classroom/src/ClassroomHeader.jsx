@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MusicNotes, Globe, Bell, CaretDown, Heart, BookOpen, CheckCircle, Check, List, PianoKeys, Guitar } from '@phosphor-icons/react';
+import { MusicNotes, Globe, Bell, CaretDown, Heart, BookOpen, CheckCircle, Check, List, PianoKeys, Guitar, UserCircle, SignOut } from '@phosphor-icons/react';
+import { useAccount } from './AuthContext.jsx';
 import { languages, setLanguage, tr, useLanguage } from './language.js';
 import './classroom-header.css';
 
@@ -12,6 +13,8 @@ export function shortenName(name) {
 
 export function ClassroomHeader({ userName = '音乐同学', assets, isSearchPage, onHome, onResults, onCommunity, onOpen, checkedIn, onCheckIn, savedCount }) {
   const language = useLanguage();
+  const account = useAccount();
+  const signedIn = !!account.user && !account.user.isAnonymous;
   const [menu, setMenu] = useState(null);
   const [mobileNav, setMobileNav] = useState(false);
   const header = useRef(null);
@@ -19,7 +22,7 @@ export function ClassroomHeader({ userName = '音乐同学', assets, isSearchPag
   const course = useRef(null);
   const languageMenu = useRef(null);
   const notifications = useRef(null);
-  const fullName = userName?.trim() || '音乐同学';
+  const fullName = signedIn ? account.user.displayName || account.user.email?.split('@')[0] || tr('我的账号') : tr('登录 / 注册');
   const run = action => { setMenu(null); setMobileNav(false); action(); };
   const toggle = value => setMenu(previous => previous === value ? null : value);
 
@@ -70,8 +73,8 @@ export function ClassroomHeader({ userName = '音乐同学', assets, isSearchPag
           </section>}
         </div>
         <div className="dropdown-wrap" ref={profile}>
-          <button className="profile" title={fullName} aria-label={fullName} aria-expanded={menu === 'profile'} aria-controls="header-profile-menu" onClick={() => toggle('profile')}><img src={assets + 'avatar-musician.png'} alt={tr('我的头像')}/><span>{shortenName(fullName)}</span><CaretDown size={13}/></button>
-          {menu === 'profile' && <div className="dropdown profile-menu" id="header-profile-menu"><strong>{tr('你好，')}{fullName}</strong><small>{tr('每天一点点，音乐近一点')}</small><button onClick={() => run(() => onOpen({ type: 'saved' }))}><Heart size={18}/>{tr('我的收藏')}（{savedCount}）</button><button onClick={() => run(() => onOpen({ type: 'lesson', title: '我的学习计划' }))}><BookOpen size={18}/>{tr('我的学习计划')}</button><button onClick={() => run(onCheckIn)}><CheckCircle size={18}/>{tr(checkedIn ? '今日已打卡' : '完成今日打卡')}</button></div>}
+          <button className={`profile ${signedIn ? '' : 'login-trigger'}`} title={fullName} aria-label={fullName} aria-expanded={signedIn ? menu === 'profile' : undefined} aria-controls={signedIn ? 'header-profile-menu' : undefined} onClick={() => signedIn ? toggle('profile') : run(account.openLogin)}>{signedIn ? <img src={account.user.photoURL || assets + 'avatar-musician.png'} referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = assets + 'avatar-musician.png'; }} alt={tr('我的头像')}/> : <UserCircle size={25}/>}<span>{signedIn ? shortenName(fullName) : fullName}</span>{signedIn && <CaretDown size={13}/>}</button>
+          {menu === 'profile' && signedIn && <div className="dropdown profile-menu" id="header-profile-menu"><strong>{tr('你好，')}{fullName}</strong><small className="account-email">{account.user.email}</small><small className="account-connected">{tr('已登录 · 学习记录随账号同步')}</small><button onClick={() => run(() => onOpen({ type: 'saved' }))}><Heart size={18}/>{tr('我的收藏')}（{savedCount}）</button><button onClick={() => run(() => onOpen({ type: 'lesson', title: '我的学习计划' }))}><BookOpen size={18}/>{tr('我的学习计划')}</button><button onClick={() => run(onCheckIn)}><CheckCircle size={18}/>{tr(checkedIn ? '今日已打卡' : '完成今日打卡')}</button><button className="account-signout" disabled={account.busy} onClick={() => run(account.logout)}><SignOut size={18}/>{tr('退出登录')}</button></div>}
         </div>
         <button className="icon-button mobile-toggle" aria-label={tr('展开导航')} aria-expanded={mobileNav} onClick={() => { setMenu(null); setMobileNav(previous => !previous); }}><List size={25}/></button>
       </div>
