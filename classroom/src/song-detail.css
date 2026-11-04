@@ -118,3 +118,9 @@
   .song-detail-mode .detail-side-nav>button{grid-template-columns:18px auto auto}
   .song-detail-mode .detail-side-nav>button>span{white-space:nowrap}
 }
+
+/* Two sample staff rows with a concise single-line caption. */
+.song-detail-mode .detail-sheet-strip{display:grid;height:auto;gap:4px;padding:4px;margin:6px 0}
+.detail-sheet-row{display:block;width:100%;height:29px;object-fit:cover;border-radius:2px}
+.song-detail-mode .detail-version-description{min-height:0;height:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:20px}
+@media(max-width:760px){.detail-sheet-row{height:25px}.song-detail-mode .detail-sheet-strip{gap:3px;padding:3px}}
