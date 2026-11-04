@@ -143,3 +143,6 @@
   .detail-overlay-header .detail-side-nav{justify-content:flex-start;gap:5px}
   .song-detail-mode .detail-overlay-header .detail-side-nav>button{padding:3px 7px;font-size:11px}
 }
+
+/* Give the complete detail content equal responsive space at both edges. */
+.song-detail-mode .song-detail-page{padding-inline:clamp(16px,2.5vw,40px)}

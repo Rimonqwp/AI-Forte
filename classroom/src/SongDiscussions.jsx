@@ -3,8 +3,26 @@ import { ArrowLeft, ArrowRight, BookmarkSimple, ChatCircle, CheckCircle, Heart, 
 import './song-discussions.css';
 
 const asset = import.meta.env.BASE_URL + 'assets/song-detail/';
+const PAGE_SIZE = 20;
 const categories = ['全部', '乐谱选择', '练习方法', '学歌指导', '指法技巧', '演奏分享'];
 const categoryIcons = { 乐谱选择: MusicNotes, 练习方法: ThumbsUp, 学歌指导: MusicNotes, 指法技巧: MusicNotes, 演奏分享: PaperPlaneTilt };
+
+const discussionTopics = {
+  乐谱选择: ['怎样选择适合自己音域的调？', '简化谱和原版谱的节奏差在哪里？', '和弦谱里的斜杠符号怎么看？', '零基础先看五线谱还是六线谱？', '不同版本的前奏该怎么挑？', '想练独奏应该看哪些编配信息？', '如何判断一个版本的实际难度？', '谱上没有指法标记时怎么办？', '同一首歌为什么有不同拍号标记？', '数字谱和五线谱怎样对照练习？', '移调后哪些和弦需要重新确认？', '选谱时你最看重哪些细节？'],
+  练习方法: ['如何把一首歌拆成每日的小目标？', '慢练到什么程度才适合提速？', '总在同一小节卡住，该怎么拆练？', '练琴前的五分钟热身怎么安排？', '怎样用录音找到节奏问题？', '左右手分开练后怎么合起来？', '隔天再练就忘记，如何巩固？', '每天只有十五分钟该练什么？', '节拍器开到多少速度比较合适？', '完整弹一遍和难点练习如何分配？', '练习时怎样避免越弹越快？', '背谱和看谱练习怎么交替？'],
+  学歌指导: ['主歌与副歌的力度怎么安排？', '怎样找到乐句自然的呼吸点？', '听原曲时可以重点记哪些细节？', '歌词的重音怎样放进伴奏里？', '前奏和第一句怎样自然连接？', '如何让重复段落有一点变化？', '旋律里哪些音适合轻一些？', '怎样把自己的情绪放进演奏？', '句尾留白多长会比较自然？', '唱歌和伴奏总不同步怎么办？', '遇到高音时怎样保持放松？', '尾奏怎样收得更完整？'],
+  指法技巧: ['换和弦时怎样减少停顿？', '大横按按不响有哪些调整方法？', '右手分解和弦怎样练得均匀？', '如何减少换把时的杂音？', '扫弦的手腕应该怎样放松？', '左手手指抬得太高怎么改善？', '连音和滑音怎样练得清楚？', '怎样让旋律音从伴奏里突出？', '低音与高音的音量怎么平衡？', '连续八分音符怎样保持稳定？', '拨弦角度会怎样影响音色？', '相邻和弦有哪些保留指的小技巧？'],
+  演奏分享: ['第一次录下完整演奏，想听听建议', '坚持慢练一周后的变化记录', '用简化版完成了今天的练习', '分享我的分段练习笔记', '终于把前奏和主歌接起来了', '和朋友一起合奏的练习心得', '今天尝试了不一样的演奏速度', '从跟不上节拍到稳定弹完的过程', '分享一次小小的家庭演奏', '给这首歌加了一点自己的处理', '一个月后的练习回顾与目标', '欢迎一起交流今天的练习收获'],
+};
+
+function moreDemoPosts(song) {
+  const authors = [['柚子琴友', 'star'], ['小谱音乐', 'teacher'], ['阿木同学', 'acous'], ['晴天小七', 'lin']];
+  return Object.entries(discussionTopics).flatMap(([category, topics], group) => topics.map((topic, index) => {
+    const [author, avatar] = authors[(group + index) % authors.length];
+    const excerpt = `正在练习《${song}》，想和琴友一起聊聊${topic.replace(/[？！，]/g, '')}，欢迎分享你的经验。`;
+    return { id: `demo-${group}-${index}`, category, title: `《${song}》${topic}`, excerpt, body: `${excerpt}\n\n你会怎样安排这部分的练习？有哪些值得留意的小细节？`, author, avatar, level: 3 + index % 5, likes: 380 - index * 19 - group * 7, comments: 68 - index * 4 - group, replies: [] };
+  }));
+}
 
 function initialPosts(song) {
   return [
@@ -15,6 +33,7 @@ function initialPosts(song) {
     { id: 'plan', category: '练习方法', title: '每天练多久效果最好？我的一周练习计划分享', excerpt: `从零开始学《${song}》的一周练习安排（附节拍练习方法）`, author: '小谱音乐', avatar: 'teacher', level: 5, likes: 689, comments: 102, body: '我的练习安排：5 分钟热身，10 分钟难点慢练，10 分钟分段连接，最后录一遍完整演奏。每次只选一个具体目标，练完记下今天的进步。', replies: [] },
     { id: 'strum', category: '指法技巧', title: `《${song}》弹唱如何配和弦？超实用入门方案`, excerpt: '分享一个简单好听的弹唱和弦方案，适合新手。', author: '阿木同学', avatar: 'acous', level: 4, likes: 517, comments: 98, body: '可以先用每拍一下的下扫练熟和弦转换，再逐渐加入切分。左手先提前准备下一个和弦的位置，右手保持匀速，先不要追求速度。', replies: [] },
     { id: 'first-song', category: '演奏分享', title: `我的《${song}》练习打卡：从不会到完整弹唱！`, excerpt: `记录自己练习《${song}》的过程与心得，遇到的问题也一起聊聊。`, author: '晴天小七', avatar: 'lin', level: 6, likes: 420, comments: 76, body: '练了两周，今天终于能慢速完整弹唱啦！最难的还是一边唱一边换和弦。对我最有帮助的是先分开练，再每天录音听一听有没有抢拍。也给正在练习的你一点鼓励！', replies: [] },
+    ...moreDemoPosts(song),
   ];
 }
 
@@ -46,6 +65,7 @@ export default function SongDiscussions({ song }) {
   const [liked, setLiked] = useState(initial.liked || []);
   const [saved, setSaved] = useState(initial.saved || []);
   const [category, setCategory] = useState('全部');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [view, setView] = useState(null);
   const [replyTo, setReplyTo] = useState('');
   const [message, setMessage] = useState('');
@@ -84,8 +104,9 @@ export default function SongDiscussions({ song }) {
     {!view ? <>
       <header className="sd-heading"><div className="sd-heading-title"><UsersThree size={31} /><h2 id="detail-comments-heading" tabIndex={-1}>相关讨论</h2><p>· 一起交流练习心得，寻找更合适的乐谱版本！</p></div><div className="sd-heading-actions"><span className="sd-friends">{['star', 'acous', 'lin'].map(kind => <Avatar key={kind} name="琴友" kind={kind} />)}</span><span className="sd-online">12,680 位琴友正在讨论</span><button type="button" className="sd-primary sd-publish" onClick={() => changeView('compose')}>我要发帖 <PencilSimple size={16} /></button></div></header>
       <div className="sd-featured">{posts.filter(p => p.featured).map(post => { const Icon = categoryIcons[post.category]; return <article className="sd-card" key={post.id}><button type="button" className="sd-card-open" onClick={() => changeView(post.id)}><div className="sd-card-picture"><img src={asset + `discussion-${post.image}.png`} alt={{ selection: '戴耳机的女孩对照原版与简化版乐谱', practice: '吉他练习、节拍器和热茶', theory: '晚霞下的金色稻田与乡间小路' }[post.image]} /><span className={`sd-card-badge sd-tone-${post.category}`}><Icon size={17} />{post.badge}</span></div><div className="sd-card-copy"><h3>{post.title}</h3><p>{post.excerpt}</p></div></button><Meta post={post} liked={liked} onToggle={toggleLike} onOpen={changeView} count={counts(post)} /></article>; })}</div>
-      <div className="sd-hot-heading"><h3><ListBullets size={24} />更多热门讨论</h3><div className="sd-categories" role="group" aria-label="讨论分类">{categories.map(item => <button type="button" key={item} aria-pressed={category === item} className={category === item ? 'active' : ''} onClick={() => setCategory(item)}>{item}</button>)}</div></div>
-      <div className="sd-hot-list">{hotPosts.map(post => { const Icon = categoryIcons[post.category] || MusicNotes; return <article key={post.id} className="sd-hot-row"><ChatCircle className="sd-row-chat" size={22} /><button type="button" className="sd-hot-open" onClick={() => changeView(post.id)}><span className={`sd-category sd-tone-${post.category}`}><Icon size={14} />{post.category}</span><strong>{post.title}</strong><span className="sd-hot-excerpt">{post.excerpt}</span></button><div className="sd-hot-author"><Avatar name={post.author} kind={post.avatar} /><span>{post.author}</span><span className="sd-level">Lv.{post.level}</span></div><Like post={post} compact liked={liked} onToggle={toggleLike} /><button type="button" className="sd-hot-replies" aria-label={`查看${post.title}的回复`} onClick={() => changeView(post.id)}><ChatCircle size={16} />{counts(post)}</button></article>; })}</div>
+      <div className="sd-hot-heading"><h3><ListBullets size={24} />更多热门讨论</h3><div className="sd-categories" role="group" aria-label="讨论分类">{categories.map(item => <button type="button" key={item} aria-pressed={category === item} className={category === item ? 'active' : ''} onClick={() => { setCategory(item); setVisibleCount(PAGE_SIZE); }}>{item}</button>)}</div></div>
+      <div className="sd-hot-list" id="sd-hot-posts" aria-live="polite" aria-relevant="additions">{hotPosts.slice(0, visibleCount).map(post => { const Icon = categoryIcons[post.category] || MusicNotes; return <article key={post.id} className="sd-hot-row"><ChatCircle className="sd-row-chat" size={22} /><button type="button" className="sd-hot-open" onClick={() => changeView(post.id)}><span className={`sd-category sd-tone-${post.category}`}><Icon size={14} />{post.category}</span><strong>{post.title}</strong><span className="sd-hot-excerpt">{post.excerpt}</span></button><div className="sd-hot-author"><Avatar name={post.author} kind={post.avatar} /><span>{post.author}</span><span className="sd-level">Lv.{post.level}</span></div><Like post={post} compact liked={liked} onToggle={toggleLike} /><button type="button" className="sd-hot-replies" aria-label={`查看${post.title}的回复`} onClick={() => changeView(post.id)}><ChatCircle size={16} />{counts(post)}</button></article>; })}</div>
+      {visibleCount < hotPosts.length && <div className="sd-load-more"><button type="button" aria-controls="sd-hot-posts" onClick={() => setVisibleCount(count => count + PAGE_SIZE)}>显示更多</button></div>}
     </> : view === 'compose' ? <>
       <div className="sd-view-toolbar"><button type="button" onClick={() => changeView(null)}><ArrowLeft size={18} />返回相关讨论</button><span>《{song.title}》· 发起讨论</span></div>
       <h2 id="detail-comments-heading" tabIndex={-1} className="sd-view-title"><PencilSimple size={26} />分享你的音乐练习心得</h2><p className="sd-view-intro">一个具体的问题，一段练习的收获，都值得与琴友交流。</p>
@@ -98,6 +119,5 @@ export default function SongDiscussions({ song }) {
       <aside className="sd-thread-aside"><h3><MusicNotes size={20} />正在练习《{song.title}》</h3><p>选择适合自己的版本，先放慢速度，把每一小节弹稳。</p><button type="button" onClick={() => document.getElementById('detail-versions')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}>看看乐谱版本 <ArrowRight size={17} /></button><h3>继续聊聊</h3>{posts.filter(p => p.id !== current.id && p.featured).map(post => <button type="button" className="sd-related-thread" key={post.id} onClick={() => changeView(post.id)}>{post.title}<ArrowRight size={16} /></button>)}</aside></div>
     </> : null}
     {message && <p className="sd-status" role="status"><CheckCircle size={17} />{message}</p>}
-    <p className="sd-demo-note">讨论演示 · 社区人数与互动数量为示例；新帖子、回复和收藏仅保存在本机浏览器。</p>
   </section>;
 }
