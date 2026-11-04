@@ -38,9 +38,9 @@ html[lang="en"] .search-help { white-space: normal; line-height: 1.5; }
 }
 
 @media (min-width: 901px) {
-  .site-header .header-inner { justify-content: flex-start; }
-  .site-header .header-inner > nav { flex: 0 1 auto; justify-content: flex-start; gap: 24px; }
-  .site-header .header-actions { margin-left: auto; }
+  .site-header .header-inner { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .site-header .header-inner > nav { justify-self: center; justify-content: flex-start; gap: 24px; }
+  .site-header .header-actions { justify-self: end; }
 }
 @media (min-width: 901px) and (max-width: 1150px) {
   .site-header .header-inner > nav { gap: 18px; }

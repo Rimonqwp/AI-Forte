@@ -127,4 +127,4 @@ All header popovers (profile, courses and language) close on outside pointer int
 
 Learning notifications open in a paper-style popover anchored below the header bell, reusing the shared outside-click, focus-leave and Escape dismissal and exclusive-open behavior. Keep the notification content and score-discovery action inside this popover instead of opening a modal. Keep the bell and popover usable on phones.
 
-On desktop, keep the main navigation compact beside the brand, sized to its labels with consistent gaps. Do not stretch it across the available header width or distribute links with space-between. Keep account actions aligned to the right and retain the mobile navigation layout.
+On desktop, center the main navigation as one compact group in the header, sized to its labels with consistent gaps. Do not stretch it across the available header width or distribute links with space-between. Keep account actions aligned to the right and retain the mobile navigation layout.
