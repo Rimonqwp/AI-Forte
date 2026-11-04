@@ -204,3 +204,9 @@ html::-webkit-scrollbar-corner{background:#fff1e4}
   .search-result-icon{width:29px;height:32px}.search-result-text strong{font-size:12px}
   .search-clear{width:20px}
 }
+
+/* Give the score filters and results breathing room below the banner. */
+.score-search-page .results-shell{margin-top:24px}
+@media(max-width:760px){
+  .score-search-page .results-shell{margin-top:16px}
+}

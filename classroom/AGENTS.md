@@ -55,3 +55,5 @@ Opening and closing search suggestions must keep the hero illustration and surro
 ## Score library reference
 
 The score search body follows `design-reference/score-library.png`: a 250px filter sidebar, five-column score grid at the reference desktop width, and related forum recommendations below. Keep each illustration and thumbnail as a separate asset under `public/assets/score-library/`; do not flatten the page into a screenshot. The original home design is the source of truth for the library banner: preserve the home heading, promises, search panel order, note card and illustration. Match the home introduction dimensions at every breakpoint. The five learning entry cards remain on home. Counts must reflect the actual available demo data.
+
+The user requested the complete score results area (filter sidebar, score grid and related discussions) to sit lower below the banner. Keep a 24px gap on desktop and tablet, and 16px on phones, moving the sidebar and results together.
