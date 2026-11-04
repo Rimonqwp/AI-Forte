@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Bell, BookOpen, CaretDown, ChatCircle, Check, CheckSquare, FileText, Fire, GraduationCap, Guitar, Heart, Lightbulb, List, MagnifyingGlass, Microphone, MusicNote, MusicNotes, Pause, PianoKeys, Plant, Play, SpeakerHigh, Sparkle, Star, Target, UsersThree, VideoCamera, X } from '@phosphor-icons/react';
 import { App } from './App.jsx';
 import './song-detail.css';
+import SongDiscussions from './SongDiscussions.jsx';
 
 const assets = import.meta.env.BASE_URL + 'assets/';
 const detailAssets = assets + 'song-detail/';
@@ -82,7 +83,6 @@ function SongDetail({song,modal=false,onClose,onSongChange}) {
   const [playing,setPlaying]=useState(false);
   const [toast,setToast]=useState('');
   const [mobileNav,setMobileNav]=useState(false);
-  const [replies,setReplies]=useState([]);
   const overlayDialog=useRef(null);
   const dialog=useRef(null),audio=useRef(null),nodes=useRef([]),timer=useRef(null),toastTimer=useRef(null);
   const stop=()=>{nodes.current.forEach(node=>{try{node.stop();}catch{}});nodes.current=[];clearTimeout(timer.current);setPlaying(false);};
@@ -123,13 +123,7 @@ function SongDetail({song,modal=false,onClose,onSongChange}) {
         <div className="detail-version-grid">{visible.map(version=><article className="detail-version-card" key={version.id} onClick={event=>{if(!event.target.closest('button')){stop();setSelected(version);}}}><VersionBadge label={version.badge}/><button className="detail-version-save" aria-label={`${saved.includes(version.id)?'取消收藏':'收藏'}${version.author}的${version.subtitle}`} aria-pressed={saved.includes(version.id)} onClick={()=>setSaved(previous=>previous.includes(version.id)?previous.filter(id=>id!==version.id):[...previous,version.id])}><Heart size={20} weight={saved.includes(version.id)?'fill':'regular'}/></button><div className="detail-author"><img src={detailAssets+`avatar-${version.avatar}.png`} alt={`${version.author}头像`}/><strong>{version.author}</strong><span>{version.certified?<><CheckSquare size={13} weight="fill"/>老师认证</>:`Lv.${version.authorLevel}`}</span></div><h3><button className="detail-version-open" onClick={()=>{stop();setSelected(version);}} aria-label={`打开《${song.title}》${version.subtitle}谱例`}>《{song.title}》{version.subtitle}</button></h3><div className="detail-version-meta"><span className={version.instrument==='吉他'?'orange':'purple'}><Instrument name={version.instrument} size={17}/>{version.instrument}</span><span>难度：<Rating level={version.level}/></span><span>调性：{version.key} 调</span></div><div className="detail-sheet-strip" role="img" aria-label={`${version.instrument}编配的两行谱例演示`}>{[0,1].map(row=><img key={row} className="detail-sheet-row" src={detailAssets+`sheet-${version.sheet}.png`} alt=""/>)}</div><p className="detail-version-description">{version.description}</p><div className="detail-version-stats"><span><SpeakerHigh size={16}/>{version.plays}万练习</span><span><Star size={15} weight="fill"/>{version.rating} 分</span><small>更新：{version.days} 天前</small></div></article>)}</div>
         {!visible.length&&<div className="detail-empty"><MusicNotes size={35}/><h3>暂时没有匹配的版本</h3><p>换一组筛选条件，试试其他编配。</p><button onClick={()=>setFilters({instrument:'全部乐器',level:'难度',type:'谱子类型',key:'调性'})}>清空筛选</button></div>}
       </section>
-      <section id="detail-comments" className="detail-extra-panel" aria-labelledby="detail-comments-heading">
-        <h2 id="detail-comments-heading">相关讨论</h2>
-        <p className="detail-demo-note">讨论演示 · 回复仅保存在当前页面</p>
-        <p>小谱老师：先放慢速度，逐小节练习，再把旋律和伴奏连起来。</p>
-        {replies.map((reply,index)=><p key={index}>音乐同学：{reply}</p>)}
-        <form onSubmit={event=>{event.preventDefault();const form=new FormData(event.currentTarget);setReplies(previous=>[...previous,form.get('reply')]);event.currentTarget.reset();}}><input name="reply" aria-label="分享练习心得" placeholder="分享你的练习心得…" required/><button>发表回复</button></form>
-      </section>
+      <SongDiscussions song={song}/>
       <section id="detail-courses" className="detail-extra-panel" aria-labelledby="detail-courses-heading">
         <h2 id="detail-courses-heading">相关课程</h2><p className="detail-demo-note">课程演示</p>
         <div className="detail-course-list">{['认识节拍与音符','三个常用和弦','跟着节拍器弹唱','让旋律更连贯'].map((course,index)=><button key={course} onClick={()=>notify(`已选择第 ${index+1} 课：${course} · 演示`)}><BookOpen size={23}/>{course}<span>{index+1}/4</span></button>)}</div>
