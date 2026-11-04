@@ -120,3 +120,26 @@ final result: passed
 ## 后续细化（P3）
 
 源图小字和浏览器字体渲染、谱型图标及标题旁装饰可进一步贴近；中央墙面插画不是逐像素相同。本次完成可交互复刻与素材拆分，不将其表述为像素完全一致。
+
+
+## 2026-11-04 Arrangement practice workspace
+
+Source: the user's inline 稻香 practice reference (934 × 552), plus two follow-up annotated screenshots explicitly requiring the practice screen inside the existing song dialog and its song metadata merged into the original top 52px toolbar. The selected card is the 晴天 piano beginner arrangement.
+
+Final browser evidence:
+- `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-desktop.png` (1830 × 1255)
+- `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-mobile.png` (390 × 844)
+
+State: 晴天, piano beginner, first page, day theme, staff notation. Screenshots use one physical pixel per CSS pixel. The browser reserves an 11px native scrollbar gutter. Full-view comparison uses the original inline reference and the two subsequent layout annotations. Focused header inspection confirms one 52px row, with return action, title, performer, version facts, practice count, favorite and right-side close.
+
+Comparison history:
+1. Initial full-viewport implementation was rejected. Replaced it with content inside `.detail-overlay-frame`, retaining the search background and the existing dialog boundaries.
+2. Duplicate metadata row was rejected. Moved the practice heading into the original top row; removed its duplicate caption and the extra row below.
+3. The relocated heading initially clipped under the original toolbar. Corrected overflow and stacking and verified every header control is visible, with the close button at the right.
+4. Five complete systems display on desktop; the reading toolbar and score scroll within their own regions on mobile.
+
+Browser interactions: card → practice content; staff/number/chord views; next/previous page; play with elapsed-time advancement; pause/stop; font/zoom; night/day; metronome; automatic following; speed; browser-local favorite; Return to Score List and Escape. Returning preserves the existing search URL. Final console inspection found no warnings/errors. Build and four Sites worker/packaging checks pass. Printing, fullscreen and clipboard browser dialogs were not exercised.
+
+Intentional content differences: song and version metadata correspond to the selected 晴天 arrangement. Notes, captions and synthesized audio are original sight-reading demonstrations, labeled “谱面演示 · 非原曲”; a full song score and recording evaluation are not connected. The reference paper texture and detailed engraving differ slightly; this is not a claim of pixel-identical score content.
+
+final result: passed
