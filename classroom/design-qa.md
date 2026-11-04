@@ -143,3 +143,10 @@ Browser interactions: card → practice content; staff/number/chord views; next/
 Intentional content differences: song and version metadata correspond to the selected 晴天 arrangement. Notes, captions and synthesized audio are original sight-reading demonstrations, labeled “谱面演示 · 非原曲”; a full song score and recording evaluation are not connected. The reference paper texture and detailed engraving differ slightly; this is not a claim of pixel-identical score content.
 
 final result: passed
+
+
+### Practice header annotation follow-up
+
+Removed difficulty text, stars and the top favorite action. Moved performer into the right metadata group immediately before practice count; kept the bottom favorite action. Verified the rendered header text and DOM order in the existing 1830 × 1255 in-app preview. Source: three current user annotations. Screenshot: `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-header-simplified.png`. Production build passes.
+
+final result: passed
