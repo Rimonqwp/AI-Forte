@@ -1,3 +1,4 @@
+import { useCloudState } from './useCloudState.js';
 import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Bell, CaretDown, ChatCircle, Check, CheckSquare, FileText, Fire, GraduationCap, Guitar, Heart, Lightbulb, List, MagnifyingGlass, Microphone, MusicNote, MusicNotes, Pause, PianoKeys, Plant, Play, SpeakerHigh, Sparkle, Star, Target, UsersThree, X } from '@phosphor-icons/react';
 import { App } from './App.jsx';
@@ -84,8 +85,12 @@ export function ClassroomApp() {
 function SongDetail({song,modal=false,onClose}) {
   const [filters,setFilters]=useState(defaultFilters);
   const [sort,setSort]=useState('最热推荐');
-  const [saved,setSaved]=useState([]);
-  const [songSaved,setSongSaved]=useState(false);
+  const [practiceSaved,setPracticeSaved]=useCloudState('practice-favorites',[],'classroom.practice.saved');
+  const saved=practiceSaved.filter(id=>id.startsWith(`${song.id}:`)).map(id=>id.slice(song.id.length+1));
+  const setSaved=change=>setPracticeSaved(values=>{const current=values.filter(id=>id.startsWith(`${song.id}:`)).map(id=>id.slice(song.id.length+1));return [...values.filter(id=>!id.startsWith(`${song.id}:`)),...change(current).map(id=>`${song.id}:${id}`)];});
+  const [songFavorites,setSongFavorites]=useCloudState('favorites',[]);
+  const songSaved=songFavorites.includes(song.id);
+  const setSongSaved=next=>setSongFavorites(values=>(typeof next==='function'?next(values.includes(song.id)):next)?[...new Set([...values,song.id])]:values.filter(id=>id!==song.id));
   const [section,setSection]=useState('versions');
   const [selected,setSelected]=useState(null);
   const [tempo,setTempo]=useState(80);

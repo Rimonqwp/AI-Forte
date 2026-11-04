@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useCloudState, localDay } from './useCloudState.js';
 import { ClassroomHeader } from './ClassroomHeader.jsx';
 import { tr, useLanguage } from './language.js';
 import { MusicSearch, matchesSong } from './MusicSearch.jsx';
@@ -40,13 +41,14 @@ function Rating({level}) { return <span className="rating" aria-label={`难度 $
 export function App({ userName = '音乐同学' }) {
   useLanguage();
   const [query,setQuery]=useState(''); const [search,setSearch]=useState(''); const [filter,setFilter]=useState('全部');
-  const [tab,setTab]=useState('推荐'); const [saved,setSaved]=useState([]); const [liked,setLiked]=useState([]);
-  const [modal,setModal]=useState(null); const [menu,setMenu]=useState(null); const [checkedIn,setCheckedIn]=useState(false);
-  const [posts,setPosts]=useState(initialPosts); const [toast,setToast]=useState(''); const [completed,setCompleted]=useState([]);
+  const [tab,setTab]=useState('推荐'); const [saved,setSaved]=useCloudState('favorites',[]); const [liked,setLiked]=useCloudState('likes',[]);
+  const [modal,setModal]=useState(null); const [menu,setMenu]=useState(null); const [checkins,setCheckins]=useCloudState('checkins',[]); const checkedIn=checkins.includes(localDay()); const setCheckedIn=()=>setCheckins(days=>[...new Set([...days,localDay()])].slice(-1000));
+  const [posts,setPosts]=useState(initialPosts); const [toast,setToast]=useState(''); const [completed,setCompleted]=useCloudState('completed',[]);
   const [playing,setPlaying]=useState(false); const [tempo,setTempo]=useState(80); const [progress,setProgress]=useState(0);
   const dialog=useRef(null); const audio=useRef(null); const audioNodes=useRef([]); const timer=useRef(null); const toastTimer=useRef(null);
   const [mobileNav,setMobileNav]=useState(false);
   const notify=(message)=>{setToast(tr(message));clearTimeout(toastTimer.current);toastTimer.current=setTimeout(()=>setToast(''),3000);};
+  useEffect(()=>{let last=0;const failed=()=>{if(Date.now()-last>10000){last=Date.now();notify('云端暂不可用，改动保留在本机，联网后重试。');}};window.addEventListener('puyadao:sync-error',failed);return()=>window.removeEventListener('puyadao:sync-error',failed);},[]);
   const stopAudio=()=>{audioNodes.current.forEach(n=>{try{n.stop();}catch{}});audioNodes.current=[];clearInterval(timer.current);setPlaying(false);setProgress(0);};
   const closeModal=()=>{stopAudio();setModal(null);};
   const open=(value)=>{if(value.song&&['preview','practice'].includes(value.type)&&window.location.hash.startsWith('#scores')){if(value.type==='practice'){window.dispatchEvent(new CustomEvent('classroom:open-song',{detail:{id:value.song.id}}));return;}sessionStorage.setItem('classroom.lastScoreSearch',window.location.hash);window.location.hash='song?id='+encodeURIComponent(value.song.id);return;}stopAudio();setMenu(null);setMobileNav(false);setModal(value);setTempo(value.song?.bpm||80);};
