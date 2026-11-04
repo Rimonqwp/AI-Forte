@@ -93,3 +93,5 @@ Give the practice dialog exit controls a dedicated 52px toolbar in normal layout
 Song details use one continuous scroll: song information, arrangement versions, related discussions, courses and similar songs all stay rendered in that order. Sidebar actions scroll to their sections without replacing content or changing the search URL. Use transparent active navigation with a thin outline and right-align all counts. Increase vertical breathing room around arrangement statistics; omit the separate View Score action and open the score preview from the card or its accessible title control instead.
 
 Each arrangement card shows exactly two rows of the existing demonstration notation. Keep its description a concise single-line sentence with ellipsis on narrow cards, without the old multi-line minimum height.
+
+Related discussions, courses and similar songs continue directly on the detail page background, without enclosing cards, rounded outlines or separate fills. Separate each section with the same thin warm horizontal divider used between song information and versions, with comfortable responsive spacing.
