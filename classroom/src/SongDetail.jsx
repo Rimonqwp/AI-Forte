@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Bell, BookOpen, CaretDown, ChatCircle, Check, CheckSquare, FileText, Fire, GraduationCap, Guitar, Heart, Lightbulb, List, MagnifyingGlass, Microphone, MusicNote, MusicNotes, Pause, PianoKeys, Plant, Play, SpeakerHigh, Sparkle, Star, Target, UsersThree, VideoCamera, X } from '@phosphor-icons/react';
+import { ArrowLeft, ArrowRight, Bell, CaretDown, ChatCircle, Check, CheckSquare, FileText, Fire, GraduationCap, Guitar, Heart, Lightbulb, List, MagnifyingGlass, Microphone, MusicNote, MusicNotes, Pause, PianoKeys, Plant, Play, SpeakerHigh, Sparkle, Star, Target, UsersThree, X } from '@phosphor-icons/react';
 import { App } from './App.jsx';
 import './song-detail.css';
 import SongDiscussions from './SongDiscussions.jsx';
@@ -99,14 +99,14 @@ function SongDetail({song,modal=false,onClose,onSongChange}) {
   const change=(key,value)=>setFilters(previous=>({...previous,[key]:value}));
   const visible=versions.filter(version=>(filters.instrument==='全部乐器'||version.instrument===filters.instrument)&&(filters.level==='难度'||version.level===Number(filters.level))&&(filters.type==='谱子类型'||version.type===filters.type)&&(filters.key==='调性'||version.key===filters.key));
   visible.sort((a,b)=>sort==='最新发布'?a.days-b.days:sort==='评分最高'?b.rating-a.rating:sort==='最适合新手'?a.level-b.level:Number(b.plays)-Number(a.plays));
-  const sectionItems=[{id:'info',label:'歌曲信息',Icon:MusicNotes},{id:'versions',label:'选择乐谱版本',Icon:GraduationCap},{id:'comments',label:'相关讨论',count:'1,268',Icon:ChatCircle},{id:'courses',label:'相关课程',count:'4',Icon:VideoCamera},{id:'similar',label:'相似歌曲推荐',count:'6',Icon:MusicNotes}];
+  const sectionItems=[{id:'info',label:'歌曲信息',Icon:MusicNotes},{id:'versions',label:'选择乐谱版本',Icon:GraduationCap},{id:'comments',label:'相关讨论',count:'1,268',Icon:ChatCircle},{id:'similar',label:'相似歌曲推荐',count:'6',Icon:MusicNotes}];
   const chooseSection=id=>{setSection(id);overlayDialog.current?.querySelector(`#${id==='info'?'detail-song-info':`detail-${id}`}`)?.scrollIntoView({behavior:'smooth',block:'start'});};
   const sectionNav=<div className="detail-side-nav" role="navigation" aria-label="歌曲详情导航">{sectionItems.map(({id,label,Icon,count})=><button key={id} className={section===id?'active':''} aria-current={section===id?'location':undefined} onClick={()=>chooseSection(id)}><Icon size={22}/><span>{label}</span>{count&&<small>（{count}）</small>}</button>)}</div>;
   return <div className={`song-detail-mode${modal?' detail-overlay':''}`} onMouseDown={event=>{if(modal&&event.target===event.currentTarget)onClose();}}>
     <div className={modal?'detail-overlay-frame':'detail-page-frame'} role={modal?'dialog':undefined} aria-modal={modal?true:undefined} aria-label={modal?`${song.title} · 选择乐谱版本`:undefined} tabIndex={modal?-1:undefined} ref={overlayDialog}>{modal&&<div className="detail-overlay-header"><button className="detail-back" onClick={back}><ArrowLeft size={16}/>返回搜索结果</button>{sectionNav}<button className="detail-overlay-close" aria-label="关闭版本选择" onClick={onClose}><X size={21}/></button></div>}
     {!modal&&<><header className="site-header detail-site-header"><div className="header-inner">
       <a className="brand" href="#" onClick={event=>{event.preventDefault();home();}} aria-label="小谱音乐教室首页"><MusicNotes size={39} weight="duotone"/><span><strong>小谱音乐教室</strong><small>零基础也能学音乐 <MusicNotes size={10}/></small></span></a>
-      <nav aria-label="主导航" className={mobileNav?'open':''}><button className="nav-active" onClick={home}>首页</button><button onClick={()=>notify('零基础入门课程 · 演示')}>零基础入门</button><button onClick={back}>乐谱练习</button><button onClick={()=>chooseSection('courses')}>乐器课程 <CaretDown size={12}/></button><button onClick={()=>chooseSection('courses')}>声乐课程</button><button onClick={()=>notify('今日练习打卡已完成 · 演示')}>每日打卡</button><button onClick={()=>chooseSection('comments')}>社区问答</button></nav>
+      <nav aria-label="主导航" className={mobileNav?'open':''}><button className="nav-active" onClick={home}>首页</button><button onClick={()=>notify('零基础入门课程 · 演示')}>零基础入门</button><button onClick={back}>乐谱练习</button><button onClick={()=>notify('课程尚未接入，敬请期待。')}>乐器课程 <CaretDown size={12}/></button><button onClick={()=>notify('课程尚未接入，敬请期待。')}>声乐课程</button><button onClick={()=>notify('今日练习打卡已完成 · 演示')}>每日打卡</button><button onClick={()=>chooseSection('comments')}>社区问答</button></nav>
       <div className="header-actions"><button className="icon-button" aria-label="搜索乐谱" onClick={back}><MagnifyingGlass size={23}/></button><button className="icon-button notification" aria-label="学习通知" onClick={()=>notify('今天也来选一个适合自己的版本练习吧！')}><Bell size={23}/><span>1</span></button><button className="profile" onClick={()=>notify(`本页已收藏 ${saved.length} 个乐谱版本 · 演示`)}><img src={assets+'avatar-musician.png'} alt="我的头像"/><span>我的学习</span><CaretDown size={12}/></button><button className="mobile-toggle icon-button" aria-label="展开导航" onClick={()=>setMobileNav(!mobileNav)}><List size={24}/></button></div>
     </div></header>
     <section className="detail-hero" aria-label="选择歌曲编配版本"><img className="detail-hero-art" src={detailAssets+'detail-hero-v2.png'} alt="阳光洒进音乐教室，女孩抱着尤克里里，钢琴旁摆着乐谱"/>
@@ -125,10 +125,6 @@ function SongDetail({song,modal=false,onClose,onSongChange}) {
         {!visible.length&&<div className="detail-empty"><MusicNotes size={35}/><h3>暂时没有匹配的版本</h3><p>换一组筛选条件，试试其他编配。</p><button onClick={()=>setFilters({instrument:'全部乐器',level:'难度',type:'谱子类型',key:'调性'})}>清空筛选</button></div>}
       </section>
       <SongDiscussions song={song}/>
-      <section id="detail-courses" className="detail-extra-panel" aria-labelledby="detail-courses-heading">
-        <h2 id="detail-courses-heading">相关课程</h2><p className="detail-demo-note">课程演示</p>
-        <div className="detail-course-list">{['认识节拍与音符','三个常用和弦','跟着节拍器弹唱','让旋律更连贯'].map((course,index)=><button key={course} onClick={()=>notify(`已选择第 ${index+1} 课：${course} · 演示`)}><BookOpen size={23}/>{course}<span>{index+1}/4</span></button>)}</div>
-      </section>
       <section id="detail-similar" className="detail-extra-panel" aria-labelledby="detail-similar-heading">
         <h2 id="detail-similar-heading">相似歌曲推荐</h2>
         <div className="detail-related-songs">{songCatalog.filter(item=>item.id!==song.id).slice(0,6).map(item=><button key={item.id} onClick={()=>{if(modal){onSongChange(item.id);}else{window.location.hash='song?id='+item.id;}}}><MusicNote size={24}/><strong>{item.title}</strong><small>{item.artist}</small><ArrowRight size={18}/></button>)}</div>
