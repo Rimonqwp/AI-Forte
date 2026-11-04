@@ -8,10 +8,6 @@
 .score-search-page {
   --search-ink: #63291e;
   --search-coral: #ff735e;
-  background-image: url('../public/assets/score-library/page-leaves.png'), url('../public/assets/score-library/paper-texture.png');
-  background-position: left bottom, left top;
-  background-size: 42px 68px, 36px 400px;
-  background-repeat: no-repeat, repeat;
 }
 .score-search-page .results-hero { height: 244px; }
 .score-search-page .results-hero-art { z-index: -2; }
@@ -195,6 +191,7 @@
 /* The library now follows the original home introduction. Learning cards remain on home. */
 .score-search-page > .results-hero { display: none; }
 .library-home-hero { --classroom-art-height: 480px; height: var(--hero-intro-height); overflow: visible; }
+.library-home-hero .hero-art-frame { height: var(--classroom-art-height); }
 .library-home-hero .hero-art { height: calc(var(--classroom-art-height) + 16px); }
 @media (max-width: 900px) { .library-home-hero { --classroom-art-height: 520px; } }
 @media (min-width: 601px) and (max-width: 750px) { .library-home-hero { --classroom-art-height: 640px; } }
