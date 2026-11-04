@@ -190,7 +190,7 @@
 
 /* The library now follows the original home introduction. Learning cards remain on home. */
 .score-search-page > .results-hero { display: none; }
-.library-home-hero { --classroom-art-height: 480px; height: var(--hero-intro-height); overflow: visible; }
+.library-home-hero { --classroom-art-height: 480px; height: var(--classroom-art-height); overflow: visible; }
 .library-home-hero .hero-art-frame { height: var(--classroom-art-height); }
 .library-home-hero .hero-art { height: calc(var(--classroom-art-height) + 16px); }
 @media (max-width: 900px) { .library-home-hero { --classroom-art-height: 520px; } }
