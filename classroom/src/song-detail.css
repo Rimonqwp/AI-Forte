@@ -91,9 +91,10 @@
   .song-detail-mode .detail-versions{margin-top:12px}
 }
 
-/* Keep both dialog exit controls aligned above the scrollable content. */
-.detail-overlay-header{position:absolute;top:7px;left:12px;right:12px;z-index:2;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
-.detail-overlay-header>button{pointer-events:auto}
+/* A dedicated toolbar centers both exit controls within equal vertical padding. */
+.detail-overlay-header{position:relative;z-index:2;display:flex;flex:0 0 52px;align-items:center;justify-content:space-between;padding:12px;background:#fff8f0;box-sizing:border-box}
 .detail-overlay-header .detail-back{height:28px;margin:0}
 .detail-overlay-header .detail-overlay-close{position:static}
-.detail-overlay-frame .song-detail-page{padding-top:48px}
+.detail-overlay-frame{display:flex;flex-direction:column}
+.detail-overlay-frame .song-detail-page{min-height:0;max-height:calc(100dvh - 116px);padding-top:12px;border-top-left-radius:0;border-top-right-radius:0}
+@media(max-width:760px){.detail-overlay-frame .song-detail-page{max-height:calc(100dvh - 76px)}}
