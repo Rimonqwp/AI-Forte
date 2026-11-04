@@ -82,3 +82,11 @@
   .song-detail-mode .detail-version-card{padding-top:36px}
   .song-detail-mode .detail-version-save{top:17px}
 }
+
+/* Separate song information from versions without an enclosing versions panel. */
+.song-detail-mode .detail-summary{padding-bottom:16px;border-bottom:1px solid #e8d5c5}
+.song-detail-mode .detail-versions{margin:14px 0 0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+@media(max-width:760px){
+  .song-detail-mode .detail-summary{padding-bottom:12px}
+  .song-detail-mode .detail-versions{margin-top:12px}
+}
