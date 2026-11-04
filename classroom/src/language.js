@@ -32,7 +32,6 @@ export function useLanguage() {
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
   '登录 / 注册':['Sign in','登入 / 註冊'], '我的账号':['My account','我的帳號'], '退出登录':['Sign out','登出'],
-  '已登录 · 学习记录随账号同步':['Signed in · Learning records sync with your account','已登入 · 學習紀錄隨帳號同步'],
   '关闭登录窗口':['Close sign-in window','關閉登入視窗'], '让每一次练习，都留下足迹':['Keep every step of your music journey','讓每一次練習，都留下足跡'],
   '完成账号同步':['Complete account sync','完成帳號同步'],
   '登录后，在不同设备上找回你的收藏和学习进度。':['Sign in to access your saved scores and learning progress across devices.','登入後，在不同裝置上找回你的收藏和學習進度。'],

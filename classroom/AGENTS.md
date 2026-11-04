@@ -137,3 +137,5 @@ The site brand is 谱芽岛 and its tagline is 让喜欢的歌，在指尖靠岸
 The user requested account login from the header profile entry, backed by the existing Firebase project. Google (including Gmail) is enabled first; keep GitHub and Apple visibly unavailable until their developer credentials are configured. Preserve anonymous favorites and progress when upgrading or merging into an existing account. Show the real signed-in name and avatar, provide logout, isolate all caches by UID, and never carry signed-out account data into a new guest session. Keep the login dialog consistent with the warm paper theme and accessible on phones and with the keyboard.
 
 Google sign-in must use `puyadao.top` as the Firebase `authDomain`, so the Google account chooser displays the site domain instead of the Firebase project hostname. Keep the matching Google OAuth redirect URI `https://puyadao.top/__/auth/handler` configured before changing or deploying the frontend.
+
+Account menus must omit the signed-in learning-record sync status sentence; keep the user name, email and account actions.
