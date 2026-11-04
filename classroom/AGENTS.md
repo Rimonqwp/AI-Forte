@@ -103,3 +103,5 @@ In the practice dialog, put all four song-section navigation buttons in the fixe
 Keep equal responsive horizontal insets around the complete song detail content, including the practice dialog. Popular discussions initially show 20 rows; Show More appends 20 rows and category changes reset to the first 20. Omit the separate discussion demo disclaimer below this list; retain the existing overall demo disclosure and local-storage guidance in publishing flows.
 
 Omit the related-courses section and its song-section navigation entry from both the standalone detail page and practice dialog. Similar songs follow discussions directly.
+
+Allow selecting the original singer or a specific cover singer before filtering arrangements of the same song. Keep performer credits separate from community arranger credits, show them on cards and score previews, combine singer selection with existing filters and sorting, and clear it with the other filters. Clearly label illustrative cover singers as demo data.
