@@ -105,3 +105,5 @@ Keep equal responsive horizontal insets around the complete song detail content,
 Omit the related-courses section and its song-section navigation entry from both the standalone detail page and practice dialog. Similar songs follow discussions directly.
 
 Allow selecting the original singer or a specific cover singer before filtering arrangements of the same song. Keep performer credits separate from community arranger credits, show them on cards and score previews, combine singer selection with existing filters and sorting, and clear it with the other filters. Clearly label illustrative cover singers as demo data.
+
+The user removed the singer-selection explanatory sentence, the entire similar-song recommendations section (including its navigation entry), and the overall demo-data footer sentence. Keep these absent from standalone song details and the practice dialog. Retain the inline demo labels on illustrative cover singers and score previews. This supersedes the earlier similar-song and overall-disclosure layout instructions.

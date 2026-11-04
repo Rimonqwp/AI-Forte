@@ -8,13 +8,11 @@
 .detail-singer-options small{font-size:10px;color:#946d59}
 .detail-singer-kind{font-size:10px;border-right:1px solid #dfc6b5;padding-right:7px}
 .detail-singer-demo{font-size:9px;color:#9a806e}
-.detail-singer-filter>p{flex-basis:100%;margin:0;color:#987562;font-size:11px;line-height:18px}
 .detail-performer{display:flex;align-items:center;gap:4px;margin:3px 0 6px;color:#946d59;font-size:11px;line-height:18px}
 .detail-performer svg{flex-shrink:0;color:#bd8169}
 @media(max-width:760px){
   .detail-singer-filter{gap:7px;padding:9px 0}
   .detail-singer-options{flex-basis:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .detail-singer-options button{padding:5px 6px;gap:5px;font-size:11px}
-  .detail-singer-filter>p{font-size:10px}
   .detail-performer{font-size:10px;flex-wrap:wrap}
 }
