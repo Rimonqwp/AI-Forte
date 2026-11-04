@@ -47,7 +47,7 @@ export function ClassroomHeader({ userName = '音乐同学', assets, isSearchPag
 
   return <header className="site-header" ref={header}>
     <div className="header-inner">
-      <a href="#" className="brand" aria-label={tr('首页')} onClick={event => { event.preventDefault(); run(onHome); }}><MusicNotes size={42} weight="duotone"/><span><strong>{tr('小谱音乐教室')}</strong><small>{tr('零基础也能学音乐')} <MusicNotes size={11}/></small></span></a>
+      <a href="#" className="brand" aria-label={tr('首页')} onClick={event => { event.preventDefault(); run(onHome); }}><MusicNotes size={42} weight="duotone"/><span><strong>{tr('谱芽岛')}</strong><small>{tr('让喜欢的歌，在指尖靠岸。')} <MusicNotes size={11}/></small></span></a>
       <nav aria-label={tr('主导航')} className={mobileNav ? 'open' : ''}>
         <button className={!isSearchPage ? 'nav-active' : ''} onClick={() => run(onHome)}>{tr('首页')}</button>
         <button className={isSearchPage ? 'nav-active' : ''} onClick={() => run(() => onResults())}>{tr('乐谱')}</button>
@@ -65,7 +65,7 @@ export function ClassroomHeader({ userName = '音乐同学', assets, isSearchPag
           <button className="icon-button notification" aria-label={tr('学习通知')} aria-expanded={menu === 'notification'} aria-controls="header-notification-menu" onClick={() => toggle('notification')}><Bell size={23}/><span>1</span></button>
           {menu === 'notification' && <section className="dropdown notification-menu" id="header-notification-menu" aria-labelledby="header-notification-heading">
             <h2 id="header-notification-heading">{tr('学习通知')}</h2>
-            <div className="notification-message"><MusicNotes size={26} weight="duotone" aria-hidden="true"/><div><h3>{tr('欢迎来到小谱音乐教室')}</h3><p>{tr('你的音乐旅程从这里开始。试试收藏一首喜欢的曲子，完成今天的第一段练习吧。')}</p></div></div>
+            <div className="notification-message"><MusicNotes size={26} weight="duotone" aria-hidden="true"/><div><h3>{tr('欢迎来到谱芽岛')}</h3><p>{tr('你的音乐旅程从这里开始。试试收藏一首喜欢的曲子，完成今天的第一段练习吧。')}</p></div></div>
             <button className="notification-discover" onClick={() => run(() => onResults(''))}>{tr('发现我的第一首乐谱')}</button>
           </section>}
         </div>

@@ -14,7 +14,7 @@ function update(code) {
   if (!valid(code)) return;
   language = code;
   document.documentElement.lang = code;
-  document.title = code === 'en' ? 'Little Score Music Classroom' : code === 'zh-TW' ? '小譜音樂教室' : '小谱音乐教室';
+  document.title = code === 'en' ? 'Puya Island · Songs you love, at your fingertips.' : code === 'zh-TW' ? '譜芽島 · 讓喜歡的歌，在指尖靠岸。' : '谱芽岛 · 让喜欢的歌，在指尖靠岸。';
   listeners.forEach(listener => listener());
 }
 update(language);
@@ -31,8 +31,8 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
-  '小谱音乐教室':['Little Score','小譜音樂教室'],
-  '零基础也能学音乐':['Music for everyone','零基礎也能學音樂'],
+  '谱芽岛':['Puya Island','譜芽島'],
+  '让喜欢的歌，在指尖靠岸。':['Songs you love, at your fingertips.','讓喜歡的歌，在指尖靠岸。'],
   '首页':['Home','首頁'], '乐谱':['Scores','樂譜'], '乐谱练习':['Practice','樂譜練習'],
   '乐器课程':['Courses','樂器課程'], '每日打卡':['Check in','每日打卡'], '已打卡':['Checked in','已打卡'],
   '社区问答':['Community','社區問答'], '语言':['Language','語言'], '学习通知':['Notifications','學習通知'],
@@ -61,7 +61,7 @@ const messages = {
   '搜索历史':['Recent searches','搜尋歷史'], '清空':['Clear','清空'], '还没有搜索记录，搜一首喜欢的歌吧':['Search for a song you love','還沒有搜尋記錄，搜一首喜歡的歌吧'],
   '匹配乐谱':['Matching scores','符合的樂譜'], '没有找到匹配的乐谱，试试其他歌曲或歌手':['No matches. Try another song or artist','沒有找到符合的樂譜，試試其他歌曲或歌手'],
   '支持歌曲名、歌手、乐器或粘贴音乐链接（如 YouTube / Bilibili 等）':['Search by song, artist, instrument or music URL (YouTube / Bilibili)','支援歌曲名、歌手、樂器或貼上音樂連結（如 YouTube / Bilibili 等）'],
-  '让音乐，成为生活里的小美好':['Make music part of your day','讓音樂，成為生活裡的小美好'], '从第一个音符，到第一首完整的歌。':['From your first note to your first song.','從第一個音符，到第一首完整的歌。'], '陪你慢慢学，开心唱，自在弹。':['Learn, sing and play at your own pace.','陪你慢慢學，開心唱，自在彈。'],
+  '从第一个音符，到第一首完整的歌。':['From your first note to your first song.','從第一個音符，到第一首完整的歌。'], '陪你慢慢学，开心唱，自在弹。':['Learn, sing and play at your own pace.','陪你慢慢學，開心唱，自在彈。'],
   '开始学音乐':['Start learning','開始學音樂'], '零基础入门':['For beginners','零基礎入門'], '发现好乐谱':['Discover scores','發現好樂譜'], '遇见音乐同好':['Meet music lovers','遇見音樂同好'],
   '每天一小段，':['A little practice every day,','每天一小段，'], '离喜欢的音乐近一点。':['closer to the music you love.','離喜歡的音樂近一點。'], '今天也来练一首':['Play a song today','今天也來練一首'],
   '返回顶部':['Back to top','返回頂部'], '学习体验演示 · 社区内容为示例':['Learning demo · Sample community content','學習體驗示範 · 社區內容為範例'], '用音乐记录每一点进步':['Celebrate every step with music','用音樂記錄每一點進步'],
@@ -74,10 +74,10 @@ const messages = {
   "试试「小星星」「晴天」，或选择乐器来发现乐谱。":["Try another song or choose an instrument.", "試試「小星星」「晴天」，或選擇樂器來發現樂譜。"],
   "查看全部乐谱":["View all scores", "查看全部樂譜"],
   "作品分类":["Performance categories", "作品分類"],
-  "小谱音乐教室，返回顶部":["Little Score, back to top", "小譜音樂教室，返回頂部"],
+  "谱芽岛，返回顶部":["Puya Island, back to top", "譜芽島，返回頂部"],
   "页尾快捷入口":["Footer navigation", "頁尾快捷入口"],
   "关闭弹窗":["Close dialog", "關閉彈窗"],
-  "LITTLE SCORE · 一起享受音乐":["LITTLE SCORE · Enjoy music together", "LITTLE SCORE · 一起享受音樂"],
+  "PUYA ISLAND · 一起享受音乐":["PUYA ISLAND · Enjoy music together", "PUYA ISLAND · 一起享受音樂"],
   "练习速度":["Tempo", "練習速度"],
   "试听进度":["Playback progress", "試聽進度"],
   "每一点进步，都值得被听见":["Every step deserves to be heard", "每一點進步，都值得被聽見"],
@@ -97,13 +97,13 @@ const messages = {
   "当前为页面演示，作品会展示在本次预览中。":["Demo: your performance appears in this session only.", "目前為頁面示範，作品會展示在本次預覽中。"],
   "发布到作品社区":["Share with the community", "發布到作品社區"],
   "音乐同好的小小讨论室":["A place for music lovers", "音樂同好的小小討論室"],
-  "小谱音乐老师":["Little Score teacher", "小譜音樂老師"],
+  "小谱音乐老师":["Puya Island teacher", "小譜音樂老師"],
   "一起学习，一起进步":["Learn and grow together", "一起學習，一起進步"],
   "讨论回复":["Reply", "討論回覆"],
   "聊聊你的音乐心得…":["Share your thoughts on music…", "聊聊你的音樂心得…"],
   "发送":["Send", "傳送"],
   "位同学参与讨论":["people in this discussion", "位同學參與討論"],
-  "欢迎来到小谱音乐教室":["Welcome to Little Score", "歡迎來到小譜音樂教室"],
+  "欢迎来到谱芽岛":["Welcome to Puya Island", "歡迎來到譜芽島"],
   "你的音乐旅程从这里开始。试试收藏一首喜欢的曲子，完成今天的第一段练习吧。":["Start your music journey here. Save a favorite score and try your first practice.", "你的音樂旅程從這裡開始。試試收藏一首喜歡的曲子，完成今天的第一段練習吧。"],
   "发现我的第一首乐谱":["Find my first score", "發現我的第一首樂譜"],
   "从音乐链接开始":["Start with a music link", "從音樂連結開始"],
