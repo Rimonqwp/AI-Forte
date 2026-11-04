@@ -98,3 +98,23 @@
 .detail-overlay-frame{display:flex;flex-direction:column}
 .detail-overlay-frame .song-detail-page{min-height:0;max-height:calc(100dvh - 116px);padding-top:0;border:0;border-top-left-radius:0;border-top-right-radius:0}
 @media(max-width:760px){.detail-overlay-frame .song-detail-page{max-height:calc(100dvh - 76px)}}
+
+/* A continuous detail page with outline navigation and aligned counts. */
+.song-detail-mode .detail-side-nav>button{display:grid;grid-template-columns:20px minmax(0,1fr) auto;gap:4px;padding:6px;font-size:12px;border:1px solid transparent}
+.song-detail-mode .detail-side-nav>button>svg{width:20px;height:20px}
+.song-detail-mode .detail-side-nav>button>span{white-space:normal;line-height:18px}
+.song-detail-mode .detail-side-nav>button.active{background:transparent;border-color:#ed9179}
+.song-detail-mode .detail-side-nav small{margin-left:0;justify-self:end;text-align:right;white-space:nowrap}
+.song-detail-mode .detail-version-stats{margin-top:8px;padding:6px 0}
+.song-detail-mode .detail-version-card{cursor:pointer}
+.detail-version-open{text-align:inherit;font:inherit;color:inherit;width:100%}
+.detail-version-open:focus-visible{outline:2px solid #ed9179;outline-offset:3px;border-radius:3px}
+.song-detail-mode .detail-main>section{scroll-margin-top:12px}
+@media(min-width:761px){
+  .song-detail-mode .detail-sidebar{position:sticky;top:12px;align-self:start}
+  .detail-overlay .detail-sidebar{top:0}
+}
+@media(max-width:760px){
+  .song-detail-mode .detail-side-nav>button{grid-template-columns:18px auto auto}
+  .song-detail-mode .detail-side-nav>button>span{white-space:nowrap}
+}
