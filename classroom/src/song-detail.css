@@ -64,3 +64,21 @@
   .song-detail-mode .detail-version-badge svg{width:13px;height:13px}
   .song-detail-mode .detail-version-card{padding-top:28px}
 }
+
+/* Supported instruments reflect the complete version list, independent of filters. */
+.detail-supported-instruments{display:flex;align-items:center;flex-wrap:wrap;gap:5px 12px;margin-top:5px;font-size:12px;line-height:20px}
+.detail-instruments-label{color:#987562}
+.detail-instrument{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;color:#795542}
+.detail-instrument svg{flex-shrink:0;color:#ad6f5b}
+
+/* Give the status label and the rest of each card space below the top border. */
+.song-detail-mode .detail-version-badge{top:7px}
+.song-detail-mode .detail-version-card{padding-top:38px}
+.song-detail-mode .detail-version-save{top:18px}
+@media(max-width:760px){
+  .detail-supported-instruments{gap:4px 8px;font-size:10px;line-height:18px}
+  .detail-instrument{gap:3px}
+  .detail-instrument svg{width:14px;height:14px}
+  .song-detail-mode .detail-version-card{padding-top:36px}
+  .song-detail-mode .detail-version-save{top:17px}
+}

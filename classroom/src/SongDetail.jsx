@@ -36,6 +36,17 @@ function Rating({level}) {
 }
 function Instrument({name,...props}) { return name==='钢琴'?<PianoKeys {...props}/>:<Guitar {...props}/>; }
 
+function SupportedInstruments({versions}) {
+  const instruments=[...new Set(versions.map(version=>version.instrument))];
+  const iconsOnly=instruments.length>3;
+  return <div className="detail-supported-instruments" role="group" aria-label="支持乐器">
+    <span className="detail-instruments-label">支持乐器：</span>
+    {instruments.map(name=><span key={name} className="detail-instrument" title={name} aria-label={name}>
+      <Instrument name={name} size={16} aria-hidden="true"/>{!iconsOnly&&<span>{name}</span>}
+    </span>)}
+  </div>;
+}
+
 const versionBadgeStyles = {
   '官方推荐': {tone:'sage', Icon:CheckSquare},
   '热门': {tone:'coral', Icon:Fire},
@@ -104,7 +115,7 @@ function SongDetail({song,modal=false,onClose,onSongChange}) {
     </section></>}
     <main className="song-detail-page"><aside className="detail-sidebar"><button className="detail-back" onClick={back}><ArrowLeft size={16}/>返回搜索结果</button><div className="detail-side-nav" aria-label="歌曲详情导航">{sectionItems.map(({id,label,Icon,count})=><button key={id} className={section===id?'active':''} onClick={()=>chooseSection(id)}><Icon size={22}/><span>{label}</span>{count&&<small>（{count}）</small>}</button>)}</div></aside>
       <div className="detail-main"><section className="detail-summary" id="detail-song-info" aria-label="歌曲信息"><button className="detail-cover" onClick={play} aria-label={`试听${song.title}练习音色演示`}><img src={song.cover?detailAssets+song.cover:assets+`score-library/cover-${song.id}.png`} onError={event=>{if(!event.currentTarget.dataset.fallback){event.currentTarget.dataset.fallback='true';event.currentTarget.src=assets+`score-${song.id}.png`;}}} alt={`${song.title}歌曲封面`}/><span>{playing?<Pause size={20} weight="fill"/>:<Play size={20} weight="fill"/>}</span></button>
-        <div className="detail-song-copy"><h2>《{song.title}》</h2><p className="detail-credits"><span><FileText size={14}/>原唱：{song.artist}</span><span>词曲：{song.artist}</span>{song.date&&<span>发行：{song.date}</span>}</p><div className="detail-song-tags">{(song.tags||['流行','抒情','弹唱']).map(tag=><span key={tag}>{tag}</span>)}</div><p className="detail-song-facts"><span><MusicNotes size={17}/>原调：{song.key} 调</span><span><Target size={16}/>常用调：C / G / D</span><span>难度：<Rating level={3}/><small>（中等）</small></span></p><div className="detail-song-stats"><span><Fire size={18} weight="fill"/>128.6 万人练习</span><button onClick={()=>setSongSaved(!songSaved)} aria-pressed={songSaved} aria-label={`收藏${song.title}`}><Heart size={20} weight={songSaved?'fill':'regular'}/>{songSaved?'3.9 万+1':'3.9 万'}收藏</button><span><Star size={18} weight="fill"/>4.9 分<small>（4,328 条评分）</small></span></div></div>
+        <div className="detail-song-copy"><h2>《{song.title}》</h2><p className="detail-credits"><span><FileText size={14}/>原唱：{song.artist}</span><span>词曲：{song.artist}</span>{song.date&&<span>发行：{song.date}</span>}</p><div className="detail-song-tags">{(song.tags||['流行','抒情','弹唱']).map(tag=><span key={tag}>{tag}</span>)}</div><p className="detail-song-facts"><span><MusicNotes size={17}/>原调：{song.key} 调</span><span><Target size={16}/>常用调：C / G / D</span><span>难度：<Rating level={3}/><small>（中等）</small></span></p><SupportedInstruments versions={versions}/><div className="detail-song-stats"><span><Fire size={18} weight="fill"/>128.6 万人练习</span><button onClick={()=>setSongSaved(!songSaved)} aria-pressed={songSaved} aria-label={`收藏${song.title}`}><Heart size={20} weight={songSaved?'fill':'regular'}/>{songSaved?'3.9 万+1':'3.9 万'}收藏</button><span><Star size={18} weight="fill"/>4.9 分<small>（4,328 条评分）</small></span></div></div>
         <aside className="detail-advice"><h3><Lightbulb size={24}/>选择建议 <small>· 不同版本适合不同的练习目标</small></h3><div className="detail-advice-cards">{[{Icon:Plant,title:'新手推荐',tone:'green',tips:['和弦简单、易上手','适合零基础入门']},{Icon:Microphone,title:'适合弹唱',tone:'pink',tips:['边弹边唱、氛围感强','适合自弹自唱练习']},{Icon:Target,title:'进阶提升',tone:'purple',tips:['指弹 / 独奏版本','提升演奏技巧与表现力']}].map(({Icon,title,tone,tips})=><div className={tone} key={title}><h4><Icon size={21}/>{title}</h4>{tips.map(tip=><p key={tip}><Check size={17}/>{tip}</p>)}</div>)}</div></aside>
       </section>
       {['versions','info'].includes(section)?<section className="detail-versions" aria-labelledby="detail-version-heading"><div className="detail-version-heading"><h2 id="detail-version-heading"><MusicNotes size={27}/>玩家制作的乐谱版本 <span>（共 {visible.length} 个）</span></h2><p>由社区创作者精心编配，选择最适合你的版本开始练习吧！</p></div>
