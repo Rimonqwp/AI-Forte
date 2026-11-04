@@ -96,5 +96,5 @@
 .detail-overlay-header .detail-back{height:28px;margin:0}
 .detail-overlay-header .detail-overlay-close{position:static}
 .detail-overlay-frame{display:flex;flex-direction:column}
-.detail-overlay-frame .song-detail-page{min-height:0;max-height:calc(100dvh - 116px);padding-top:12px;border-top-left-radius:0;border-top-right-radius:0}
+.detail-overlay-frame .song-detail-page{min-height:0;max-height:calc(100dvh - 116px);padding-top:0;border:0;border-top-left-radius:0;border-top-right-radius:0}
 @media(max-width:760px){.detail-overlay-frame .song-detail-page{max-height:calc(100dvh - 76px)}}
