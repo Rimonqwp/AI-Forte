@@ -33,7 +33,7 @@ export function useLanguage() {
 const messages = {
   '小谱音乐教室':['Little Score','小譜音樂教室'],
   '零基础也能学音乐':['Music for everyone','零基礎也能學音樂'],
-  '首页':['Home','首頁'], '乐普':['Scores','樂譜'], '乐谱练习':['Practice','樂譜練習'],
+  '首页':['Home','首頁'], '乐谱':['Scores','樂譜'], '乐谱练习':['Practice','樂譜練習'],
   '乐器课程':['Courses','樂器課程'], '每日打卡':['Check in','每日打卡'], '已打卡':['Checked in','已打卡'],
   '社区问答':['Community','社區問答'], '语言':['Language','語言'], '学习通知':['Notifications','學習通知'],
   '我的头像':['My avatar','我的頭像'], '我的学习':['My learning','我的學習'], '你好，':['Hello, ','你好，'],
