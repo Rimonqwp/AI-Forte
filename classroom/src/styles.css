@@ -206,7 +206,4 @@ html::-webkit-scrollbar-corner{background:#fff1e4}
 }
 
 /* Give the score filters and results breathing room below the banner. */
-.score-search-page .results-shell{margin-top:12px}
-@media(max-width:760px){
-  .score-search-page .results-shell{margin-top:8px}
-}
+.score-search-page .results-shell{margin-top:4px}
