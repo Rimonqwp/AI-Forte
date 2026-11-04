@@ -157,3 +157,19 @@ final result: passed
 Added “编配：{selected version author}” beside song/version facts in the existing top toolbar. Kept original-performer metadata at the right. Verified current piano version renders 编配：小谱老师, visible on desktop and narrow screens. Source: current user annotation; screenshot: `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-arranger-credit.png`. Production build passes.
 
 final result: passed
+
+
+### Continuous score and themed control menus
+
+Source: the nine current browser annotations. Changes: removed font sizing and mood text; replaced three notation tabs and the native practice-mode select with single-trigger themed menus; moved singer immediately before arranger, removing the former singer badge; removed pagination and rendered all ten systems in one scroll area; replaced the hidden metronome input with an explicit themed BPM panel.
+
+Evidence:
+- `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-notation-menu.png`
+- `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-metronome-panel.png`
+- `/Users/rimon/.codex/visualizations/2026/11/04/01a1a644-4fdf-7630-8bde-b5afa14e8b9e/practice-custom-menu-mobile.png`
+
+Visual comparison: warm paper, coral accents, thin warm outlines, rounded corners and selected checkmarks follow the existing interface. Popovers are anchored below notation and above mode/metronome, rendered outside clipping containers, and clamped to viewport edges. Night menus use the corresponding dark paper palette; fixed the inherited light header so night credits remain readable. Desktop inspected at 1830 × 1255 and mobile at 390 × 844, one physical pixel per CSS pixel. Mobile menus fit entirely inside the viewport and the toolbar wraps without covering exit controls.
+
+Browser verification: notation menu selection, keyboard opening/Home/Enter, mode selection, Escape dismissing only the menu, mutual exclusion/outside dismissal, BPM slider Home/End (40/180), separate metronome start/stop, and real wheel adjustment (40 → 41). Continuous score has 10 engraved systems and no page/font controls. Manual wheel scroll reaches later systems (scrollTop 702); automatic following during later playback also reaches scrollTop 702 with total content height 1583 and viewport height 881. Stop returns the score to the top. Removed mood text and duplicate singer badge confirmed from DOM. Final browser warnings/errors: none. Production build passes.
+
+final result: passed
