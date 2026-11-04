@@ -1,3 +1,5 @@
+.header-actions > .dropdown-wrap { display: flex; align-items: center; }
+.header-actions .notification { min-width: 28px; min-height: 32px; }
 .language-trigger { min-width: 28px; min-height: 32px; }
 .language-menu { min-width: 164px; }
 .language-menu button { justify-content: space-between; }
