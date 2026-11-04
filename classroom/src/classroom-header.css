@@ -36,3 +36,12 @@ html[lang="en"] .search-help { white-space: normal; line-height: 1.5; }
   .header-actions .notification-wrap .notification { display: inline-flex; min-height: 32px; }
   .dropdown.notification-menu { right: -71px; }
 }
+
+@media (min-width: 901px) {
+  .site-header .header-inner { justify-content: flex-start; }
+  .site-header .header-inner > nav { flex: 0 1 auto; justify-content: flex-start; gap: 24px; }
+  .site-header .header-actions { margin-left: auto; }
+}
+@media (min-width: 901px) and (max-width: 1150px) {
+  .site-header .header-inner > nav { gap: 18px; }
+}
