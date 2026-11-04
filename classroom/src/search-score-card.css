@@ -1,0 +1,8 @@
+.results-score-grid .results-practice-card{cursor:pointer}
+.results-score-grid .results-practice-card:focus-within{outline:2px solid #e99779;outline-offset:2px}
+/* Match the home page paper labels, including its responsive spacing. */
+.results-score-grid .results-practice-card .score-badge{top:8px;left:8px;padding:4px 7px;font-size:11px;line-height:14px}
+@media(max-width:600px){
+  .results-score-grid .results-practice-card .score-badge{top:6px;left:6px;padding:3px 6px;font-size:10px;gap:3px}
+  .results-score-grid .results-practice-card .score-badge svg{width:11px;height:11px}
+}

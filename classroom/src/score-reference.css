@@ -104,7 +104,7 @@
 .score-search-page .results-score-grid .save-button.is-saved { color: #e94f50; }
 .score-search-page .results-score-grid .instrument-badge.orange { background: #ffead4; color: #ef8a42; }
 .score-search-page .results-score-grid .instrument-badge.purple { background: #eddbfc; color: #a37dc2; }
-.score-search-page .results-score-grid img[src$='score-sunny.png'] { content: url('../public/assets/score-library/cover-sunny.png'); }
+.score-search-page .results-score-grid img[src$='score-sunny.png'] { content: url('../public/assets/score-library/cover-sunny-clean.png'); }
 .score-search-page .results-score-grid img[src$='score-confession.png'] { content: url('../public/assets/score-library/cover-confession.png'); }
 .score-search-page .results-score-grid img[src$='score-rice.png'] { content: url('../public/assets/score-library/cover-rice.png'); }
 .score-search-page .results-score-grid img[src$='score-fireworks.png'] { content: url('../public/assets/score-library/cover-fireworks.png'); }
@@ -114,8 +114,6 @@
 .score-search-page .results-score-grid img[src$='score-north.png'] { content: url('../public/assets/score-library/cover-north.png'); }
 .score-search-page .results-score-grid img[src$='score-simple.png'] { content: url('../public/assets/score-library/cover-simple.png'); }
 .score-search-page .results-score-grid img[src$='score-clock.png'] { content: url('../public/assets/score-library/cover-clock.png'); }
-/* The supplied thumbnail already includes its small paper label. */
-.score-search-page .score-cover:has(img[src$='score-sunny.png']) .score-badge { visibility: hidden; }
 .score-search-page .results-community { margin-left: 7px; padding: 13px 16px 12px 20px; min-height: 228px; }
 .score-search-page .results-community-heading { gap: 20px; margin-bottom: 16px; }
 .score-search-page .results-community-heading h2 { font-family: 'PingFang SC', sans-serif; font-size: 20px; font-weight: 700; }
