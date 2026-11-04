@@ -219,3 +219,5 @@
 @media (max-width: 760px) {
   .score-search-page .filter-level { grid-column: 1 / -1; }
 }
+
+.score-search-page .results-community { display: none; }
