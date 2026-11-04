@@ -128,3 +128,18 @@
 /* Continue the song information divider through every related section. */
 .song-detail-mode .detail-extra-panel{margin-top:16px;padding:16px 0 0;border:0;border-top:1px solid #e8d5c5;border-radius:0;background:transparent;box-shadow:none}
 @media(max-width:760px){.song-detail-mode .detail-extra-panel{margin-top:12px;padding-top:12px}}
+
+/* Keep section navigation in the fixed exit toolbar and use the full dialog width. */
+.detail-overlay-header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:16px}
+.detail-overlay-header .detail-side-nav{display:flex;align-items:center;justify-content:safe center;gap:8px;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none}
+.detail-overlay-header .detail-side-nav::-webkit-scrollbar{display:none}
+.song-detail-mode .detail-overlay-header .detail-side-nav>button{display:inline-flex;align-items:center;flex:0 0 auto;gap:5px;width:auto;min-height:28px;margin:0;padding:3px 9px;border-radius:12px;white-space:nowrap}
+.detail-overlay-header .detail-side-nav>button>span{white-space:nowrap}
+.detail-overlay-header .detail-side-nav>button>svg{width:17px;height:17px}
+.detail-overlay-header .detail-side-nav small{font-size:10px}
+.detail-overlay-frame .song-detail-page{display:block}
+@media(max-width:760px){
+  .detail-overlay-header{gap:8px}
+  .detail-overlay-header .detail-side-nav{justify-content:flex-start;gap:5px}
+  .song-detail-mode .detail-overlay-header .detail-side-nav>button{padding:3px 7px;font-size:11px}
+}
