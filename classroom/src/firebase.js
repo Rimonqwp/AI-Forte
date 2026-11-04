@@ -8,7 +8,7 @@ import { authenticateProvider } from './account-auth-flow.js';
 // and firestore.rules; no service-account key belongs in the browser bundle.
 const app = initializeApp({
   apiKey: 'AIzaSyDEfVuPiIw9bO9r66GVvrwZosGnbPV2RAY',
-  authDomain: 'puyadao-75dd0.firebaseapp.com',
+  authDomain: 'puyadao.top',
   projectId: 'puyadao-75dd0',
   appId: '1:783569378912:web:955ac462d0295906506d05',
 });

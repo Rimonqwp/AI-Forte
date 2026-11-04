@@ -26,11 +26,13 @@ Google 登录已在 Firebase 项目 `puyadao-75dd0` 启用，包含 Gmail 与其
 - 登录用户：[用户列表](https://console.firebase.google.com/project/puyadao-75dd0/authentication/users)
 - 用户资料：[Firestore users](https://console.firebase.google.com/project/puyadao-75dd0/firestore/databases/-default-/data/~2Fusers)
 
-当前 Firebase `authDomain` 为 `puyadao-75dd0.firebaseapp.com`，OAuth 回调为：
+当前 Firebase `authDomain` 为 `puyadao.top`，Google 登录页面使用网站自己的域名，OAuth 回调为：
 
 ```text
-https://puyadao-75dd0.firebaseapp.com/__/auth/handler
+https://puyadao.top/__/auth/handler
 ```
+
+Google OAuth 客户端已添加 JavaScript 来源 `https://puyadao.top` 和上述自定义回调；保留原 Firebase 回调以兼容已有授权流程。
 
 域名 `puyadao.top`、`www.puyadao.top`、Firebase 默认域名和本地开发域名均在授权域名列表。不要只改前端 `authDomain`；更换 OAuth 回调域名需要同步修改提供方的配置。
 
