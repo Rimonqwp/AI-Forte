@@ -1,0 +1,81 @@
+{
+  "desktop": {
+    "viewport": [
+      1448,
+      1086
+    ],
+    "referenceVisiblePixels": [
+      1448,
+      697
+    ],
+    "headerHeight": 48,
+    "firstCardTop": 478,
+    "firstCardBottom": 697,
+    "horizontalOverflow": false,
+    "missingImages": 0
+  },
+  "responsive": [
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "horizontalOverflow": false,
+      "columns": 2,
+      "clippedButtons": 0
+    },
+    {
+      "viewport": [
+        768,
+        1024
+      ],
+      "horizontalOverflow": false,
+      "columns": 2
+    },
+    {
+      "viewport": [
+        1947,
+        1255
+      ],
+      "horizontalOverflow": false,
+      "columns": 4
+    }
+  ],
+  "interactions": {
+    "sunnyEntry": true,
+    "backPreservesQuery": true,
+    "riceEntry": true,
+    "guitarFilterCount": 4,
+    "fourStarGuitarCount": 1,
+    "incompatibleNotationEmpty": true,
+    "resetCount": 8,
+    "newestFirst": "尤克里里弹唱版（超简单）",
+    "favoriteToggle": true,
+    "sheetDialog": true,
+    "tempoAfterArrow": 85,
+    "audioPlayPause": true,
+    "escapeCloses": true,
+    "commentsTab": true,
+    "coursesCount": 4,
+    "sunnyIndependentCoverLoaded": true
+  },
+  "consoleWarningsAndErrors": [],
+  "build": "passed",
+  "sitesTestsPassed": 4,
+  "finalAssets": 11,
+  "practiceOverlay": {
+    "urlUnchanged": true,
+    "extraHeaders": 0,
+    "extraHeroes": 0,
+    "repeatOpenBackgroundScrollY": 100,
+    "repeatOpenBackgroundTop": 438,
+    "repeatOpenBackgroundWidth": 1680,
+    "backgroundFilterRetainedCount": 4,
+    "nestedEscapeOnlyClosesInner": true,
+    "closeRestoresBodyScroll": true,
+    "phonePanelTop": 12,
+    "phonePanelBottom": 832,
+    "phoneInternalScrollTest": 1146,
+    "phoneCloseStaysVisible": true
+  }
+}

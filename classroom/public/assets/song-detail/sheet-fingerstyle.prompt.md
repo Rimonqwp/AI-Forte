@@ -1,0 +1,6 @@
+Use case: scientific-educational
+Asset type: ONE standalone horizontal original music notation thumbnail.
+Primary request: an ORIGINAL generic treble-clef musical example, not the melody or score of any actual song. A single five-line staff, about ten simple quarter and eighth notes with a few beamed pairs, plus a few small lower harmony noteheads suggesting a fingerstyle arrangement. Fine dark ink on softly textured warm ivory paper.
+Composition: wide 3:1 canvas; ALL musical content, including the treble clef, note stems and staff, must fit in a narrow middle horizontal band between 40% and 60% of image height. Keep glyphs modest and the entire staff very shallow. Large plain ivory margins above and below. The final image is center-cropped into a 250px by 29px thumbnail, so no meaningful marks should be above/below that central band.
+Style: fine printed black sheet-music engraving, small delicately spaced notation, understated warm ivory paper.
+Constraints: only one single staff strip; no title, no heading, no other text, no multiple staves, no UI, no frame, no collage, no instrument or hands, no color accents, no logos, no watermark.

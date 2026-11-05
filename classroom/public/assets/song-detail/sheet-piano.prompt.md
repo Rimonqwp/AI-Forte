@@ -1,0 +1,6 @@
+Use case: scientific-educational
+Asset type: ONE standalone horizontal musical notation snippet for a small thumbnail on a cream-paper music-learning website.
+Primary request: an ORIGINAL generic music-notation motif, NOT the melody or score of any named song. One single five-line staff with thin gray-black horizontal staff lines, a clear black treble clef at far left, 4/4 time signature, then about 8 to 12 simple quarter notes and paired eighth notes spaced evenly across the staff.
+Composition: a wide 3:1 canvas. Center the entire notation staff, clef and notes in a narrow horizontal band covering about 40% to 60% of image height, leaving plain cream paper above and below. Important: the image will be displayed at 250px wide and 29px high using a centered crop, so all notation must stay close to the middle horizontal line.
+Style: clean printed black musical engraving on very subtly warm off-white cream paper. Small notation glyphs; gently aged paper consistent with a warm pastel music-learning website.
+Constraints: single flat notation strip only. No frame, no heading, no song title, no words, no UI, no hands or instruments, no illustration, no collage, no multiple rows or separate panels, no decorative marks.

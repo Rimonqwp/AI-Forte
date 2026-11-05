@@ -1,0 +1,5 @@
+Use case: illustration-story
+Asset type: one square standalone avatar image for a music-learning website, shown as a small circular avatar.
+Reference image: avatar-teacher.png is style guidance only. Match its watercolor paper texture, warm peach and cream palette, thin brown organic outlines, gentle chibi/anime proportions, soft blush, and simple portrait composition.
+Primary request: a friendly smiling young woman musician, brown eyes, medium brown hair gathered into a side ponytail with a small yellow star hair clip, cream-colored top and rosy cheeks. Head and shoulders portrait centered on a warm peach circular painted background, with cream paper corners outside the circle.
+Constraints: exactly one centered face, one standalone portrait only; no text, no logos, no music notes, no collage, no split image, no borders. Keep the face large and readable at small avatar scale.

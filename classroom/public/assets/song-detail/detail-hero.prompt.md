@@ -1,0 +1,8 @@
+Use case: illustration-story
+Asset type: one standalone panoramic website hero-background illustration, 3:1 aspect ratio, no collage.
+Primary request: Recreate ONLY the music-classroom background illustration from the top banner of the supplied reference, without any overlaid UI or text.
+Input image: style/composition reference; do not copy its interface, cards, typography or black bottom region.
+Scene/backdrop: a warmly sunlit pastel peach music classroom. Far left, a smiling brown-haired teenage girl wearing large white headphones and a cream blouse holds a small wooden ukulele beside a pink sunlit window. A sleepy cream-and-ginger cat rests by books at the lower left. Far right, a dark brown upright piano with open sheet music, a little brass lamp, trailing green vines, books and a soft rose stool.
+Composition/framing: extra-wide 3:1 panorama. All illustrative focal subjects confined to the outer left 25% and outer right 22%. Center 53% is a largely empty pale peach paper wall, softly textured, with generous clear space for real webpage heading and controls. Girl is a relatively small figure so she and her ukulele remain visible when the panorama is cropped into a 1448 by 181 banner; keep focal features near horizontal centerline of that shallow strip. Continuous warm classroom background, not split panels.
+Style/medium: delicate anime watercolor children's illustration, soft hand-drawn ink contours, luminous peach and cream washes, gentle natural sunlight, matching the reference's charming painterly style.
+Constraints: one image only. No text, no lettering, no UI, no logos, no border, no musical-note glyphs, no screenshot, no collage.

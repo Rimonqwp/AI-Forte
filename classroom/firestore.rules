@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Read-only migration archive. New writes use the authenticated Cloud SQL API.
+    match /users/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid
+        && request.auth.token.firebase.sign_in_provider != 'anonymous';
+      allow write: if false;
+    }
+    match /visitors/{uid}/state/{key} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+  }
+}

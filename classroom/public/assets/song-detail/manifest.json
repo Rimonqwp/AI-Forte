@@ -1,0 +1,83 @@
+{
+  "tool": "built-in image_gen",
+  "policy": "One image per call; no collage or sprite sheet.",
+  "assets": [
+    {
+      "file": "detail-hero-v2.png",
+      "purpose": "操作指引横幅背景",
+      "width": 2172,
+      "height": 724,
+      "prompt": "detail-hero-v2.prompt.md"
+    },
+    {
+      "file": "rice-cover.png",
+      "purpose": "稻香歌曲封面",
+      "width": 1448,
+      "height": 1086,
+      "prompt": "rice-cover.prompt.md"
+    },
+    {
+      "file": "sunny-cover.png",
+      "purpose": "晴天歌曲详情封面",
+      "prompt": "sunny-cover.prompt.md",
+      "width": 1448,
+      "height": 1086
+    },
+    {
+      "file": "avatar-teacher.png",
+      "purpose": "小谱老师头像",
+      "width": 1254,
+      "height": 1254,
+      "prompt": "avatar-teacher.prompt.md"
+    },
+    {
+      "file": "avatar-acous.png",
+      "purpose": "阿泽头像",
+      "width": 1254,
+      "height": 1254,
+      "prompt": "avatar-acous.prompt.md"
+    },
+    {
+      "file": "avatar-star.png",
+      "purpose": "星星同学头像",
+      "width": 1254,
+      "height": 1254,
+      "prompt": "avatar-star.prompt.md"
+    },
+    {
+      "file": "avatar-lin.png",
+      "purpose": "指弹小林头像",
+      "width": 1254,
+      "height": 1254,
+      "prompt": "avatar-lin.prompt.md"
+    },
+    {
+      "file": "sheet-piano.png",
+      "purpose": "钢琴版本谱例",
+      "width": 2172,
+      "height": 724,
+      "prompt": "sheet-piano.prompt.md"
+    },
+    {
+      "file": "sheet-guitar.png",
+      "purpose": "吉他弹唱版本谱例",
+      "width": 2172,
+      "height": 724,
+      "prompt": "sheet-guitar.prompt.md"
+    },
+    {
+      "file": "sheet-ukulele-v2.png",
+      "purpose": "尤克里里版本谱例",
+      "width": 2172,
+      "height": 724,
+      "prompt": "sheet-ukulele-v2.prompt.md"
+    },
+    {
+      "file": "sheet-fingerstyle.png",
+      "purpose": "吉他指弹版本谱例",
+      "width": 2172,
+      "height": 724,
+      "prompt": "sheet-fingerstyle.prompt.md"
+    }
+  ]
+}

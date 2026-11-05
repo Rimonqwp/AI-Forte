@@ -1,0 +1,189 @@
+{
+  "source": "design-reference/score-library.png",
+  "sourceSize": [
+    1448,
+    1086
+  ],
+  "coordinateConvention": "left, top, right exclusive, bottom exclusive",
+  "assets": [
+    {
+      "file": "hero-left.png",
+      "bounds": [
+        0,
+        50,
+        425,
+        291
+      ]
+    },
+    {
+      "file": "hero-piano.png",
+      "bounds": [
+        1284,
+        50,
+        1448,
+        291
+      ]
+    },
+    {
+      "file": "hero-wall.png",
+      "bounds": [
+        425,
+        242,
+        1060,
+        263
+      ]
+    },
+    {
+      "file": "avatar.png",
+      "bounds": [
+        1229,
+        15,
+        1250,
+        36
+      ]
+    },
+    {
+      "file": "cover-sunny.png",
+      "bounds": [
+        312,
+        394,
+        515,
+        490
+      ]
+    },
+    {
+      "file": "cover-confession.png",
+      "bounds": [
+        530,
+        394,
+        729,
+        490
+      ]
+    },
+    {
+      "file": "cover-rice.png",
+      "bounds": [
+        744,
+        394,
+        946,
+        490
+      ]
+    },
+    {
+      "file": "cover-fireworks.png",
+      "bounds": [
+        963,
+        394,
+        1169,
+        490
+      ]
+    },
+    {
+      "file": "cover-windmill.png",
+      "bounds": [
+        1186,
+        394,
+        1390,
+        490
+      ]
+    },
+    {
+      "file": "cover-nocturne.png",
+      "bounds": [
+        312,
+        613,
+        515,
+        710
+      ]
+    },
+    {
+      "file": "cover-secret.png",
+      "bounds": [
+        530,
+        613,
+        729,
+        710
+      ]
+    },
+    {
+      "file": "cover-north.png",
+      "bounds": [
+        744,
+        613,
+        946,
+        710
+      ]
+    },
+    {
+      "file": "cover-simple.png",
+      "bounds": [
+        963,
+        613,
+        1169,
+        710
+      ]
+    },
+    {
+      "file": "cover-clock.png",
+      "bounds": [
+        1186,
+        613,
+        1390,
+        710
+      ]
+    },
+    {
+      "file": "forum-piano.png",
+      "bounds": [
+        323,
+        906,
+        564,
+        996
+      ]
+    },
+    {
+      "file": "forum-guitar.png",
+      "bounds": [
+        577,
+        906,
+        818,
+        996
+      ]
+    },
+    {
+      "file": "forum-vocal.png",
+      "bounds": [
+        830,
+        906,
+        1065,
+        996
+      ]
+    },
+    {
+      "file": "paper-texture.png",
+      "bounds": [
+        0,
+        400,
+        36,
+        800
+      ]
+    },
+    {
+      "file": "page-leaves.png",
+      "bounds": [
+        0,
+        1018,
+        42,
+        1086
+      ]
+    }
+  ],
+  "generatedAlternatives": [
+    {
+      "file": "cover-sunny-clean.png",
+      "prompt": "cover-sunny-clean.prompt.md",
+      "mode": "built-in image_gen",
+      "usedInPage": false
+    }
+  ]
+}

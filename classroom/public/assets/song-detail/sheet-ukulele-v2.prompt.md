@@ -1,0 +1,3 @@
+Tool: built-in image_gen. Input: sheet-ukulele.png, edit target.
+
+Edit this ONE music notation image only. Keep the same single staff, original generic ukulele melody example, black clean notes and warm ivory paper. Change only horizontal composition: extend the music staff and distribute the 12 notes across at least 92 percent of the full image width, with treble clef near the left 4 percent and last note near the right 96 percent. Keep all notation in the narrow central 20 percent of image height so a very shallow 250x29 crop includes it. No words, titles, UI, frames or collage. Output one standalone image.

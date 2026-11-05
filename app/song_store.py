@@ -8,6 +8,14 @@ from pathlib import Path
 TERMINAL = ('done', 'partial', 'error', 'cancelled')
 
 
+def configured_song_store(root):
+    import os
+    if os.environ.get('DATABASE_URL') or os.environ.get('INSTANCE_CONNECTION_NAME'):
+        from app.postgres_song_store import PostgresSongStore
+        return PostgresSongStore(root)
+    return SongStore(root)
+
+
 class Conflict(ValueError):
     pass
 

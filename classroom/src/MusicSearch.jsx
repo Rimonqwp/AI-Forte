@@ -1,3 +1,4 @@
+import { tr, useLanguage } from './language.js';
 import React, { useEffect, useRef, useState } from 'react';
 import { MagnifyingGlass, Fire, ClockCounterClockwise, MusicNotes, CaretRight, Trash, X, Link } from '@phosphor-icons/react';
 
@@ -26,6 +27,7 @@ function Highlight({ text, query }) {
 }
 
 export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
+  useLanguage();
   const [expanded, setExpanded] = useState(false);
   const [history, setHistory] = useState(readHistory);
   const [activeIndex, setActiveIndex] = useState(-1);
@@ -114,8 +116,8 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
   return <div className="search-panel" ref={panel} onBlur={event => {
     if (!event.currentTarget.contains(event.relatedTarget)) setExpanded(false);
   }}>
-    <h2><MagnifyingGlass size={32}/>搜索你想学习的歌曲或乐谱</h2>
-    <div className="hot-search"><b><Fire size={18} weight="duotone"/>热门搜索：</b>{popularSearches.map(text => <button key={text} onClick={() => submit(text)}>{text}</button>)}</div>
+    <h2><MagnifyingGlass size={32}/>{tr("搜索你想学习的歌曲或乐谱")}</h2>
+    <div className="hot-search"><b><Fire size={18} weight="duotone"/>{tr("热门搜索：")}</b>{popularSearches.map(text => <button key={text} onClick={() => submit(text)}>{text}</button>)}</div>
     <div className="search-control">
       <form className={`search-form${expanded ? ' is-expanded' : ''}`} onClick={() => setExpanded(true)} onSubmit={event => {
         event.preventDefault();
@@ -128,44 +130,44 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
           setExpanded(true);
         }} onFocus={() => setExpanded(true)} onKeyDown={handleKeyDown}
           onCompositionStart={() => { composing.current = true; }} onCompositionEnd={() => { composing.current = false; }}
-          placeholder="搜索歌曲、歌手、谱子，或粘贴音乐 URL..." autoComplete="off" spellCheck={false}
-          aria-label="搜索歌曲或乐谱" role="combobox" aria-autocomplete="list" aria-expanded={expanded}
+          placeholder={tr("搜索歌曲、歌手、谱子，或粘贴音乐 URL...")} autoComplete="off" spellCheck={false}
+          aria-label={tr("搜索歌曲或乐谱")} role="combobox" aria-autocomplete="list" aria-expanded={expanded}
           aria-controls={expanded ? 'music-search-results' : undefined} aria-activedescendant={expanded && activeIndex >= 0 ? `music-search-option-${activeIndex}` : undefined}/>
-        {query && <button type="button" className="search-clear" aria-label="清空搜索内容" onClick={() => {
+        {query && <button type="button" className="search-clear" aria-label={tr("清空搜索内容")} onClick={() => {
           onQueryChange('');
           input.current?.focus();
         }}><X size={15}/></button>}
-        <button className="coral-button" type="submit">搜索</button>
+        <button className="coral-button" type="submit">{tr("搜索")}</button>
       </form>
-      {expanded && <div className="search-suggestions" aria-label="搜索建议">
+      {expanded && <div className="search-suggestions" aria-label={tr("搜索建议")}>
         <section className="suggestion-section" aria-labelledby="popular-search-heading">
-          <div className="suggestion-heading"><h3 id="popular-search-heading"><Fire size={17} weight="duotone"/>热门搜索</h3><button className="suggestion-close" aria-label="关闭搜索建议" onClick={() => setExpanded(false)}><X size={17}/></button></div>
+          <div className="suggestion-heading"><h3 id="popular-search-heading"><Fire size={17} weight="duotone"/>{tr("热门搜索")}</h3><button className="suggestion-close" aria-label={tr("关闭搜索建议")} onClick={() => setExpanded(false)}><X size={17}/></button></div>
           <div className="suggestion-chips popular-chips">{popularSearches.map((text, index) => <button key={text} onClick={() => submit(text)}><span>{index + 1}</span>{text}</button>)}</div>
         </section>
         <section className="suggestion-section" aria-labelledby="search-history-heading">
-          <div className="suggestion-heading"><h3 id="search-history-heading"><ClockCounterClockwise size={17}/>搜索历史</h3>{history.length > 0 && <button className="clear-history" onClick={() => {
+          <div className="suggestion-heading"><h3 id="search-history-heading"><ClockCounterClockwise size={17}/>{tr("搜索历史")}</h3>{history.length > 0 && <button className="clear-history" onClick={() => {
             setHistory([]);
             input.current?.focus();
-          }}><Trash size={14}/>清空</button>}</div>
+          }}><Trash size={14}/>{tr("清空")}</button>}</div>
           {history.length ? <div className="suggestion-chips history-chips">{history.map(text => <span className="history-chip" key={text}><button className="history-term" onClick={() => submit(text)} title={text}>{text}</button><button className="remove-history" aria-label={`删除搜索记录：${text}`} onClick={() => {
             setHistory(previous => previous.filter(item => item !== text));
             input.current?.focus();
-          }}><X size={12}/></button></span>)}</div> : <p className="search-history-empty">还没有搜索记录，搜一首喜欢的歌吧</p>}
+          }}><X size={12}/></button></span>)}</div> : <p className="search-history-empty">{tr("还没有搜索记录，搜一首喜欢的歌吧")}</p>}
         </section>
         <section className="suggestion-section matching-section" aria-labelledby="matching-search-heading">
-          <div className="suggestion-heading"><h3 id="matching-search-heading"><MusicNotes size={17}/>{term ? '匹配乐谱' : '推荐乐谱'}</h3><span className="match-count" role="status">{isLink ? '音乐链接' : `${results.length} 首`}</span></div>
+          <div className="suggestion-heading"><h3 id="matching-search-heading"><MusicNotes size={17}/>{tr(term ? '匹配乐谱' : '推荐乐谱')}</h3><span className="match-count" role="status">{isLink ? tr('音乐链接') : `${results.length} ${tr('首乐谱')}`}</span></div>
           <div id="music-search-results" role="listbox" aria-labelledby="matching-search-heading">
             {results.map((song, index) => <button key={song.id} id={`music-search-option-${index}`} type="button" role="option" aria-selected={activeIndex === index}
               className={`search-result${activeIndex === index ? ' is-active' : ''}`} onClick={() => submit(song.title)}>
               <span className="search-result-icon"><MusicNotes size={19} weight="duotone"/></span>
-              <span className="search-result-text"><strong><Highlight text={song.title} query={query}/></strong><small><Highlight text={song.artist} query={query}/></small></span>
+              <span className="search-result-text"><strong><Highlight text={tr(song.title)} query={query}/></strong><small><Highlight text={song.artist} query={query}/></small></span>
               <CaretRight size={14}/>
             </button>)}
           </div>
-          {isLink ? <button className="search-link-action" onClick={() => submit(term)}><Link size={19}/><span>已识别音乐链接<small>继续前往旋律转谱工作台</small></span><CaretRight size={16}/></button> : !results.length && <p className="search-no-results" role="status">没有找到相关乐谱，试试其他歌曲名、歌手或乐器</p>}
+          {isLink ? <button className="search-link-action" onClick={() => submit(term)}><Link size={19}/><span>{tr("已识别音乐链接")}<small>{tr("继续前往旋律转谱工作台")}</small></span><CaretRight size={16}/></button> : !results.length && <p className="search-no-results" role="status">{tr("没有找到相关乐谱，试试其他歌曲名、歌手或乐器")}</p>}
         </section>
       </div>}
     </div>
-    <p className="search-help">支持歌曲名、歌手、乐器或粘贴音乐链接（如 YouTube / Bilibili 等）</p>
+    <p className="search-help">{tr("支持歌曲名、歌手、乐器或粘贴音乐链接（如 YouTube / Bilibili 等）")}</p>
   </div>;
 }

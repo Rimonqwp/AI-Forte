@@ -1,5 +1,55 @@
 # Design QA — 小谱音乐教室
 
+## 2026-11-04 — 歌曲详情与玩家编配版本
+
+final result: passed
+
+Latest user clarification — Start Practice is a content-only overlay: verified at 1947 × 1255 and 390 × 844. The search URL is unchanged, the overlay has zero copied site headers and zero instructional hero banners, and the existing results remain behind the backdrop. Repeat-open measurement retains scrollY=100, results top=438 and width=1680. Closing after a guitar filter preserves 4 results and the selected filter. Nested sheet preview Escape closes only the inner dialog; closing the outer dialog restores body scrolling. On phone the panel spans y=12–832, scrolls internally and keeps its close button visible after 1146px of internal scrolling. Evidence: `docs/classroom/qa/song-detail-overlay.jpg` and `song-detail-overlay-mobile.jpg`. This user-requested floating presentation supersedes the standalone layout only for Start Practice; cover/preview routes remain available.
+
+### Visual truth and comparison scope
+
+- Source: `classroom/design-reference/song-detail.jpg`; normalized visible source: `classroom/design-reference/song-detail-visible.png`.
+- Original attachment is 1448 × 1086; page content is visible through y=697 and the remaining area is black. Comparison uses the complete visible 1448 × 697 region, not a recreated black footer.
+- Prototype: `http://127.0.0.1:4173/static/classroom/#song?id=rice`; matching initial state: all 8 versions, 最热推荐, no active filters or favorites.
+- CSS viewport and screenshot: 1448 × 1086 at 1 pixel per CSS pixel. The first 697 pixels are compared without scaling. Native scrollbar reduces available layout width by 11px; that small right-edge difference is accounted for rather than treated as density drift.
+- Full-view evidence: `docs/classroom/qa/detail-comparison-v1.jpg` and `detail-comparison-final.jpg` contain source and implementation together. Focused evidence: `detail-focused-final.jpg` compares version heading, filters and first cards together.
+- Final desktop: `song-detail-desktop-final.jpg`; actual Sunny entry: `song-detail-preview.jpg`; phone: `song-detail-mobile.jpg`; working sheet preview: `song-detail-score-dialog.jpg`. All are under `docs/classroom/qa/`.
+
+### Comparison history and fixes
+
+1. **P2 — Desktop spacing drift.** Initial capture used the inherited 54px header, a slightly wider instructional strip and 227px version cards; the first row began at y=488. Scoped header height to 48px, aligned the banner introduction and x210 content start, and adjusted card line heights/padding. Final first card begins at y=478 and ends at y=697, matching the reference visible row.
+2. **P2 — Image delivery/crop.** Initial live capture held a cached missing fingerstyle thumbnail; the first hero cropped the girl/cat, and the ukulele staff was too narrow. Regenerated the shallow-banner composition and ukulele snippet as separate images, finished syncing all files, and reloaded. Final reference capture has zero missing images; the actual Sunny route also uses a separately generated title cover instead of a magnified search thumbnail.
+3. **P2 — Responsive sorting label.** At 768px the sort label could be orphaned above its options. Grouped label and options in one responsive wrapper. Phone and tablet remain two-column version grids with no horizontal overflow; 390px card buttons fit within their cards.
+4. **P2 — Small type/copy.** Corrected the teacher certification text and aligned brand sizing, version title weight and statistics sizing. Post-fix evidence is the final full/focused comparison.
+
+### Required fidelity surfaces
+
+- **Typography:** Existing local Ma Shan Zheng matches the brush-style hero; PingFang SC/Songti fallbacks match the dense Chinese UI hierarchy. Headings, body text, certification, counts and four original version titles are present as real text. Exact source font rasterization is not available; small brush-stroke and antialiasing differences remain P3.
+- **Spacing/layout:** Shallow hero, 160px side navigation, song cover/facts, three advice cards and four arrangement cards per desktop row follow the source. Version row y=478–697 matches. Phone, tablet and normal desktop sizes have no viewport overflow.
+- **Color/tokens:** Warm ivory/peach surfaces, brown text, coral primary controls and green/pink/purple recommendation groups preserve the source roles. Generated watercolor tones and minor control highlight differences remain P3.
+- **Images:** Eleven final independent built-in image_gen assets: hero, two song covers, four portraits and four notation strips. No page flattening, sprite sheet or hand-drawn code substitute. Prompts and dimensions are in `classroom/public/assets/song-detail/manifest.json`. Generated art is coherent but differs from original pixels; no exact-pixel identity is claimed.
+- **Content:** Selected song title, artist/date and cover follow the clicked song. There are eight actual demo versions, and filtered counts reflect visible data. The hidden black reference region is not interpreted as content. Community figures, notation and audio are clearly marked as demonstrations.
+
+### Interaction and runtime verification
+
+Search → Sunny → return to original query → Rice passed. Guitar gives 4 versions; adding four-star difficulty gives 1; incompatible five-line notation gives a real empty state; clearing restores 8. Newest sorting, favorite toggle, sheet preview, changing to 85 BPM, starting/pausing practice sound and Escape close passed. Related discussion and four-course sections switch correctly. Browser warning/error log is empty. Final production build and four Sites packaging/static-route checks passed. Measurements and results: `docs/classroom/qa/song-detail-checks.json`.
+
+### Follow-up polish
+
+P3 only: generated portraits and hero poses differ from the reference illustration, small glyph rasterization differs, and mobile is a responsive interpretation because no mobile detail reference was supplied. There are no remaining actionable P0/P1/P2 findings in the visible target scope. The page is a frontend experience; the generated snippets are not complete original-song scores, and demo counts/replies are not backed by community services.
+
+### Implementation checklist
+
+- [x] Selected visual target captured and normalized.
+- [x] Independent generated assets and exact prompts saved in the repository.
+- [x] Full and focused visual comparisons reviewed after fixes.
+- [x] Entry/return/version-selection core journey tested in the browser.
+- [x] Desktop, phone and tablet layouts checked.
+- [x] Production build and existing package checks passed.
+- [x] Local preview retained for the user.
+
+---
+
 final result: passed
 
 ## Latest annotation — swap popular search and help text; even row spacing
