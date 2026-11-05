@@ -344,3 +344,13 @@ Fidelity surfaces: preserved the established Songti headings, PingFang UI text, 
 Browser checks: both buttons open separate dialogs; initial focus enters the field; Tab/Shift+Tab stay within the popup; close button, Cancel, Escape and backdrop click close only the upper dialog; trigger focus returns; the underlying settings scroll position compares equal before and after opening/closing; invalid email still displays its error in the popup; real reCAPTCHA renders inside the phone popup; desktop and 390px mobile layouts verified. The parent account profile and search URL are preserved, and background profile scrolling is locked while editing. Latest console error log was empty. Temporary viewport override reset and phone popup left open for review.
 
 Production build and 11 existing binding-service tests passed. No real verification message was sent and no account contact information was changed. This task changes presentation and keyboard/modal lifecycle only; previously recorded live-delivery and Firebase-configuration verification limits remain unchanged.
+
+## 2026-11-06 — 保留独立弹窗背后的滚动条
+
+final result: passed
+
+用户明确要求打开手机/邮箱弹窗时保留原有背景滚动条，避免页面横向移动。本轮仅调整绑定弹窗的滚动锁定方式，字体、颜色、素材、文案及弹窗布局均未修改。基线 `/Users/rimon/.codex/visualizations/2026/11/06/binding-modal/04-phone-final.png`；修复截图 `/Users/rimon/.codex/visualizations/2026/11/06/binding-scrollbar/04-final.png`。两者均为同一搜索路由、账号资料、手机弹窗、1845×1242 CSS/图片像素，密度 1，无缩放。打开并检查了同目录 `05-comparison.jpg`（完整页面对照）与 `06-scrollbar-detail.jpg`（右侧滚动条及内容边缘对照）。
+
+[P2, resolved] 原逻辑把 `.settings-scroll` 从 auto 改成 hidden，实测 clientWidth 从 1187 增至 1202px，内容左边缘从 477.5 移至 485px。移除该 overflow 切换，使用原生模态的背景隔离，并仅在背景滚动容器上阻止 wheel/touchmove；关闭时移除监听。输入及返回按钮的 focus 使用 preventScroll。
+
+浏览器实测邮箱弹窗打开前、打开后、对背景滚轮操作后、关闭后，背景 clientWidth 均为 1187px，滚动条宽度均为 15px，内容宽度均为 1100px，左边缘均为 477.5px，scrollTop 均为 154。关闭后滚轮可将背景正常滚至 0，证明锁定已解除。手机绑定弹窗也确认保留 15px 滚动条、auto overflow 和相同内容宽度。最终画面滚动条在遮罩下仍可见；无遗留 P0/P1/P2。最新控制台错误为空，生产构建通过。此低影响交互修复以实际浏览器尺寸/滚动行为验证，没有新增实现镜像测试；触摸阻止路径未在真实触屏设备上测试。未发送真实短信或邮件。

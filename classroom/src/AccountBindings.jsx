@@ -28,15 +28,19 @@ export function AccountBindings({ user, service, profileSaving, onBusyChange }) 
     if (!panel) return;
     const node = modal.current;
     if (!node.open) node.showModal();
-    input.current?.focus();
+    input.current?.focus({ preventScroll: true });
     const scroller = document.querySelector('.settings-scroll');
-    const overflow = scroller?.style.overflow;
-    if (scroller) scroller.style.overflow = 'hidden';
+    // Keep the existing scrollbar visible: hiding it changes the profile width.
+    // The modal makes the background inert; block background scroll gestures too.
+    const preventBackgroundScroll = event => event.preventDefault();
+    scroller?.addEventListener('wheel', preventBackgroundScroll, { passive: false });
+    scroller?.addEventListener('touchmove', preventBackgroundScroll, { passive: false });
     return () => {
       node.close();
-      if (scroller) scroller.style.overflow = overflow;
-      if (opener.current?.isConnected) opener.current.focus();
-      else rows.current?.querySelector('button')?.focus();
+      scroller?.removeEventListener('wheel', preventBackgroundScroll);
+      scroller?.removeEventListener('touchmove', preventBackgroundScroll);
+      if (opener.current?.isConnected) opener.current.focus({ preventScroll: true });
+      else rows.current?.querySelector('button')?.focus({ preventScroll: true });
     };
   }, [panel]);
   const needCaptcha = panel === 'phone' && (!phoneSent || phoneWait === 0);
