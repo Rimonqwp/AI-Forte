@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowSquareOut, BookOpen, Check, ClockCounterClockwise, Globe, Heart, EnvelopeSimple, MusicNotes, SignIn, ShieldCheck, UserCircle, X } from '@phosphor-icons/react';
+import { ArrowSquareOut, BookOpen, Check, ClockCounterClockwise, Globe, Heart, EnvelopeSimple, SignIn, ShieldCheck, UserCircle, X } from '@phosphor-icons/react';
 import { languages, setLanguage, tr, useLanguage } from './language.js';
 import { SettingsLibrary } from './SettingsLibrary.jsx';
 import { useCloudState } from './useCloudState.js';
@@ -62,7 +62,7 @@ export function AccountSettings({ user, onClose, returnFocus }) {
             <button aria-current={section === item.id ? 'page' : undefined} aria-controls="settings-content" onClick={() => selectSection(item.id)}><item.icon size={20}/>{tr(item.title)}{counts[item.id] !== undefined && <span>{counts[item.id]}</span>}</button>
           </React.Fragment>)}
         </nav>
-        <div className="settings-sidebar-footer"><span>{tr('谱芽岛')}</span><small>{tr('让喜欢的歌，在指尖靠岸。')}</small></div>
+        <div className="settings-sidebar-footer"><img className="settings-brand-logo" src={import.meta.env.BASE_URL + 'assets/brand/puyadao-sprout-icon.png'} alt={tr('谱芽岛')}/><small>{tr('让喜欢的歌，在指尖靠岸。')}</small></div>
       </aside>
       <div className="settings-workspace">
         <header className="settings-topbar"><div><span id="account-settings-title">{tr('账号设定')}</span><span className="settings-breadcrumb">/</span><strong>{tr(current.title)}</strong></div><button className="settings-close" aria-label={tr('关闭账号设定')} onClick={onClose}><X size={20}/></button></header>
@@ -72,7 +72,7 @@ export function AccountSettings({ user, onClose, returnFocus }) {
             <p className="settings-description">{tr(section === 'favorites' ? '喜欢的歌曲，随时回来继续练习。' : section === 'scores' ? '收藏编配、重拾练习，让你的乐谱井井有条。' : section === 'recent' ? '找回刚刚听见、看过的旋律。' : section === 'profile' ? '在这里查看你的个人资料和账号信息。' : section === 'security' ? '查看当前账号使用的登录方式。' : '选择你习惯的语言，让每一次练习更自在。')}</p>{section === 'profile' && <img className="settings-profile-art" src={import.meta.env.BASE_URL + 'assets/account-settings/score-sprout.png'} alt="" aria-hidden="true"/>}</div>
             {['favorites', 'scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}
             {section === 'profile' && <>
-              <div className="settings-profile-summary"><img src={photo} alt={tr('我的头像')} referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'assets/avatar-musician.png'; }}/><div><strong>{name}</strong><span>{providers.map(id => providerNames[id] || id).join(' / ') || tr('我的账号')}</span></div><span className="settings-status"><Check size={14}/>{tr('已登录')}</span><span className="settings-profile-brand"><MusicNotes size={26} weight="duotone"/>{tr('谱芽岛')}</span></div>
+              <div className="settings-profile-summary"><img src={photo} alt={tr('我的头像')} referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'assets/avatar-musician.png'; }}/><div><strong>{name}</strong><span>{providers.map(id => providerNames[id] || id).join(' / ') || tr('我的账号')}</span></div><span className="settings-status"><Check size={14}/>{tr('已登录')}</span><span className="settings-profile-brand"><img className="settings-brand-logo" src={import.meta.env.BASE_URL + 'assets/brand/puyadao-sprout-icon.png'} alt={tr('谱芽岛')}/></span></div>
               <dl className="settings-details">
                 <div><dt><UserCircle size={21} aria-hidden="true"/>{tr('显示名称')}</dt><dd>{name}</dd></div>
                 <div><dt><EnvelopeSimple size={21} aria-hidden="true"/>{tr('邮箱')}</dt><dd><span>{emailVisible ? email : maskedEmail}</span>{user.email && <button className="settings-text-button" aria-pressed={emailVisible} onClick={() => setEmailVisible(!emailVisible)}>{tr(emailVisible ? '隐藏' : '显示')}</button>}</dd></div>

@@ -216,3 +216,11 @@ final result: passed
 - Follow-up polish: 生成的独立插画保留原参考题材和线稿风格，细节不是逐像素复制；现有产品品牌图标与生成图略有不同，属于 P3，可后续微调。
 
 final result: passed
+
+## 设置品牌图形 Logo（2026-11-05）
+
+用户选择最新 Logo 三方案中的第一张「芽与音符」，随后明确要求去掉三个中文字。以已选 Logo 为参考生成独立透明图形 `public/assets/brand/puyadao-sprout-icon.png`，账号资料身份行与侧栏底部共用，底部原标语保留。图形内容无中文字标，无拉伸；品牌名称仅保留在可访问的替代文本中。
+
+浏览器检查：1845 × 1242 桌面两处 PNG 均成功加载，分别为 52 × 52 和 46 × 46；360 × 844 手机身份行使用 44 × 44 图形，现有移动布局隐藏侧栏底部，内容无横向溢出。证据位于 `/Users/rimon/.codex/visualizations/2026/11/05/01a1ab93-87c4-7753-ac6b-918ad387f288/settings-icon-only-desktop.png` 和同目录 `settings-icon-only-mobile.png`。桌面视口已恢复，预览副本生产构建通过。
+
+final result: passed

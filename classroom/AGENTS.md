@@ -163,3 +163,5 @@ The settings sidebar also includes My Favorites (shared song favorites), My Scor
 Make the account settings dialog and right content area more spacious on desktop (1440px maximum width, 960px maximum height, 1000px content width). Sidebar navigation selection uses a warm outline with a transparent background; keep hover transparent too. Preserve the compact phone layout.
 
 Account profile decoration follows selected generated option 3 (岛屿留白): unboxed identity row with brand signature, small upper-right open-score/sprout island illustration, outline icons beside profile fields, and a pale musical-staff footer. Keep existing profile data and controls, spacious layout and transparent outlined sidebar selection. Use standalone generated raster assets, not a flattened mock.
+
+Use the icon-only version of selected latest logo option 1 (芽与音符, sprout/note above a simple island arc) in the profile identity signature and settings sidebar footer. The user explicitly removed the three-character wordmark; display only the shared transparent graphical emblem, with accessible brand alt text and the existing footer tagline. Keep the mobile icon compact.
