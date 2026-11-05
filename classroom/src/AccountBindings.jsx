@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Check, EnvelopeSimple, Phone, ArrowsClockwise } from '@phosphor-icons/react';
+import { X, Check, EnvelopeSimple, Phone, LockKey, ArrowsClockwise } from '@phosphor-icons/react';
 import { tr, useLanguage } from './language.js';
-import { bindingError, maskPhone, normalizePhone } from './account-bindings-service.js';
+import { bindingError, maskPhone, normalizePhone, passwordError } from './account-bindings-service.js';
 import { phoneVerifier } from './firebase.js';
+import { PasswordFields } from './password-fields.jsx';
 import './account-bindings.css';
 
 export function AccountBindings({ user, service, profileSaving, onBusyChange }) {
   useLanguage();
+  const hasGoogle = user.providerData?.some(item => item.providerId === 'google.com');
+  const hasPassword = user.providerData?.some(item => item.providerId === 'password');
+  const [resetUntil, setResetUntil] = useState(0);
   const [captchaAttempt, setCaptchaAttempt] = useState(0);
   const [captchaReady, setCaptchaReady] = useState(false);
   const [panel, setPanel] = useState(null), [phone, setPhone] = useState('+852 '), [email, setEmail] = useState(user.email || '');
@@ -62,7 +66,7 @@ export function AccountBindings({ user, service, profileSaving, onBusyChange }) 
     if (lock.current || profileSaving) return;
     lock.current = true; setBusy(true); onBusyChange(true); setNotice(null);
     try { await action(); }
-    catch (error) { if (alive.current) setNotice({ error: true, text: bindingError(error), reauth: error.code === 'auth/requires-recent-login', retry: error.code === 'binding/refresh-failed' }); }
+    catch (error) { if (alive.current) setNotice({ error: true, text: panel === 'password' ? passwordError(error) : bindingError(error), reauth: error.code === 'auth/requires-recent-login', retry: error.code === 'binding/refresh-failed' }); }
     finally { lock.current = false; if (alive.current) { setBusy(false); onBusyChange(false); } }
   };
   const open = next => {
@@ -104,12 +108,26 @@ export function AccountBindings({ user, service, profileSaving, onBusyChange }) 
       setEmailSent(null); setPanel(null); setNotice({text:'邮箱已验证并绑定。'});
     } else setNotice({text:'账号状态已刷新；如刚收到验证邮件，请先完成邮件中的验证。'});
   });
+  const passwordTitle = hasPassword ? '修改密码' : '设置密码';
+  const resetWait = Math.max(0, Math.ceil((resetUntil - now) / 1000));
+  const savePassword = draft => run(async () => {
+    await service.savePassword(user.uid, draft);
+    setPanel(null); setNotice({text:'登录密码已保存。'});
+  });
+  const resetPassword = () => run(async () => {
+    if (resetWait) return;
+    const url = new URL(window.location.href); url.searchParams.set('accountSettings', 'profile');
+    await service.resetPassword(user.uid, url.toString());
+    setResetUntil(Date.now() + 60000); setNow(Date.now());
+    setNotice({text:'密码重置邮件已发送，请在绑定邮箱中按指引操作。'});
+  });
   const maskedEmail = user.email ? user.email.replace(/^(.).*(@.*)$/, '$1••••••$2') : tr('未绑定');
   const disabled = busy || profileSaving;
   const feedback = notice && <div className={`binding-notice${notice.error ? ' is-error' : ''}`} role={notice.error ? 'alert' : 'status'}>{tr(notice.text)}{notice.reauth && user.providerData?.some(item => item.providerId === 'google.com') && <button type="button" className="binding-link" disabled={disabled} onClick={() => run(async () => { await service.reauthenticate(user.uid); setNotice({text:'登录已重新验证，请再次发送验证邮件。'}); })}>{tr('重新验证 Google 登录')}</button>}{notice.retry && <button type="button" className="binding-link" disabled={disabled} onClick={refresh}>{tr('刷新绑定状态')}</button>}</div>;
   return <div ref={rows} className="account-bindings" aria-busy={busy} onKeyDown={event => { if (event.key === 'Enter' && event.target.tagName === 'INPUT') event.preventDefault(); }}>
     <div className="binding-row"><Phone size={23} aria-hidden="true"/><div className="binding-row-main"><strong>{tr('手机号码')}</strong><span className={user.phoneNumber ? 'binding-verified' : 'binding-muted'}>{user.phoneNumber ? (phoneShown ? user.phoneNumber : maskPhone(user.phoneNumber)) : tr('未绑定')}</span><small>{tr(user.phoneNumber ? '已通过短信验证' : '验证手机号，关联到当前账号。')}</small></div>{user.phoneNumber ? <button type="button" className="binding-link" aria-pressed={phoneShown} onClick={() => setPhoneShown(!phoneShown)}>{tr(phoneShown ? '隐藏' : '显示')}</button> : <button type="button" className="binding-outline" disabled={disabled} aria-haspopup="dialog" aria-expanded={panel === 'phone'} onClick={() => open(panel === 'phone' ? null : 'phone')}>{tr('绑定手机')}</button>}</div>
     <div className="binding-row"><EnvelopeSimple size={23} aria-hidden="true"/><div className="binding-row-main"><strong>{tr('绑定邮箱')}</strong><span>{emailShown ? user.email || tr('未绑定') : maskedEmail}{user.emailVerified && <span className="binding-verified"><Check size={14}/>{tr('已验证')}</span>}</span><small>{tr('通过验证邮件确认邮箱归属，Google 登录保持不变。')}</small></div><div className="binding-row-actions">{user.email && <button type="button" className="binding-link" aria-pressed={emailShown} onClick={() => setEmailShown(!emailShown)}>{tr(emailShown ? '隐藏' : '显示')}</button>}<button type="button" className="binding-outline" disabled={disabled} aria-haspopup="dialog" aria-expanded={panel === 'email'} onClick={() => open(panel === 'email' ? null : 'email')}>{tr(user.emailVerified ? '更换邮箱' : '绑定邮箱')}</button></div></div>
+    <div className="binding-row"><LockKey size={23} aria-hidden="true"/><div className="binding-row-main"><strong>{tr('登录密码')}</strong><span className={hasPassword ? 'binding-verified' : 'binding-muted'}>{tr(hasPassword ? '已设置' : '未设置')}</span><small>{tr(hasGoogle ? hasPassword ? '使用绑定邮箱和密码登录，也可继续使用 Google。' : '为当前账号设置独立密码，保留 Google 登录。' : '使用绑定邮箱和密码登录。')}</small></div><button type="button" className="binding-outline" disabled={disabled} aria-haspopup="dialog" aria-expanded={panel === 'password'} onClick={() => open('password')}>{tr(passwordTitle)}</button></div>
     {!panel && feedback}
     {panel && createPortal(<dialog ref={modal} className="binding-modal" aria-labelledby="binding-modal-title" aria-describedby="binding-modal-description" aria-busy={busy}
       onCancel={event => { event.preventDefault(); open(null); }}
@@ -129,7 +147,7 @@ export function AccountBindings({ user, service, profileSaving, onBusyChange }) 
         const box = event.currentTarget.getBoundingClientRect();
         if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) open(null);
       }}>
-      <header className="binding-modal-header"><div><h3 id="binding-modal-title">{tr(panel === 'phone' ? '绑定手机' : user.emailVerified ? '更换邮箱' : '绑定邮箱')}</h3><p id="binding-modal-description">{tr(panel === 'phone' ? '验证手机号，关联到当前账号。' : '验证完成后才会更新绑定邮箱。请在邮件中点击验证链接。')}</p></div><button type="button" className="binding-modal-close" aria-label={tr('关闭绑定窗口')} disabled={disabled} onClick={() => open(null)}><X size={22}/></button></header>
+      <header className="binding-modal-header"><div><h3 id="binding-modal-title">{tr(panel === 'phone' ? '绑定手机' : panel === 'password' ? passwordTitle : user.emailVerified ? '更换邮箱' : '绑定邮箱')}</h3><p id="binding-modal-description">{tr(panel === 'phone' ? '验证手机号，关联到当前账号。' : panel === 'password' ? hasPassword ? '验证当前密码后更新，仅影响本站登录密码。' : '保存前需验证 Google 身份，原有登录方式会保留。' : '验证完成后才会更新绑定邮箱。请在邮件中点击验证链接。')}</p></div><button type="button" className="binding-modal-close" aria-label={tr('关闭绑定窗口')} disabled={disabled} onClick={() => open(null)}><X size={22}/></button></header>
     {panel === 'phone' && <fieldset className="binding-panel" disabled={disabled} aria-label={tr('绑定手机')}>
       <label htmlFor="binding-phone">{tr('手机号码（含国家或地区代码）')}</label>
       <div className="binding-input-action"><input ref={input} id="binding-phone" type="tel" autoComplete="tel" placeholder="+852 9123 4567" value={phone} disabled={!!phoneSent || disabled} onChange={event => setPhone(event.target.value)}/><button type="button" onClick={sendPhone} disabled={disabled || phoneWait > 0 || !captchaReady}>{busy ? tr('处理中…') : phoneWait ? `${phoneWait}s` : tr(phoneSent ? '重新发送' : '发送验证码')}</button></div>
@@ -142,6 +160,7 @@ export function AccountBindings({ user, service, profileSaving, onBusyChange }) 
       <label htmlFor="binding-email">{tr('要绑定的邮箱')}</label><div className="binding-input-action"><input ref={input} id="binding-email" type="email" autoComplete="email" maxLength={254} value={email} placeholder="name@example.com" onChange={event => setEmail(event.target.value)}/><button type="button" onClick={sendEmail} disabled={disabled || emailWait > 0 || (user.emailVerified && email.trim().toLowerCase() === user.email?.toLowerCase())}>{busy ? tr('处理中…') : emailWait ? `${emailWait}s` : tr('发送验证邮件')}</button></div>
       <div className="binding-panel-actions"><button type="button" className="binding-link" onClick={refresh}><ArrowsClockwise size={17}/>{tr('刷新绑定状态')}</button><button type="button" className="binding-link" onClick={() => open(null)}>{tr('取消')}</button></div>
     </fieldset>}
+      {panel === 'password' && <PasswordFields hasPassword={hasPassword} verifiedEmail={!!user.email && user.emailVerified} busy={disabled} resetWait={resetWait} inputRef={input} onSave={savePassword} onReset={resetPassword} onCancel={() => open(null)} onEdit={() => setNotice(null)} onVerifyEmail={() => open('email')}/>}
       {feedback}
     </dialog>, document.body)}
     <p className="binding-footnote">{tr('绑定通过验证即时生效，无需点击“保存修改”。')}</p>

@@ -177,3 +177,5 @@ Phone/email action buttons now open a separate small modal above account setting
 Opening phone/email dialogs must preserve any existing background scrollbar visibly and keep the profile content width and scroll position unchanged. Do not lock the background by switching the settings scroller to overflow:hidden. Use modal inertness and background-only gesture blocking; restore normal scrolling on close and return focus without scrolling.
 
 The phone-binding input defaults to an actual editable +852 country code followed by a space, not only a placeholder. Users may replace it with another international country/region code.
+
+Account information also includes a separate login-password row with set/change actions in the existing independent modal. Require a verified email, confirm the new password twice, reauthenticate Google before linking an initial password to the same UID, and verify the current password before updates. Keep Google login available, provide email/password sign-in and reset-email entry points, and never persist passwords in browser storage or profile data. Preserve the background scrollbar and scroll position for password dialogs too.

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { onIdTokenChanged, updateProfile } from 'firebase/auth';
-import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData, saveAccountProfile, accountBindingService } from './firebase.js';
+import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData, saveAccountProfile, accountBindingService, signInPassword, resetLoginPassword } from './firebase.js';
 import { flushCloudStates } from './cloud-stores.js';
 import { AuthDialog } from './AuthDialog.jsx';
 import { AccountSettings } from './AccountSettings.jsx';
@@ -38,6 +38,24 @@ export function AuthProvider({ children }) {
       setUser(result.user); setOpened(false);
       if (result.changedUid) window.location.reload();
     } catch (value) { setUser(auth.currentUser); setError(value); }
+    finally { setBusy(false); }
+  };
+  const loginPassword = async (email, password) => {
+    setBusy(true); setError(null);
+    try {
+      const result = await signInPassword(email, password, async uid => {
+        if (!await flushCloudStates(uid)) throw Object.assign(new Error(), {code:'auth/guest-sync-pending'});
+        return readGuestState(uid);
+      });
+      setUser(result.user); setOpened(false);
+      if (result.changedUid) window.location.reload();
+    } catch (value) { setUser(auth.currentUser); setError(value); }
+    finally { setBusy(false); }
+  };
+  const requestPasswordReset = async email => {
+    setBusy(true); setError(null);
+    try { await resetLoginPassword(email); return true; }
+    catch (value) { setError(value); return false; }
     finally { setBusy(false); }
   };
   const logout = async () => {
@@ -80,6 +98,6 @@ export function AuthProvider({ children }) {
   return <AccountContext.Provider value={{ user: displayedUser, ready, busy, login, logout, openSettings, openLogin: () => { setError(null); setOpened(true); } }}>
     {ready ? <React.Fragment key={user?.uid || 'offline'}>{children}</React.Fragment> : <div className="account-bootstrap" role="status">正在打开谱芽岛…</div>}
     {settingsOpened && user && !user.isAnonymous && <AccountSettings key={`settings-${user.uid}`} user={displayedUser} onSaveProfile={saveProfile} bindings={bindings} returnFocus={settingsTrigger.current} onClose={() => setSettingsOpened(false)}/>}
-    {opened && <AuthDialog user={user} busy={busy} error={error} onLogin={login} onRetry={retry} onClose={() => { if (!busy) setOpened(false); }}/>}
+    {opened && <AuthDialog user={user} busy={busy} error={error} onLogin={login} onPasswordLogin={loginPassword} onPasswordReset={requestPasswordReset} onRetry={retry} onClose={() => { if (!busy) setOpened(false); }}/>}
   </AccountContext.Provider>;
 }

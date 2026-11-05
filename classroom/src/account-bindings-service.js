@@ -9,6 +9,30 @@ export function normalizeEmail(value) {
   return email;
 }
 export function maskPhone(value) { return value ? value.slice(0, 3) + ' •••• ' + value.slice(-4) : ''; }
+export function validatePasswordDraft(password, confirmation, currentPassword) {
+  if (typeof password !== 'string' || password.length < 8 || password.length > 128 || !password.trim()) throw Object.assign(new Error(), {code:'password/invalid-length'});
+  if (password !== confirmation) throw Object.assign(new Error(), {code:'password/mismatch'});
+  if (currentPassword !== undefined && !currentPassword) throw Object.assign(new Error(), {code:'password/current-required'});
+}
+export function passwordError(error) {
+  const messages = {
+    'password/invalid-length': '密码须为 8–128 个字符，不能全部为空格。',
+    'password/mismatch': '两次输入的新密码不一致。',
+    'password/current-required': '请输入当前密码。',
+    'password/verified-email-required': '请先验证绑定邮箱，再设置登录密码。',
+    'password/policy': '密码不符合账号安全要求，请增加长度或加入大小写字母、数字和符号。',
+    'auth/weak-password': '密码强度不足，请换一个更安全的密码。',
+    'auth/password-does-not-meet-requirements': '密码不符合账号安全要求，请增加长度或加入大小写字母、数字和符号。',
+    'auth/wrong-password': '当前密码不正确，请重新输入或通过邮件重置。',
+    'auth/invalid-credential': '当前密码不正确，请重新输入或通过邮件重置。',
+    'auth/requires-recent-login': '登录验证已过期，请重新登录后再试。',
+    'auth/provider-already-linked': '账号的密码状态已变化，请刷新后重试。',
+    'auth/credential-already-in-use': '该邮箱已有其他账号，请使用原来的登录方式。',
+    'auth/operation-not-allowed': '密码功能暂未开通，请使用 Google 登录。',
+  };
+  return messages[error?.code] || bindingError(error);
+}
+
 export function bindingError(error) {
   const messages = {
     'binding/invalid-phone': '请输入包含国家或地区代码的手机号，例如 +852 9123 4567。',
@@ -77,6 +101,29 @@ export function createBindingService({ currentUser, sdk, changed, syncProfile })
       else await sdk.verifyBeforeUpdateEmail(user, email, settings);
       member(uid);
       return email;
+    },
+    async savePassword(uid, { password, confirmation, currentPassword }) {
+      const user = member(uid);
+      const hasPassword = user.providerData?.some(item => item.providerId === 'password');
+      validatePasswordDraft(password, confirmation, hasPassword ? (currentPassword || '') : undefined);
+      if (!user.email || !user.emailVerified) throw Object.assign(new Error(), {code:'password/verified-email-required'});
+      const email = user.email;
+      // Authenticate the current owner again; never sign into or create another UID.
+      if (hasPassword) await sdk.reauthenticateWithCredential(user, sdk.EmailAuthProvider.credential(email, currentPassword));
+      else if (user.providerData?.some(item => item.providerId === 'google.com')) await sdk.reauthenticateWithPopup(user, new sdk.GoogleAuthProvider());
+      member(uid);
+      if (user.email !== email) throw Object.assign(new Error(), {code:'binding/session-changed'});
+      const policy = await sdk.validatePassword(password); member(uid);
+      if (!policy.isValid) throw Object.assign(new Error(), {code:'password/policy'});
+      if (hasPassword) await sdk.updatePassword(user, password);
+      else await sdk.linkWithCredential(user, sdk.EmailAuthProvider.credential(email, password));
+      member(uid);
+      return finish(uid);
+    },
+    async resetPassword(uid, returnUrl) {
+      const user = member(uid);
+      if (!user.email || !user.emailVerified) throw Object.assign(new Error(), {code:'password/verified-email-required'});
+      await sdk.sendPasswordResetEmail(user.email, {url:returnUrl, handleCodeInApp:false}); member(uid);
     },
     refresh: finish,
     async reauthenticate(uid) {

@@ -9,3 +9,12 @@
 .account-privacy{display:flex;align-items:flex-start;justify-content:center;gap:5px}.account-privacy svg{margin-top:4px;color:#8aa080}.account-preserve{font-size:11px!important;margin-top:5px}.account-later{font-size:12px;color:#a17a66;padding:14px 12px 2px}.account-error{background:#fff0e9;border:1px solid #eac4b5;color:#a24935;padding:10px 12px;text-align:left;font-size:13px;line-height:1.7;border-radius:10px;margin:16px 0}
 .profile-menu .account-email{max-width:240px;overflow-wrap:anywhere;padding-bottom:8px}.profile-menu .account-signout{color:#a24b36}.profile-menu .account-menu-divider{height:1px;margin:7px 10px;background:#e8d1c0}.profile-menu .account-signout:hover{background:#fcece3}
 @media(max-width:600px){.account-dialog{padding:26px 22px 18px}.account-dialog h2{font-size:21px}.account-backdrop{padding:16px}.account-dialog{max-height:calc(100dvh - 32px)}.profile.login-trigger>span{display:inline!important}.profile.login-trigger{padding:5px 10px;min-height:30px;font-size:12px}}
+
+.account-password-section{border-top:1px solid #e8d9cb;margin-top:18px;padding-top:12px}
+.account-password-form{display:grid;gap:10px;margin-top:14px;text-align:left}
+.account-password-form label{font-size:13px;font-weight:500}
+.account-password-form input{width:100%;box-sizing:border-box;min-height:44px;padding:10px 12px;border:1px solid #b58d73;border-radius:8px;background:#fffcf7;color:#603d30;font:inherit;font-size:16px}
+.account-password-submit{min-height:44px;border-radius:8px;padding:10px 20px;background:#b96340;color:#fffaf4;margin-top:4px;font-size:14px}
+.account-password-form>p{font-size:12px;line-height:1.8;color:#61794e;margin:0}
+.account-password-form :is(input,button):focus-visible{outline:2px solid #ad5538;outline-offset:3px}
+.account-password-submit:disabled{opacity:.6}

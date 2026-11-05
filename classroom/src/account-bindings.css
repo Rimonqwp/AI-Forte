@@ -40,3 +40,15 @@
 .binding-modal button:disabled{cursor:default}
 .binding-modal :is(button,input):focus-visible{outline:2px solid #ad5538;outline-offset:3px}
 @media(max-width:600px){.binding-modal{width:calc(100% - 24px);max-height:calc(100dvh - 24px);border-radius:13px}.binding-modal-header{padding:20px 20px 16px;gap:12px}.binding-modal-header h3{font-size:24px}.binding-modal .binding-panel{padding:20px}.binding-modal .binding-notice{padding:0 20px 20px}.binding-modal .binding-recaptcha{max-width:100%;overflow:auto}}
+
+.password-fields>input{display:block;box-sizing:border-box;width:100%;min-height:46px;border:1px solid #b58d73;border-radius:7px;padding:10px 12px;background:#fffcf7;color:#603d30;font:inherit;font-size:16px;margin-bottom:16px}
+.password-fields>label:not(.password-visibility){margin-top:16px}
+.password-fields>label:first-child{margin-top:0}
+.password-fields>.password-visibility{display:flex;align-items:center;gap:8px;font-size:13px;margin:16px 0;cursor:pointer}
+.password-visibility input{width:17px;height:17px;accent-color:#b96340}
+.password-fields>.password-error{color:#a33e2b;margin:12px 0}
+.password-submit{display:flex;align-items:center;justify-content:flex-end;gap:20px;margin-top:20px}
+.password-submit>.binding-primary{min-height:44px;border:1px solid #b96340;border-radius:8px;padding:10px 22px;background:#b96340;color:#fffaf4;font-size:14px}
+.password-submit>.binding-primary:disabled{opacity:.6}
+.password-reset{border-top:1px solid #e5d2c2;margin-top:24px;padding-top:16px}
+.password-reset p{font-size:12px;line-height:1.8;margin:0;color:#85624e}

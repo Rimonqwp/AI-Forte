@@ -1,9 +1,9 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, GoogleAuthProvider, GithubAuthProvider, OAuthProvider, linkWithPopup, signInWithPopup, signInWithCredential, signOut, RecaptchaVerifier, linkWithPhoneNumber, sendEmailVerification, verifyBeforeUpdateEmail, reload, reauthenticateWithPopup } from 'firebase/auth';
-import { createBindingService } from './account-bindings-service.js';
+import { getAuth, signInAnonymously, GoogleAuthProvider, GithubAuthProvider, OAuthProvider, linkWithPopup, signInWithPopup, signInWithCredential, signOut, RecaptchaVerifier, linkWithPhoneNumber, sendEmailVerification, verifyBeforeUpdateEmail, reload, reauthenticateWithPopup, EmailAuthProvider, linkWithCredential, reauthenticateWithCredential, updatePassword, validatePassword, sendPasswordResetEmail, signInWithEmailAndPassword } from 'firebase/auth';
+import { createBindingService, normalizeEmail } from './account-bindings-service.js';
 import { stateClient } from './sql-state-client.js';
 import { mergeAccountValue } from './account-data.js';
-import { authenticateProvider } from './account-auth-flow.js';
+import { authenticateProvider, authenticatePassword } from './account-auth-flow.js';
 
 // Firebase web configuration is public. Access is controlled by Authentication
 // and the authenticated account API; no database key belongs in the browser bundle.
@@ -106,9 +106,22 @@ export async function signOutAccount() {
 export function accountBindingService(changed) {
   return createBindingService({
     currentUser: () => auth.currentUser, changed, syncProfile: saveAccountProfile,
-    sdk: { linkWithPhoneNumber, sendEmailVerification, verifyBeforeUpdateEmail, reload, reauthenticateWithPopup, GoogleAuthProvider },
+    sdk: { linkWithPhoneNumber, sendEmailVerification, verifyBeforeUpdateEmail, reload, reauthenticateWithPopup, GoogleAuthProvider, EmailAuthProvider, linkWithCredential, reauthenticateWithCredential, updatePassword, validatePassword: password => validatePassword(auth, password), sendPasswordResetEmail: (email, settings) => sendPasswordResetEmail(auth, email, settings) },
   });
 }
 export function phoneVerifier(element, parameters = {}) {
   return new RecaptchaVerifier(auth, element, { size: 'normal', ...parameters });
+}
+
+export function signInPassword(email, password, prepareGuest) {
+  return authenticatePassword({
+    user: auth.currentUser, email: normalizeEmail(email), password, prepareGuest,
+    signIn: (address, secret) => signInWithEmailAndPassword(auth, address, secret),
+    rememberMerge, resumeData: resumeAccountData,
+  });
+}
+export async function resetLoginPassword(email) {
+  const address = normalizeEmail(email);
+  try { await sendPasswordResetEmail(auth, address); }
+  catch (error) { if (error.code !== 'auth/user-not-found') throw error; }
 }

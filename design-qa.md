@@ -360,3 +360,17 @@ final result: passed
 final result: passed
 
 按用户注释将手机号输入状态初值设为 `+852 `，实际预填而非仅显示示例占位符；保留编辑其他国际区号的能力。生产构建通过；刷新后在当前内置浏览器打开绑定手机窗口，截图确认初始显示 +852，输入未禁用。证据：`/Users/rimon/.codex/visualizations/2026/11/06/phone-default/preview.png`，1845×1242。该修改仅涉及初始字段值，布局、样式、验证及发送逻辑均未改变，无视觉 P0/P1/P2；未发送验证码。
+
+## 2026-11-06 — 登录密码与邮箱密码登录
+
+final result: passed (local implementation and isolated SDK tests; live credential changes not exercised)
+
+Source: 用户要求在账号资料增加密码功能，沿用现有账号信息行及独立弹窗。基线为上方手机/邮箱绑定页面和用户最新注释；本轮新增密码行及必要登录入口，保留纸色、宋体标题、棕色文字、Phosphor 图标和原有设置外壳，没有新增素材或更换设计方向。
+
+证据目录 `/Users/rimon/.codex/visualizations/2026/11/06/account-password/`：`06-profile.png` 为当前账号资料密码行，`01-desktop.png` 为设置密码弹窗，1280×720 CSS/图片像素，密度 1；`02-mobile.png` 为 390×844 的实际弹窗。手机无横向溢出，弹窗边框宽 341px，内部 scrollWidth 339px，字段及操作均完整可见。已逐张打开检查字体、对齐、遮罩、焦点框、留白和按钮。`03-change-fixture.png` 及 `04-login-fixture.png` / `05-login-actions.png` 为直接使用相同组件的隔离测试页面，用于检查已有密码字段、重置入口和访客登录表单；该页面无真实认证回调，不代表线上密码已设置。临时测试文件在检查后删除。登录表单超出短视口时可在对话框内滚动，Tab 到登录按钮会将操作滚入视口。恢复默认视口后，将实际设置密码弹窗留在预览中供查看。
+
+浏览器检查：两个新密码输入默认 type=password 且为空；点击空表单仅显示 8–128 字符的本地错误；Tab 从最后操作回到关闭按钮，焦点仍在弹窗内；Escape 只关闭上层弹窗并返回密码行。实际打开前后 settings-scroll 的 scrollTop 均 549、clientWidth 均 952、offsetWidth 均 967，overflowY 保持 auto，原 15px 滚动条可见。最后控制台无错误。未输入或更改真实密码，未触发 Google 重新验证，未发送重置邮件。
+
+服务逻辑：初次设置在重新验证 Google 后关联同一 UID；已设置时先校验当前密码再更新；校验已验证邮箱、两次输入、8–128 字符及 Firebase 密码策略。错误旧密码、邮箱未验证、策略失败、身份切换均不会继续写入。访客密码登录先备份待合并记录，使用 signIn 而非注册或将凭据错误关联至访客。密码仅存在组件临时状态及 SDK 请求中，不写入 localStorage 或 SQL 资料。
+
+验证：生产构建通过（保留现有包大小及 Firebase 混合导入警告）；账号密码、绑定、认证流程、资料、云状态及 Sites 共 48 项测试全部通过。修复测试发现的缺失当前密码绕过校验问题。无遗留视觉 P0/P1/P2。Firebase Email/Password 提供商线上启用状态、真实密码设置/登录及邮件送达未验证；界面对未启用方式显示明确错误，不模拟成功。实现依据 [Firebase 账号关联](https://firebase.google.com/docs/auth/web/account-linking)、[用户密码管理](https://firebase.google.com/docs/auth/web/manage-users) 和 [密码认证](https://firebase.google.com/docs/auth/web/password-auth) 官方文档。

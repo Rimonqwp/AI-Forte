@@ -123,7 +123,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
               <div className="profile-name-row"><label htmlFor="profile-display-name">{tr('显示名称')}</label><div><input id="profile-display-name" value={draftName} onChange={event => { setDraftName(event.target.value); setFeedback(null); }} maxLength={100} required disabled={saving || bindingBusy} aria-describedby="profile-name-help"/><p id="profile-name-help">{tr('将显示在你的演奏作品和社区互动中。')}</p></div></div>
               <section className="profile-account-info" aria-labelledby="profile-account-heading">
                 <h3 id="profile-account-heading">{tr('账号信息')}</h3>
-                <div className="profile-provider-line">{providers.includes('google.com') ? <GoogleLogo size={28} weight="bold" aria-hidden="true"/> : <SignIn size={24} aria-hidden="true"/>}<strong>{providers.filter(id => !['phone', 'password'].includes(id)).map(id => providerNames[id] || id).join(' / ') || tr('第三方账号')}{' '}{tr('已连接')}</strong><span className="binding-verified"><Check size={14}/>{tr('已登录')}</span></div>
+                <div className="profile-provider-line">{providers.includes('google.com') ? <GoogleLogo size={28} weight="bold" aria-hidden="true"/> : <SignIn size={24} aria-hidden="true"/>}<strong>{providers.filter(id => !['phone', 'password'].includes(id)).map(id => providerNames[id] || id).join(' / ') || tr(providers.includes('password') ? '邮箱密码登录' : providers.includes('phone') ? '手机号码' : '第三方账号')}{' '}{tr('已连接')}</strong><span className="binding-verified"><Check size={14}/>{tr('已登录')}</span></div>
                 <AccountBindings user={user} service={bindings} profileSaving={saving} onBusyChange={setBindingBusy}/>
               </section>
               <div className={`profile-feedback${feedback?.error ? ' is-error' : ''}`} role={feedback?.error ? 'alert' : 'status'}>{feedback && tr(feedback.text)}</div>
@@ -132,7 +132,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
             {section === 'security' && <>
               <h3 className="settings-subheading">{tr('关联账号')}</h3>
               <div className="settings-connected-list">{providers.length ? providers.map(id => <div className="settings-connected" key={id}><ShieldCheck size={24}/><div><strong>{tr(providerNames[id] || id)}</strong><span>{tr('已关联')}</span></div><span className="settings-status"><Check size={14}/>{tr('当前登录方式')}</span></div>) : <p>{tr('未提供')}</p>}</div>
-              <div className="settings-note"><ShieldCheck size={22}/><div><h3>{tr('第三方账号登录')}</h3><p>{tr('你通过关联账号登录谱芽岛，无需单独设置本站密码。密码与两步验证请在对应账号中管理。')}</p></div></div>
+              <div className="settings-note"><ShieldCheck size={22}/><div><h3>{tr('第三方账号登录')}</h3><p>{tr('Google 密码与两步验证由 Google 管理；本站登录密码可在账号资料中设置或修改。')}</p></div></div>
               {providers.includes('google.com') && <a className="settings-external" href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer">{tr('管理 Google 账号安全设置')}<ArrowSquareOut size={18}/></a>}
             </>}
             {section === 'language' && <>

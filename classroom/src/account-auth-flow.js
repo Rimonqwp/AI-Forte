@@ -17,3 +17,14 @@ export async function authenticateProvider({ user, openPopup, prepareGuest, cred
   await resumeData(result.user);
   return { user: result.user, changedUid: !!guest && guest.uid !== result.user.uid };
 }
+
+// Password sign-in must not accidentally register a new account by linking a guest.
+export async function authenticatePassword({ user, email, password, prepareGuest, signIn, rememberMerge, resumeData }) {
+  const guest = user?.isAnonymous ? user : null;
+  const records = guest ? await prepareGuest(guest.uid) : null;
+  const result = await signIn(email, password);
+  const changedUid = !!guest && guest.uid !== result.user.uid;
+  if (changedUid) rememberMerge(result.user.uid, records);
+  await resumeData(result.user);
+  return {user:result.user, changedUid};
+}

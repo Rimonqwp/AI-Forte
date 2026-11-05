@@ -11,6 +11,12 @@ export function cacheKey(uid, key) { return `puyadao.cloud.${uid}.${key}`; }
 
 export function authErrorMessage(error) {
   const messages = {
+    'auth/invalid-credential': '邮箱或密码不正确，请检查后重试。',
+    'auth/wrong-password': '邮箱或密码不正确，请检查后重试。',
+    'auth/user-not-found': '邮箱或密码不正确，请检查后重试。',
+    'auth/invalid-email': '请输入有效的邮箱地址。',
+    'auth/too-many-requests': '操作次数过多，请稍后再试。',
+
     'auth/popup-closed-by-user': '登录窗口已关闭，你可以重新选择登录。',
     'auth/cancelled-popup-request': '请在已打开的登录窗口中继续。',
     'auth/popup-blocked': '浏览器阻止了登录窗口，请允许此网站弹出窗口后重试。',
