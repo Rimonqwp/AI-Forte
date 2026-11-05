@@ -62,7 +62,7 @@ export function AccountSettings({ user, onClose, returnFocus }) {
             <button aria-current={section === item.id ? 'page' : undefined} aria-controls="settings-content" onClick={() => selectSection(item.id)}><item.icon size={20}/>{tr(item.title)}{counts[item.id] !== undefined && <span>{counts[item.id]}</span>}</button>
           </React.Fragment>)}
         </nav>
-        <div className="settings-sidebar-footer"><img className="settings-brand-logo" src={import.meta.env.BASE_URL + 'assets/brand/puyadao-sprout-icon.png'} alt={tr('谱芽岛')}/><small>{tr('让喜欢的歌，在指尖靠岸。')}</small></div>
+        <div className="settings-sidebar-footer"><img className="settings-brand-logo" src={import.meta.env.BASE_URL + 'assets/brand/puyadao-sprout-icon.png'} alt={tr('谱芽岛')}/><div className="settings-footer-copy"><strong>{tr('谱芽岛')}</strong><small>{tr('让喜欢的歌，在指尖靠岸。')}</small></div></div>
       </aside>
       <div className="settings-workspace">
         <header className="settings-topbar"><div><span id="account-settings-title">{tr('账号设定')}</span><span className="settings-breadcrumb">/</span><strong>{tr(current.title)}</strong></div><button className="settings-close" aria-label={tr('关闭账号设定')} onClick={onClose}><X size={20}/></button></header>

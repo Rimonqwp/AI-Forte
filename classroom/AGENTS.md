@@ -165,3 +165,5 @@ Make the account settings dialog and right content area more spacious on desktop
 Account profile decoration follows selected generated option 3 (岛屿留白): unboxed identity row with brand signature, small upper-right open-score/sprout island illustration, outline icons beside profile fields, and a pale musical-staff footer. Keep existing profile data and controls, spacious layout and transparent outlined sidebar selection. Use standalone generated raster assets, not a flattened mock.
 
 Use the icon-only version of selected latest logo option 1 (芽与音符, sprout/note above a simple island arc) in the profile identity signature and settings sidebar footer. The user explicitly removed the three-character wordmark; display only the shared transparent graphical emblem, with accessible brand alt text and the existing footer tagline. Keep the mobile icon compact.
+
+Settings sidebar footer now pairs the standalone graphical logo on the left with two stacked text rows on the right: brand name 谱芽岛 above the existing tagline. Follow the user’s supplied three-box layout sketch. This restores the name only in the sidebar footer; the profile signature remains icon-only.
