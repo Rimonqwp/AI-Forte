@@ -269,3 +269,33 @@ final result: passed
 在当前内置浏览器重新启动 4173 Vite 服务并刷新，确认不再显示服务停止时缓存的旧样式。桌面视口 1845×1242；以实际截图/视口比例裁取组件。已打开并检查 `visible-edge-comparison.png`（旧效果/修复后）和 `visible-edge-reference.png`（选定图底部/实际底部）并排证据，纸边轮廓清晰；补充 `visible-edge-card.jpg` 与 `visible-edge-mobile.jpg`。
 
 360px 视口十张卡片的元数据和按钮无溢出；手机信息区保持 147px，按钮下方保留 17px，截图确认纸边不裁切按钮。字体、颜色、封面和文案沿用已通过的选定方案。生产构建通过。浏览器日志保留一条预览连接时的 Vite WebSocket 断连记录；本轮通过可用的 HTTP 页面手动刷新，已核对最新 64px 遮罩和真实截图，不将旧缓存或热更新状态作为验证依据。没有遗留 P0/P1/P2；实际生成轮廓与概念图的细微曲线/字形差异仍是 P3。
+
+## 2026-11-06 — 账号资料：选定第 3 版直接编辑
+
+final result: passed
+
+Source visual truth: `/Users/rimon/.codex/generated_images/01a1add3-e1c2-79f0-822b-8e65d109e504/exec-7e487286-3ee0-46e8-b16b-7b82f163e3a0.png` (third displayed image selected by the user).
+Implementation: `http://127.0.0.1:4173/static/classroom/#scores?q=周杰伦`, account settings → account profile.
+Evidence directory: `/Users/rimon/.codex/visualizations/2026/11/06/account-profile/`.
+Final screenshot: `12-final-preview.png`; desktop comparison capture: `09-final-desktop.png` (same visual output; final code adds a namespaced React key).
+Viewport: desktop 1845×1242 CSS px and captured pixels, effective density 1. Source 1529×1029 px, proportionally normalized to 1845×1242 for comparisons; mobile 390×844 CSS px/pixels. Account values are masked email and current nickname. Initial unchanged form intentionally disables Save; the source mock shows an enabled Save, a state handled when a draft changes.
+Full-view comparison evidence: `03-comparison-before.jpg`, `05-comparison-after.jpg`, `10-final-comparison.jpg` (source left, implementation right). Focused, readable controls comparison: `06-controls-comparison.jpg`, `11-final-controls.jpg`. Opened and inspected combined source/implementation images, not just separate screenshots. Mobile: `07-editor-mobile.png` and post-fix `08-mobile-actions.png`.
+
+Findings and comparison history:
+- [P2, resolved] First capture used noticeably smaller main typography and compressed vertical spacing. Increased heading to 46px, description to 22px, field text to 22px, section title to 30px, account row to 18px. Increased avatar/name gaps and footer spacing; post-fix comparisons show the selected single-column hierarchy with actions aligned at the bottom.
+- [P2, resolved] Mobile email and Show action initially wrapped onto separate rows. Updated flex sizing so email and control share one row; `08-mobile-actions.png` confirms readable information, reachable actions, stable top close button and no clipped form controls.
+- [P2, resolved] Console reported duplicate sibling UID keys after adding UID-scoped settings remount. Namespaced the dialog key to `settings-${uid}`. Reloaded and reopened; log timestamps remained the two earlier entries, with no additional errors after the fix.
+- No remaining actionable P0/P1/P2 issues.
+
+Required fidelity surfaces:
+- Typography: Songti heading, PingFang/system UI text, dark brown readable hierarchy. Main form fields and actions match the selected composition; existing sidebar typography retained. P3: system font rendering and smaller secondary copy differ slightly from the raster mock.
+- Spacing/layout: preserved existing 1440×960 maximum dialog, sidebar/topbar, portrait + avatar control, aligned label/input, separate provider section, bottom Cancel/Save. Reduced form minimum height after initial comparison to avoid an unnecessary desktop scrollbar. Mobile uses single column and internal vertical scrolling; final action row is reachable and close remains visible.
+- Color/tokens: warm #fffcf7 paper, #603d30 ink, terracotta primary action, fine warm dividers. Unchanged Save is intentionally muted/disabled; editing enables it.
+- Imagery: reused the existing separately generated score/sprout PNG and original brand emblem. No flattened UI image or handcrafted decorative drawing. Google uses the same Phosphor GoogleLogo family as the existing sign-in UI, with the established monochrome brown treatment instead of the mock's multicolor logo. P3: existing book illustration is paler than the generated concept.
+- Copy/content: follows the selected edit surface. Added explicit avatar file limits and browser-only/UID-scoped storage explanation; Google email and sign-in method remain read-only. New strings include English and Traditional Chinese translations. No profile brand signature or staff footer remains in this latest selected design.
+
+Primary interactions checked in the in-app browser: name changes enable Save; Cancel restores the name and disables Save; whitespace-only name produces an alert without sending a write; selecting a real PNG generates a JPEG preview and enables Save; Cancel restores the original avatar; email Show/Hide toggles; security navigation opens and returns; Escape closes and returns focus to profile trigger; search URL remains intact. Mobile internal scrolling reaches all actions. Desktop viewport override reset and profile preview left open.
+
+Validation: production build passed; 27 targeted tests passed (profile editor, account data, auth flow, cloud state and Sites packaging). Save success, name normalization, UID isolation, switched sessions, failed remote writes, failed browser storage, SQL synchronization warning and invalid files are exercised with injected adapters. No live account nickname was changed for testing; live Firebase write and cross-device propagation were not exercised. Avatars remain local to this browser per account and are not sent to Google or Cloud SQL. No backend changes/deployment were needed.
+
+Implementation checklist: complete. Follow-up P3 polish is limited to secondary typography, the paler existing illustration and provider logo color; no task-blocking differences remain.

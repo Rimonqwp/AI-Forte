@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { onIdTokenChanged } from 'firebase/auth';
-import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData } from './firebase.js';
+import { onIdTokenChanged, updateProfile } from 'firebase/auth';
+import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData, saveAccountProfile } from './firebase.js';
 import { flushCloudStates } from './cloud-stores.js';
 import { AuthDialog } from './AuthDialog.jsx';
 import { AccountSettings } from './AccountSettings.jsx';
 import './auth.css';
 
+import { readProfileAvatar, saveProfileEdits } from './profile-editor.js';
 import { AccountContext } from './account-context.js';
 export { useAccount } from './account-context.js';
 
 export function AuthProvider({ children }) {
+  const [, refreshProfile] = useState(0);
   const [user, setUser] = useState(null), [ready, setReady] = useState(false);
   const [opened, setOpened] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState(null);
   const [settingsOpened, setSettingsOpened] = useState(false), settingsTrigger = useRef(null);
@@ -53,9 +55,21 @@ export function AuthProvider({ children }) {
     catch (value) { setError(value); }
     finally { setBusy(false); }
   };
-  return <AccountContext.Provider value={{ user, ready, busy, login, logout, openSettings, openLogin: () => { setError(null); setOpened(true); } }}>
+  const displayedUser = user ? { ...user, photoURL: readProfileAvatar(user.uid) || user.photoURL } : null;
+  const saveProfile = changes => saveProfileEdits({ ...changes, uid: user.uid }, {
+    currentUser: () => auth.currentUser,
+    updateName: (member, displayName) => updateProfile(member, { displayName }),
+    syncProfile: saveAccountProfile,
+    changed: () => refreshProfile(value => value + 1),
+  });
+  useEffect(() => {
+    const refresh = () => refreshProfile(value => value + 1);
+    window.addEventListener('storage', refresh);
+    return () => window.removeEventListener('storage', refresh);
+  }, []);
+  return <AccountContext.Provider value={{ user: displayedUser, ready, busy, login, logout, openSettings, openLogin: () => { setError(null); setOpened(true); } }}>
     {ready ? <React.Fragment key={user?.uid || 'offline'}>{children}</React.Fragment> : <div className="account-bootstrap" role="status">正在打开谱芽岛…</div>}
-    {settingsOpened && user && !user.isAnonymous && <AccountSettings user={user} returnFocus={settingsTrigger.current} onClose={() => setSettingsOpened(false)}/>}
+    {settingsOpened && user && !user.isAnonymous && <AccountSettings key={`settings-${user.uid}`} user={displayedUser} onSaveProfile={saveProfile} returnFocus={settingsTrigger.current} onClose={() => setSettingsOpened(false)}/>}
     {opened && <AuthDialog user={user} busy={busy} error={error} onLogin={login} onRetry={retry} onClose={() => { if (!busy) setOpened(false); }}/>}
   </AccountContext.Provider>;
 }
