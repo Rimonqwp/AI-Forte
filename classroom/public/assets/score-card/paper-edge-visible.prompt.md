@@ -1,0 +1,9 @@
+# Visible paper-card bottom alpha mask
+
+Tool: built-in image_gen, `transparent_background=true`. PNG copied without pixel editing.
+
+Reference: `/Users/rimon/.codex/generated_images/01a1a94f-967a-7ac0-972f-dca92fa49629/exec-1da8756b-5961-4f26-8e3b-d88a903d7ccc.png`
+
+## Exact prompt
+
+Create ONLY a production-ready alpha mask for the visible organic paper bottom silhouette of the FIRST score card in the reference. Do NOT reproduce the UI. Wide horizontal 3:1 canvas, ideally 1536x512. Foreground is pure opaque white #ffffff, background is genuine transparent alpha. The white foreground fills the complete top, left and right canvas edges with NO margins, NO transparent gap above, NO surrounding frame. Its lower boundary is a broad, smooth, organic paper-cut curve: along the horizontal center x=50%, the bottom edge is at y=62% of the full image height, a gentle upward central lift; at x=25% and x=75%, it reaches down to y=80% of full image height. The far left and right endpoints sit around y=72%, with very gently rounded outermost corners. Thus the lower edge must have a LARGE 18% of image-height variation so it remains visibly wavy when rendered only 48px high. Use one broad central rise and two asymmetric low side dips, as on the selected paper-card mock. Keep the curves clean and smooth, subtly organic, NOT a repeating sine-wave pattern, NOT scalloped lace, NOT jagged or finely shredded tear, NOT rectangular or a straight line. The whole area below that broad silhouette must be transparent, not gray or a checkerboard. No outlines, dark pixels, paper grain, texture, shading, gradients, shadows, typography, text, UI, red circles, scenes, icons, watermarks or extra objects. This image is consumed as an ALPHA MASK, not displayed as a photograph. White above / real alpha transparency below the single clearly undulating paper edge.
