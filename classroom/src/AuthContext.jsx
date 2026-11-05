@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { onIdTokenChanged, updateProfile } from 'firebase/auth';
-import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData, saveAccountProfile } from './firebase.js';
+import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData, saveAccountProfile, accountBindingService } from './firebase.js';
 import { flushCloudStates } from './cloud-stores.js';
 import { AuthDialog } from './AuthDialog.jsx';
 import { AccountSettings } from './AccountSettings.jsx';
@@ -55,6 +55,16 @@ export function AuthProvider({ children }) {
     catch (value) { setError(value); }
     finally { setBusy(false); }
   };
+  const bindings = accountBindingService(() => refreshProfile(value => value + 1));
+  useEffect(() => {
+    if (!user || user.isAnonymous) return;
+    const url = new URL(window.location.href);
+    if (url.searchParams.get('accountSettings') !== 'profile') return;
+    url.searchParams.delete('accountSettings');
+    window.history.replaceState(window.history.state, '', url);
+    setSettingsOpened(true);
+    bindings.refresh(user.uid).catch(() => {});
+  }, [user?.uid, user?.isAnonymous]);
   const displayedUser = user ? { ...user, photoURL: readProfileAvatar(user.uid) || user.photoURL } : null;
   const saveProfile = changes => saveProfileEdits({ ...changes, uid: user.uid }, {
     currentUser: () => auth.currentUser,
@@ -69,7 +79,7 @@ export function AuthProvider({ children }) {
   }, []);
   return <AccountContext.Provider value={{ user: displayedUser, ready, busy, login, logout, openSettings, openLogin: () => { setError(null); setOpened(true); } }}>
     {ready ? <React.Fragment key={user?.uid || 'offline'}>{children}</React.Fragment> : <div className="account-bootstrap" role="status">正在打开谱芽岛…</div>}
-    {settingsOpened && user && !user.isAnonymous && <AccountSettings key={`settings-${user.uid}`} user={displayedUser} onSaveProfile={saveProfile} returnFocus={settingsTrigger.current} onClose={() => setSettingsOpened(false)}/>}
+    {settingsOpened && user && !user.isAnonymous && <AccountSettings key={`settings-${user.uid}`} user={displayedUser} onSaveProfile={saveProfile} bindings={bindings} returnFocus={settingsTrigger.current} onClose={() => setSettingsOpened(false)}/>}
     {opened && <AuthDialog user={user} busy={busy} error={error} onLogin={login} onRetry={retry} onClose={() => { if (!busy) setOpened(false); }}/>}
   </AccountContext.Provider>;
 }

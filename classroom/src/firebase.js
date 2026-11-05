@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, signInAnonymously, GoogleAuthProvider, GithubAuthProvider, OAuthProvider, linkWithPopup, signInWithPopup, signInWithCredential, signOut } from 'firebase/auth';
+import { getAuth, signInAnonymously, GoogleAuthProvider, GithubAuthProvider, OAuthProvider, linkWithPopup, signInWithPopup, signInWithCredential, signOut, RecaptchaVerifier, linkWithPhoneNumber, sendEmailVerification, verifyBeforeUpdateEmail, reload, reauthenticateWithPopup } from 'firebase/auth';
+import { createBindingService } from './account-bindings-service.js';
 import { stateClient } from './sql-state-client.js';
 import { mergeAccountValue } from './account-data.js';
 import { authenticateProvider } from './account-auth-flow.js';
@@ -100,4 +101,14 @@ export function signInProvider(providerId, prepareGuest) {
 export async function signOutAccount() {
   await signOut(auth);
   return ensureVisitor();
+}
+
+export function accountBindingService(changed) {
+  return createBindingService({
+    currentUser: () => auth.currentUser, changed, syncProfile: saveAccountProfile,
+    sdk: { linkWithPhoneNumber, sendEmailVerification, verifyBeforeUpdateEmail, reload, reauthenticateWithPopup, GoogleAuthProvider },
+  });
+}
+export function phoneVerifier(element, parameters = {}) {
+  return new RecaptchaVerifier(auth, element, { size: 'normal', ...parameters });
 }
