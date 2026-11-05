@@ -33,14 +33,14 @@ const demoPerformances = [
   {id:'cover-chen',kind:'翻唱',singer:'阿辰',demo:true},
 ];
 const versions = [
-  {id:'piano-easy',performanceId:'original',author:'小谱老师',avatar:'teacher',instrument:'钢琴',type:'五线谱',level:2,key:'C',subtitle:'钢琴简化版（入门友好）',badge:'官方推荐',certified:true,description:'简单旋律与和弦，适合钢琴入门。',plays:'56.8',rating:4.9,days:3,sheet:'piano'},
-  {id:'guitar-sing',performanceId:'original',author:'阿泽 Acous',avatar:'acous',instrument:'吉他',type:'和弦谱',level:3,key:'G',subtitle:'吉他弹唱版（原版和弦）',badge:'热门',authorLevel:5,description:'保留原曲和弦，适合自弹自唱。',plays:'42.3',rating:4.8,days:5,sheet:'guitar'},
-  {id:'ukulele-easy',performanceId:'cover-xia',author:'星星同学',avatar:'star',instrument:'尤克里里',type:'简谱',level:2,key:'C',subtitle:'尤克里里弹唱版（超简单）',badge:'新上架',authorLevel:7,description:'三个常用和弦，新手轻松弹唱。',plays:'8.7',rating:4.9,days:1,sheet:'ukulele-v2'},
-  {id:'guitar-finger',performanceId:'cover-chen',author:'指弹小林',avatar:'lin',instrument:'吉他',type:'吉他谱',level:4,key:'D',subtitle:'吉他指弹版（进阶独奏）',badge:'进阶精选',authorLevel:6,description:'旋律结合分解和弦，适合进阶。',plays:'6.2',rating:4.8,days:4,sheet:'fingerstyle'},
-  {id:'piano-lyric',performanceId:'cover-xia',author:'小谱老师',avatar:'teacher',instrument:'钢琴',type:'五线谱',level:3,key:'G',subtitle:'钢琴抒情版（完整练习）',badge:'精选',certified:true,description:'分手慢练，逐步完成抒情演奏。',plays:'5.6',rating:4.7,days:8,sheet:'piano'},
-  {id:'guitar-beginner',performanceId:'original',author:'阿泽 Acous',avatar:'acous',instrument:'吉他',type:'和弦谱',level:1,key:'C',subtitle:'吉他入门版（基础和弦）',badge:'新手友好',authorLevel:5,description:'简化和弦转换，先练稳节奏。',plays:'3.8',rating:4.6,days:2,sheet:'guitar'},
-  {id:'uke-melody',performanceId:'original',author:'星星同学',avatar:'star',instrument:'尤克里里',type:'简谱',level:1,key:'G',subtitle:'尤克里里旋律版（单音练习）',badge:'轻松练习',authorLevel:7,description:'单音旋律练习，弹得清晰连贯。',plays:'2.1',rating:4.7,days:6,sheet:'ukulele-v2'},
-  {id:'fingerstyle-full',performanceId:'cover-chen',author:'指弹小林',avatar:'lin',instrument:'吉他',type:'吉他谱',level:5,key:'G',subtitle:'指弹挑战版（丰富编配）',badge:'进阶精选',authorLevel:6,description:'融合旋律与低音，挑战丰富编配。',plays:'1.9',rating:4.9,days:7,sheet:'fingerstyle'},
+  {id:'piano-easy',performanceId:'original',author:'小谱老师',avatar:'teacher',instrument:'钢琴',type:'五线谱',level:2,key:'C',subtitle:'钢琴简化版（入门友好）',badge:'官方推荐',certified:true,description:'简单旋律与和弦，适合钢琴入门。',plays:'56.8',demoFavoriteCount:3920,rating:4.9,days:3,sheet:'piano'},
+  {id:'guitar-sing',performanceId:'original',author:'阿泽 Acous',avatar:'acous',instrument:'吉他',type:'和弦谱',level:3,key:'G',subtitle:'吉他弹唱版（原版和弦）',badge:'热门',authorLevel:5,description:'保留原曲和弦，适合自弹自唱。',plays:'42.3',demoFavoriteCount:2860,rating:4.8,days:5,sheet:'guitar'},
+  {id:'ukulele-easy',performanceId:'cover-xia',author:'星星同学',avatar:'star',instrument:'尤克里里',type:'简谱',level:2,key:'C',subtitle:'尤克里里弹唱版（超简单）',badge:'新上架',authorLevel:7,description:'三个常用和弦，新手轻松弹唱。',plays:'8.7',demoFavoriteCount:680,rating:4.9,days:1,sheet:'ukulele-v2'},
+  {id:'guitar-finger',performanceId:'cover-chen',author:'指弹小林',avatar:'lin',instrument:'吉他',type:'吉他谱',level:4,key:'D',subtitle:'吉他指弹版（进阶独奏）',badge:'进阶精选',authorLevel:6,description:'旋律结合分解和弦，适合进阶。',plays:'6.2',demoFavoriteCount:520,rating:4.8,days:4,sheet:'fingerstyle'},
+  {id:'piano-lyric',performanceId:'cover-xia',author:'小谱老师',avatar:'teacher',instrument:'钢琴',type:'五线谱',level:3,key:'G',subtitle:'钢琴抒情版（完整练习）',badge:'精选',certified:true,description:'分手慢练，逐步完成抒情演奏。',plays:'5.6',demoFavoriteCount:430,rating:4.7,days:8,sheet:'piano'},
+  {id:'guitar-beginner',performanceId:'original',author:'阿泽 Acous',avatar:'acous',instrument:'吉他',type:'和弦谱',level:1,key:'C',subtitle:'吉他入门版（基础和弦）',badge:'新手友好',authorLevel:5,description:'简化和弦转换，先练稳节奏。',plays:'3.8',demoFavoriteCount:310,rating:4.6,days:2,sheet:'guitar'},
+  {id:'uke-melody',performanceId:'original',author:'星星同学',avatar:'star',instrument:'尤克里里',type:'简谱',level:1,key:'G',subtitle:'尤克里里旋律版（单音练习）',badge:'轻松练习',authorLevel:7,description:'单音旋律练习，弹得清晰连贯。',plays:'2.1',demoFavoriteCount:180,rating:4.7,days:6,sheet:'ukulele-v2'},
+  {id:'fingerstyle-full',performanceId:'cover-chen',author:'指弹小林',avatar:'lin',instrument:'吉他',type:'吉他谱',level:5,key:'G',subtitle:'指弹挑战版（丰富编配）',badge:'进阶精选',authorLevel:6,description:'融合旋律与低音，挑战丰富编配。',plays:'1.9',demoFavoriteCount:160,rating:4.9,days:7,sheet:'fingerstyle'},
 ];
 
 function Rating({level}) {
