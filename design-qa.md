@@ -326,3 +326,21 @@ Integration limits: Firebase administrator credentials were unavailable for the 
 
 Implementation references: https://firebase.google.com/docs/auth/web/phone-auth ; https://firebase.google.com/docs/reference/js/auth#linkwithphonenumber ; https://firebase.google.com/docs/reference/js/auth#verifybeforeupdateemail .
 Implementation checklist: complete for the requested local UI and SDK integration; live delivery validation requires an enabled Firebase project and user-controlled test contacts.
+
+## 2026-11-06 — 绑定入口改为独立小弹窗
+
+final result: passed
+
+Source: the user's latest annotation explicitly requests a separate popup when clicking the phone/email action buttons. Baseline surface `/Users/rimon/.codex/visualizations/2026/11/06/account-bindings/08-desktop-1845.png`; the existing profile, row layout and visual language remain the source for surrounding UI. Implementation is the same local search route / account settings, now with a top-level phone or email dialog.
+Evidence folder: `/Users/rimon/.codex/visualizations/2026/11/06/binding-modal/`. Desktop `04-phone-final.png`: 1845×1242 CSS px/image pixels, density 1. Mobile `03-mobile-email-stable.png`: 390×844 CSS px/image pixels, density 1. The initial screenshot immediately following viewport resize (`02-mobile-email.png`) was a transient compositor frame and was rejected; the stable recapture confirms readable dialog dimensions. No image density rescaling was required. Combined baseline/implementation comparison `05-modal-comparison.jpg` was opened and inspected; the appearance of a centered popup and additional dimming is the requested change, not unintended layout drift. The standalone full-resolution phone and mobile email images were also inspected for field labels, focus outlines, button hit areas and content wrapping.
+
+Findings/history:
+- [P2, resolved] The browser's default Tab traversal did not reliably return from the last control to the first. Added explicit first/last Tab and Shift+Tab handling inside the top dialog, then verified both directions remain inside it.
+- [P2, resolved] Escape must not bubble to the parent account settings dialog. The popup stops keyboard propagation and handles Escape itself. Browser verification confirms only the popup closes and focus returns to the triggering row button.
+- No remaining P0/P1/P2 findings. P3: third-party reCAPTCHA retains its own visual style; existing contained overflow remains available on narrow screens.
+
+Fidelity surfaces: preserved the established Songti headings, PingFang UI text, warm paper, brown ink and outline controls. New 560px maximum modal has a sticky heading/close action, compact field padding, warm border and restrained shadow. Both phone and email fields use the existing validation and send/confirm controls. Mobile layout fits the email field and actions without clipping. Existing raster art and brand images remain unchanged; icons use the existing Phosphor family. Copy changes are limited to the dialog close label, Cancel in place of inline Collapse, and removal of a repeated email explanation. Close-label translations cover all three UI languages.
+
+Browser checks: both buttons open separate dialogs; initial focus enters the field; Tab/Shift+Tab stay within the popup; close button, Cancel, Escape and backdrop click close only the upper dialog; trigger focus returns; the underlying settings scroll position compares equal before and after opening/closing; invalid email still displays its error in the popup; real reCAPTCHA renders inside the phone popup; desktop and 390px mobile layouts verified. The parent account profile and search URL are preserved, and background profile scrolling is locked while editing. Latest console error log was empty. Temporary viewport override reset and phone popup left open for review.
+
+Production build and 11 existing binding-service tests passed. No real verification message was sent and no account contact information was changed. This task changes presentation and keyboard/modal lifecycle only; previously recorded live-delivery and Firebase-configuration verification limits remain unchanged.

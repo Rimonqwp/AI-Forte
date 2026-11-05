@@ -31,6 +31,7 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  "关闭绑定窗口":["Close linking dialog","關閉綁定視窗"],
   "账号状态刷新失败，请重试刷新。":["Could not refresh the account. Try refreshing again.","帳號狀態重新整理失敗，請重試。"],
   "收起":["Collapse","收起"],
   "处理中…":["Working…","處理中…"],
