@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowSquareOut, BookOpen, Camera, CaretRight, Check, ClockCounterClockwise, Globe, GoogleLogo, Heart, SignIn, ShieldCheck, UserCircle, X } from '@phosphor-icons/react';
+import { BookOpen, Camera, CaretRight, Check, ClockCounterClockwise, Globe, GoogleLogo, Heart, SignIn, UserCircle, X } from '@phosphor-icons/react';
 import { languages, setLanguage, tr, useLanguage } from './language.js';
 import { SettingsLibrary } from './SettingsLibrary.jsx';
 import { useCloudState } from './useCloudState.js';
 import { useScoreHistory } from './score-history.js';
 import { AccountBindings } from './AccountBindings.jsx';
 import { prepareAvatar } from './profile-editor.js';
+import { LoginHistory } from './LoginHistory.jsx';
 import './account-settings.css';
 
 const sections = [
   { id: 'profile', title: '账号资料', icon: UserCircle, group: '用户设定' },
-  { id: 'security', title: '登录与安全', icon: ShieldCheck, group: '用户设定' },
+  { id: 'security', title: '登录记录', icon: ClockCounterClockwise, group: '用户设定' },
   { id: 'favorites', title: '我的收藏', icon: Heart, group: '我的音乐' },
   { id: 'scores', title: '我的乐谱', icon: BookOpen, group: '我的音乐' },
   { id: 'recent', title: '最近浏览', icon: ClockCounterClockwise, group: '我的音乐' },
@@ -112,7 +113,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
         <div className="settings-scroll" ref={content}>
           <div className={`settings-content${section === 'profile' ? ' settings-profile-content' : ''}`} id="settings-content" key={section}>
             <div className="settings-page-heading"><h2>{tr(current.title)}</h2>
-            <p className="settings-description">{tr(section === 'favorites' ? '喜欢的歌曲，随时回来继续练习。' : section === 'scores' ? '收藏编配、重拾练习，让你的乐谱井井有条。' : section === 'recent' ? '找回刚刚听见、看过的旋律。' : section === 'profile' ? '让音乐伙伴认识你。' : section === 'security' ? '查看当前账号使用的登录方式。' : '选择你习惯的语言，让每一次练习更自在。')}</p>{section === 'profile' && <img className="settings-profile-art" src={import.meta.env.BASE_URL + 'assets/account-settings/score-sprout.png'} alt="" aria-hidden="true"/>}</div>
+            <p className="settings-description">{tr(section === 'favorites' ? '喜欢的歌曲，随时回来继续练习。' : section === 'scores' ? '收藏编配、重拾练习，让你的乐谱井井有条。' : section === 'recent' ? '找回刚刚听见、看过的旋律。' : section === 'profile' ? '让音乐伙伴认识你。' : section === 'security' ? '查看当前会话与此浏览器保存的成功登录记录。' : '选择你习惯的语言，让每一次练习更自在。')}</p>{section === 'profile' && <img className="settings-profile-art" src={import.meta.env.BASE_URL + 'assets/account-settings/score-sprout.png'} alt="" aria-hidden="true"/>}</div>
             {['favorites', 'scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}
             {section === 'profile' && <form className="profile-editor" noValidate onSubmit={saveProfile} aria-busy={saving}>
               <div className="profile-avatar-row">
@@ -127,14 +128,9 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
                 <AccountBindings user={user} service={bindings} profileSaving={saving} onBusyChange={setBindingBusy}/>
               </section>
               <div className={`profile-feedback${feedback?.error ? ' is-error' : ''}`} role={feedback?.error ? 'alert' : 'status'}>{feedback && tr(feedback.text)}</div>
-              <footer className="profile-editor-footer"><button type="button" className="profile-security-link" disabled={saving || bindingBusy} onClick={() => selectSection('security')}>{tr('登录与安全')}<CaretRight size={18}/></button><div><button type="button" className="profile-cancel" disabled={saving || bindingBusy} onClick={resetDraft}>{tr('取消')}</button><button type="submit" className="profile-save" disabled={saving || bindingBusy || readingPhoto || !dirty}>{tr(saving ? '正在保存…' : '保存修改')}</button></div></footer>
+              <footer className="profile-editor-footer"><button type="button" className="profile-security-link" disabled={saving || bindingBusy} onClick={() => selectSection('security')}>{tr('登录记录')}<CaretRight size={18}/></button><div><button type="button" className="profile-cancel" disabled={saving || bindingBusy} onClick={resetDraft}>{tr('取消')}</button><button type="submit" className="profile-save" disabled={saving || bindingBusy || readingPhoto || !dirty}>{tr(saving ? '正在保存…' : '保存修改')}</button></div></footer>
             </form>}
-            {section === 'security' && <>
-              <h3 className="settings-subheading">{tr('关联账号')}</h3>
-              <div className="settings-connected-list">{providers.length ? providers.map(id => <div className="settings-connected" key={id}><ShieldCheck size={24}/><div><strong>{tr(providerNames[id] || id)}</strong><span>{tr('已关联')}</span></div><span className="settings-status"><Check size={14}/>{tr('当前登录方式')}</span></div>) : <p>{tr('未提供')}</p>}</div>
-              <div className="settings-note"><ShieldCheck size={22}/><div><h3>{tr('第三方账号登录')}</h3><p>{tr('Google 密码与两步验证由 Google 管理；本站登录密码可在账号资料中设置或修改。')}</p></div></div>
-              {providers.includes('google.com') && <a className="settings-external" href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer">{tr('管理 Google 账号安全设置')}<ArrowSquareOut size={18}/></a>}
-            </>}
+            {section === 'security' && <LoginHistory uid={user.uid}/>}
             {section === 'language' && <>
               <fieldset className="settings-language-options"><legend>{tr('界面语言')}</legend>{languages.map(item => <label key={item.code} className={language === item.code ? 'selected' : ''}><span><strong>{item.label}</strong><small>{item.code === 'zh-CN' ? 'Simplified Chinese' : item.code === 'zh-TW' ? 'Traditional Chinese' : 'English'}</small></span><input type="radio" aria-label={item.label} name="settings-language" value={item.code} checked={language === item.code} onChange={() => setLanguage(item.code)}/></label>)}</fieldset>
               <p className="settings-saved" role="status"><Check size={17}/>{tr('语言选择会自动保存在当前浏览器。')}</p>

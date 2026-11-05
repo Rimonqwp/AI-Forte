@@ -374,3 +374,15 @@ Source: 用户要求在账号资料增加密码功能，沿用现有账号信息
 服务逻辑：初次设置在重新验证 Google 后关联同一 UID；已设置时先校验当前密码再更新；校验已验证邮箱、两次输入、8–128 字符及 Firebase 密码策略。错误旧密码、邮箱未验证、策略失败、身份切换均不会继续写入。访客密码登录先备份待合并记录，使用 signIn 而非注册或将凭据错误关联至访客。密码仅存在组件临时状态及 SDK 请求中，不写入 localStorage 或 SQL 资料。
 
 验证：生产构建通过（保留现有包大小及 Firebase 混合导入警告）；账号密码、绑定、认证流程、资料、云状态及 Sites 共 48 项测试全部通过。修复测试发现的缺失当前密码绕过校验问题。无遗留视觉 P0/P1/P2。Firebase Email/Password 提供商线上启用状态、真实密码设置/登录及邮件送达未验证；界面对未启用方式显示明确错误，不模拟成功。实现依据 [Firebase 账号关联](https://firebase.google.com/docs/auth/web/account-linking)、[用户密码管理](https://firebase.google.com/docs/auth/web/manage-users) 和 [密码认证](https://firebase.google.com/docs/auth/web/password-auth) 官方文档。
+
+## 2026-11-06 — 登录与安全改为登录记录
+
+final result: passed (current session + browser-local history)
+
+用户最新注释要求将原“登录与安全”页改成登录 log。沿用注释中的设置外壳、暖纸色、棕色文字和细线图标；侧栏、面包屑、标题及资料页底部入口统一改为“登录记录”。原关联账号和 Google 安全说明区域替换为当前会话卡、最近登录列表及真实空状态；密码和联系方式仍由账号资料管理。当前会话使用 Firebase authTime 与 signInProvider，真实登录成功回调记录时间、方式及浏览器推测的系统/浏览器名称；刷新、令牌刷新、绑定重新验证不新增历史。不存令牌、密码、邮箱、原始 User-Agent、IP 或位置。
+
+范围在页面明确说明：成功登录历史仅保存在此浏览器，按 UID 分开，最多 50 条；不覆盖其他设备、失败尝试或功能接入前的完整历史。已有会话可立即显示其真实认证时间，不填充虚构历史。Firebase 时间语义依据 [IdTokenResult 文档](https://firebase.google.com/docs/reference/js/auth.idtokenresult#idtokenresultauthtime)，不是服务端完整审计记录。
+
+证据目录 `/Users/rimon/.codex/visualizations/2026/11/06/login-history/`：`01-desktop.png` 为实际账号页面，1845×1242 CSS/图像像素、密度 1；`02-mobile.png` 为 390×844，内容 clientWidth 与 scrollWidth 同为 342px，无横向溢出。已打开检查两种视口下的层级、内边距、时间显示、当前会话状态、空状态及底部范围说明，保留原外壳布局。实际已读取当前 Google 会话的认证时间，历史为真实空状态。`03-fixture-desktop-list.png` 为 1280×720 的隔离测试列表，`04-fixture-mobile-list.png` 为 390×844；这些使用相同组件及仅内存的模拟记录，没有写入真实账号历史。手机列表将时间移至设备信息下方，保持可读性；错误读取后点击重试恢复当前会话信息。临时测试页面在检查后删除。
+
+验证：38 项登录记录、Google/密码认证流程、绑定及 Sites 测试通过，覆盖 UID 隔离、50 条上限、去重排序、跨标签页合并、损坏或禁用存储、认证期间切换账号及原始令牌不落盘；生产构建通过，保留既有大小/混合导入警告。无视觉 P0/P1/P2；最终控制台无错误。恢复默认视口，真实登录记录页留在浏览器。未退出、重新登录或更改用户凭据；没有部署服务端审计系统。

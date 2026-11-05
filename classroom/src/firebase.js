@@ -4,6 +4,7 @@ import { createBindingService, normalizeEmail } from './account-bindings-service
 import { stateClient } from './sql-state-client.js';
 import { mergeAccountValue } from './account-data.js';
 import { authenticateProvider, authenticatePassword } from './account-auth-flow.js';
+import { sessionFromToken, captureSuccessfulLogin } from './login-history-store.js';
 
 // Firebase web configuration is public. Access is controlled by Authentication
 // and the authenticated account API; no database key belongs in the browser bundle.
@@ -91,9 +92,9 @@ export function signInProvider(providerId, prepareGuest) {
   // Start the popup in the click handler; read guest data while the user grants consent.
   return authenticateProvider({
     user: auth.currentUser, prepareGuest,
-    openPopup: guest => guest ? linkWithPopup(guest, provider) : signInWithPopup(auth, provider),
+    openPopup: guest => (guest ? linkWithPopup(guest, provider) : signInWithPopup(auth, provider)).then(recordLoginCredential),
     credentialFromError: error => providerId === 'google.com' ? GoogleAuthProvider.credentialFromError(error) : providerId === 'github.com' ? GithubAuthProvider.credentialFromError(error) : OAuthProvider.credentialFromError(error),
-    signInCredential: credential => signInWithCredential(auth, credential),
+    signInCredential: credential => signInWithCredential(auth, credential).then(recordLoginCredential),
     rememberMerge, resumeData: resumeAccountData,
   });
 }
@@ -116,7 +117,7 @@ export function phoneVerifier(element, parameters = {}) {
 export function signInPassword(email, password, prepareGuest) {
   return authenticatePassword({
     user: auth.currentUser, email: normalizeEmail(email), password, prepareGuest,
-    signIn: (address, secret) => signInWithEmailAndPassword(auth, address, secret),
+    signIn: (address, secret) => signInWithEmailAndPassword(auth, address, secret).then(recordLoginCredential),
     rememberMerge, resumeData: resumeAccountData,
   });
 }
@@ -124,4 +125,18 @@ export async function resetLoginPassword(email) {
   const address = normalizeEmail(email);
   try { await sendPasswordResetEmail(auth, address); }
   catch (error) { if (error.code !== 'auth/user-not-found') throw error; }
+}
+
+async function readUserLoginSession(user) {
+  return sessionFromToken(await user.getIdTokenResult());
+}
+function recordLoginCredential(result) {
+  return captureSuccessfulLogin(result, {currentUser: () => auth.currentUser, readSession: readUserLoginSession, agent: navigator.userAgent});
+}
+export async function readAccountLoginSession(uid) {
+  const user = auth.currentUser;
+  if (!user || user.isAnonymous || user.uid !== uid) throw new Error('auth/session-changed');
+  const session = await readUserLoginSession(user);
+  if (auth.currentUser?.uid !== uid) throw new Error('auth/session-changed');
+  return session;
 }
