@@ -10,7 +10,7 @@ export function AccountBindings({ user, service, profileSaving, onBusyChange }) 
   useLanguage();
   const [captchaAttempt, setCaptchaAttempt] = useState(0);
   const [captchaReady, setCaptchaReady] = useState(false);
-  const [panel, setPanel] = useState(null), [phone, setPhone] = useState(''), [email, setEmail] = useState(user.email || '');
+  const [panel, setPanel] = useState(null), [phone, setPhone] = useState('+852 '), [email, setEmail] = useState(user.email || '');
   const [code, setCode] = useState(''), [busy, setBusy] = useState(false), [notice, setNotice] = useState(null);
   const [emailShown, setEmailShown] = useState(false), [phoneShown, setPhoneShown] = useState(false);
   const [emailSent, setEmailSent] = useState(null), [phoneSent, setPhoneSent] = useState(null);

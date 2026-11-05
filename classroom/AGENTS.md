@@ -175,3 +175,5 @@ Account information now includes separate Google sign-in, phone-number and verif
 Phone/email action buttons now open a separate small modal above account settings, superseding inline verification expansion. Keep the underlying profile and its scroll position intact. Provide a close button, Cancel, Escape and backdrop closing, contain focus in the top dialog and return it to the triggering binding button. Escape must close only the binding dialog while it is open. Preserve existing verification and resend logic.
 
 Opening phone/email dialogs must preserve any existing background scrollbar visibly and keep the profile content width and scroll position unchanged. Do not lock the background by switching the settings scroller to overflow:hidden. Use modal inertness and background-only gesture blocking; restore normal scrolling on close and return focus without scrolling.
+
+The phone-binding input defaults to an actual editable +852 country code followed by a space, not only a placeholder. Users may replace it with another international country/region code.
