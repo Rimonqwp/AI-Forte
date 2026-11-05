@@ -1,0 +1,10 @@
+.account-settings h3{text-align:left;font-size:13px;color:#9a7764;margin:22px 0 10px;font-weight:500}
+.account-settings-details{margin:0 0 22px;padding:4px 14px;background:#fff4e8;border:1px solid #efdece;border-radius:12px;text-align:left}
+.account-settings-details>div{padding:11px 0;display:grid;grid-template-columns:80px minmax(0,1fr);gap:12px;font-size:13px;line-height:1.6}
+.account-settings-details>div+div{border-top:1px solid #efdece}
+.account-settings-details dt{color:#9a7764}.account-settings-details dd{margin:0;overflow-wrap:anywhere}
+.account-settings-language{display:grid;gap:9px;text-align:left;font-size:13px;font-weight:600}
+.account-settings-language select{width:100%;min-height:42px;padding:8px 12px;border:1px solid #e4c6b2;border-radius:10px;background:#fffdf8;color:#603d30}
+.account-settings>p{text-align:left;font-size:11px;margin:8px 0 22px}
+.account-settings-done{width:100%;min-height:42px;border-radius:22px;background:#ef896f;color:#fffaf4;font-size:14px}
+.account-settings-done:hover{background:#e77c62}

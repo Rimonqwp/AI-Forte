@@ -153,3 +153,5 @@ Show 总次数 on the right of the instrument badge in search score cards, repla
 Keep the paper-card information area compact as clarified by the user: reduce vertical padding and gaps around the artist, divider and buttons, keeping the landscape cover, existing type sizes and button hit areas.
 
 Reduce search-result card typography slightly: keep song titles, artist credits, instrument labels, practice totals and action text compact, with readable small labels on phones. This supersedes the earlier instruction to keep existing type sizes. Preserve card spacing and button hit areas.
+
+Add 账号设定 to signed-in profile menus, opening a paper-style account details and language settings dialog. Separate logout from the regular actions with an inset warm divider and balanced space above and below; keep the divider independent of the button hover background.

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { CaretDown, SignOut, UserCircle } from '@phosphor-icons/react';
+import { CaretDown, SignOut, UserCircle, GearSix } from '@phosphor-icons/react';
 import { useAccount } from './AuthContext.jsx';
 import { shortenName } from './ClassroomHeader.jsx';
 import { tr } from './language.js';
@@ -15,5 +15,5 @@ export function AccountShortcut({ assets }) {
     document.addEventListener('pointerdown', outside); document.addEventListener('focusin', outside); document.addEventListener('keydown', escape);
     return () => { document.removeEventListener('pointerdown', outside); document.removeEventListener('focusin', outside); document.removeEventListener('keydown', escape); };
   }, [opened]);
-  return <div className="dropdown-wrap" ref={wrap}><button className={`profile ${signedIn ? '' : 'login-trigger'}`} title={name} aria-label={name} aria-expanded={signedIn ? opened : undefined} onClick={() => signedIn ? setOpened(!opened) : account.openLogin()}>{signedIn ? <img src={account.user.photoURL || assets + 'avatar-musician.png'} referrerPolicy="no-referrer" alt={tr('我的头像')}/> : <UserCircle size={25}/>}<span>{signedIn ? shortenName(name) : name}</span>{signedIn && <CaretDown size={13}/>}</button>{opened && signedIn && <div className="dropdown profile-menu"><strong>{name}</strong><small className="account-email">{account.user.email}</small><button className="account-signout" disabled={account.busy} onClick={() => { setOpened(false); account.logout(); }}><SignOut size={18}/>{tr('退出登录')}</button></div>}</div>;
+  return <div className="dropdown-wrap" ref={wrap}><button className={`profile ${signedIn ? '' : 'login-trigger'}`} title={name} aria-label={name} aria-expanded={signedIn ? opened : undefined} onClick={() => signedIn ? setOpened(!opened) : account.openLogin()}>{signedIn ? <img src={account.user.photoURL || assets + 'avatar-musician.png'} referrerPolicy="no-referrer" alt={tr('我的头像')}/> : <UserCircle size={25}/>}<span>{signedIn ? shortenName(name) : name}</span>{signedIn && <CaretDown size={13}/>}</button>{opened && signedIn && <div className="dropdown profile-menu"><strong>{name}</strong><small className="account-email">{account.user.email}</small><button onClick={() => { account.openSettings(); setOpened(false); }}><GearSix size={18}/>{tr('账号设定')}</button><div className="account-menu-divider" role="separator"/><button className="account-signout" disabled={account.busy} onClick={() => { setOpened(false); account.logout(); }}><SignOut size={18}/>{tr('退出登录')}</button></div>}</div>;
 }

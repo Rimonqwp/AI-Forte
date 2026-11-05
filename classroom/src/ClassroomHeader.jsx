@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { MusicNotes, Globe, Bell, CaretDown, Heart, BookOpen, CheckCircle, Check, List, PianoKeys, Guitar, UserCircle, SignOut } from '@phosphor-icons/react';
+import { MusicNotes, Globe, Bell, CaretDown, Heart, BookOpen, CheckCircle, Check, List, PianoKeys, Guitar, UserCircle, SignOut, GearSix } from '@phosphor-icons/react';
 import { useAccount } from './AuthContext.jsx';
 import { languages, setLanguage, tr, useLanguage } from './language.js';
 import './classroom-header.css';
@@ -74,7 +74,7 @@ export function ClassroomHeader({ userName = '音乐同学', assets, isSearchPag
         </div>
         <div className="dropdown-wrap" ref={profile}>
           <button className={`profile ${signedIn ? '' : 'login-trigger'}`} title={fullName} aria-label={fullName} aria-expanded={signedIn ? menu === 'profile' : undefined} aria-controls={signedIn ? 'header-profile-menu' : undefined} onClick={() => signedIn ? toggle('profile') : run(account.openLogin)}>{signedIn ? <img src={account.user.photoURL || assets + 'avatar-musician.png'} referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = assets + 'avatar-musician.png'; }} alt={tr('我的头像')}/> : <UserCircle size={25}/>}<span>{signedIn ? shortenName(fullName) : fullName}</span>{signedIn && <CaretDown size={13}/>}</button>
-          {menu === 'profile' && signedIn && <div className="dropdown profile-menu" id="header-profile-menu"><strong>{tr('你好，')}{fullName}</strong><small className="account-email">{account.user.email}</small><button onClick={() => run(() => onOpen({ type: 'saved' }))}><Heart size={18}/>{tr('我的收藏')}（{savedCount}）</button><button onClick={() => run(() => onOpen({ type: 'lesson', title: '我的学习计划' }))}><BookOpen size={18}/>{tr('我的学习计划')}</button><button onClick={() => run(onCheckIn)}><CheckCircle size={18}/>{tr(checkedIn ? '今日已打卡' : '完成今日打卡')}</button><button className="account-signout" disabled={account.busy} onClick={() => run(account.logout)}><SignOut size={18}/>{tr('退出登录')}</button></div>}
+          {menu === 'profile' && signedIn && <div className="dropdown profile-menu" id="header-profile-menu"><strong>{tr('你好，')}{fullName}</strong><small className="account-email">{account.user.email}</small><button onClick={() => run(() => onOpen({ type: 'saved' }))}><Heart size={18}/>{tr('我的收藏')}（{savedCount}）</button><button onClick={() => run(() => onOpen({ type: 'lesson', title: '我的学习计划' }))}><BookOpen size={18}/>{tr('我的学习计划')}</button><button onClick={() => run(onCheckIn)}><CheckCircle size={18}/>{tr(checkedIn ? '今日已打卡' : '完成今日打卡')}</button><button onClick={() => run(account.openSettings)}><GearSix size={18}/>{tr('账号设定')}</button><div className="account-menu-divider" role="separator"/><button className="account-signout" disabled={account.busy} onClick={() => run(account.logout)}><SignOut size={18}/>{tr('退出登录')}</button></div>}
         </div>
         <button className="icon-button mobile-toggle" aria-label={tr('展开导航')} aria-expanded={mobileNav} onClick={() => { setMenu(null); setMobileNav(previous => !previous); }}><List size={25}/></button>
       </div>

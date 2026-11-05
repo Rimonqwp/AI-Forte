@@ -31,6 +31,11 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  '账号设定':['Account settings','帳號設定'], '关闭账号设定':['Close account settings','關閉帳號設定'],
+  '账号资料':['Account details','帳號資料'], '显示名称':['Display name','顯示名稱'], '邮箱':['Email','信箱'],
+  '登录方式':['Sign-in method','登入方式'], '界面语言':['Interface language','介面語言'],
+  '语言选择会自动保存在当前浏览器。':['Your language choice is saved automatically in this browser.','語言選擇會自動儲存在目前瀏覽器。'],
+  '未提供':['Not provided','未提供'], '完成':['Done','完成'],
   '登录 / 注册':['Sign in','登入 / 註冊'], '我的账号':['My account','我的帳號'], '退出登录':['Sign out','登出'],
   '关闭登录窗口':['Close sign-in window','關閉登入視窗'], '让每一次练习，都留下足迹':['Keep every step of your music journey','讓每一次練習，都留下足跡'],
   '完成账号同步':['Complete account sync','完成帳號同步'],
