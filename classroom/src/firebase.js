@@ -1,11 +1,11 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, signInAnonymously, GoogleAuthProvider, GithubAuthProvider, OAuthProvider, linkWithPopup, signInWithPopup, signInWithCredential, signOut } from 'firebase/auth';
-import { collection, doc, getDocFromServer, getDocsFromServer, getFirestore, runTransaction, serverTimestamp } from 'firebase/firestore';
+import { stateClient } from './sql-state-client.js';
 import { mergeAccountValue } from './account-data.js';
 import { authenticateProvider } from './account-auth-flow.js';
 
 // Firebase web configuration is public. Access is controlled by Authentication
-// and firestore.rules; no service-account key belongs in the browser bundle.
+// and the authenticated account API; no database key belongs in the browser bundle.
 const app = initializeApp({
   apiKey: 'AIzaSyDEfVuPiIw9bO9r66GVvrwZosGnbPV2RAY',
   authDomain: 'puyadao.top',
@@ -13,7 +13,17 @@ const app = initializeApp({
   appId: '1:783569378912:web:955ac462d0295906506d05',
 });
 export const auth = getAuth(app);
-const db = getFirestore(app);
+const apiBase = import.meta.env.VITE_ACCOUNT_API_BASE || '/api/account';
+async function accountRequest(user, path, options = {}) {
+  if (auth.currentUser?.uid !== user.uid) throw new Error('auth/session-changed');
+  const token = await user.getIdToken();
+  const response = await fetch(`${apiBase}${path}`, {
+    ...options, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+  });
+  if (auth.currentUser?.uid !== user.uid) throw new Error('auth/session-changed');
+  if (!response.ok) { const error = new Error('storage/request-failed'); error.status = response.status; throw error; }
+  return response.json();
+}
 let session;
 export async function ensureVisitor() {
   await auth.authStateReady();
@@ -27,37 +37,25 @@ export async function connectState(key, expectedUid) {
     if (auth.currentUser?.uid !== user.uid || (expectedUid && expectedUid !== user.uid)) throw new Error('auth/session-changed');
   };
   assertSession();
-  const ref = doc(db, 'visitors', user.uid, 'state', key);
+  const client = stateClient((path, options) => { assertSession(); return accountRequest(user, path, options); });
   return {
-    async read() { assertSession(); const result = await getDocFromServer(ref); assertSession(); return result.exists() ? result.data().value : undefined; },
-    update(change) {
-      assertSession();
-      return runTransaction(db, async transaction => {
-        assertSession();
-        const result = await transaction.get(ref);
-        assertSession();
-        const value = change(result.exists() ? result.data().value : undefined);
-        transaction.set(ref, { value, updatedAt: serverTimestamp() });
-        return value;
-      });
-    },
+    async read() { return (await client.read(key)).value; },
+    update(change) { return client.update(key, change); },
   };
 }
 
 export async function readGuestState(uid) {
-  if (auth.currentUser?.uid !== uid) throw new Error('auth/session-changed');
-  const records = await getDocsFromServer(collection(db, 'visitors', uid, 'state'));
-  return records.docs.map(record => ({ key: record.id, value: record.data().value }));
+  const user = auth.currentUser;
+  if (user?.uid !== uid) throw new Error('auth/session-changed');
+  return accountRequest(user, '/state');
 }
 
 async function mergeGuestState(records, uid) {
+  const user = auth.currentUser;
+  if (user?.uid !== uid) throw new Error('auth/session-changed');
+  const client = stateClient((path, options) => accountRequest(user, path, options));
   for (const { key, value } of records) {
-    const ref = doc(db, 'visitors', uid, 'state', key);
-    await runTransaction(db, async transaction => {
-      if (auth.currentUser?.uid !== uid) throw new Error('auth/session-changed');
-      const current = await transaction.get(ref);
-      transaction.set(ref, { value: mergeAccountValue(key, current.exists() ? current.data().value : undefined, value), updatedAt: serverTimestamp() });
-    });
+    await client.update(key, current => mergeAccountValue(key, current, value));
   }
 }
 
@@ -81,14 +79,8 @@ export async function resumeAccountData(user) {
 
 export async function saveAccountProfile(user) {
   if (user.isAnonymous) return;
-  const ref = doc(db, 'users', user.uid);
-  await runTransaction(db, async transaction => {
-    const current = await transaction.get(ref);
-    transaction.set(ref, {
-      displayName: (user.displayName || '').slice(0, 100), email: user.email || '', photoURL: user.photoURL || '',
-      providers: user.providerData.map(item => item.providerId),
-      createdAt: current.exists() ? current.data().createdAt : serverTimestamp(), updatedAt: serverTimestamp(),
-    });
+  await accountRequest(user, '/profile', {
+    method: 'PUT', body: JSON.stringify({ displayName: (user.displayName || '').slice(0, 100), photoURL: user.photoURL || '' }),
   });
 }
 

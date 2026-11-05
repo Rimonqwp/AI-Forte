@@ -10,7 +10,7 @@ Google 登录已在 Firebase 项目 `puyadao-75dd0` 启用，包含 Gmail 与其
 
 ## 数据和账号转换
 
-- 首次登录优先用 `linkWithPopup` 将匿名身份关联到 Google，保留原 UID 和 `visitors/{uid}/state/` 中的数据。
+- 首次登录优先用 `linkWithPopup` 将匿名身份关联到 Google，保留原 UID 和 Cloud SQL `visitor_states` 中的数据。
 - Google 已有关联账号时，先确认访客待写入记录已同步，并读取访客数据，再使用 Google 凭据登录已有账号。
 - 收藏、打卡、课程完成及个人点赞合并去重；打卡保留最近 1000 个日期。已有账号的练习位置优先，访客的其他练习位置补入。
 - 合并前在目标 UID 专属缓存中留下待合并备份。中途失败时显示同步重试入口，重新打开页面也会重试，合并操作可重复执行。
@@ -18,13 +18,13 @@ Google 登录已在 Firebase 项目 `puyadao-75dd0` 启用，包含 Gmail 与其
 - 所有云端状态缓存改用 `puyadao.cloud.{uid}.{key}`。旧版未分账号的缓存只迁移给首次识别的拥有者，后续账号不能复用。
 - 账号 UID 变化会重新挂载页面内容，清除上一身份的临时页面状态，保留地址栏路由。
 
-数据库新增私有 `users/{uid}` 文档，包含 `displayName`、`email`、`photoURL`、`providers`、`createdAt`、`updatedAt`。只有对应正式登录用户能读写，邮箱必须与登录令牌一致，禁止额外角色字段和篡改创建时间。管理员凭证不会进入网页代码或用户记录。
+账号资料保存在 Cloud SQL `user_profiles`（按 UID 隔离），包含 `displayName`、`email`、`photoURL`、`providers`、`createdAt`、`updatedAt`。只有对应正式登录用户能读写，邮箱必须与登录令牌一致，禁止额外角色字段和篡改创建时间。管理员凭证不会进入网页代码或用户记录。
 
 ## 控制台
 
 - 登录方式：[Firebase Authentication](https://console.firebase.google.com/project/puyadao-75dd0/authentication/providers)
 - 登录用户：[用户列表](https://console.firebase.google.com/project/puyadao-75dd0/authentication/users)
-- 用户资料：[Firestore users](https://console.firebase.google.com/project/puyadao-75dd0/firestore/databases/-default-/data/~2Fusers)
+- 用户资料：[Cloud SQL 实例](https://console.cloud.google.com/sql/instances/puyadao-postgresql/overview?project=puyadao-75dd0) 的 `puyadao` 数据库、`user_profiles` 表；旧 Firestore 文档为只读归档。
 
 当前 Firebase `authDomain` 为 `puyadao.top`，Google 登录页面使用网站自己的域名，OAuth 回调为：
 
@@ -56,5 +56,5 @@ npm run build
 npm run test:sites
 ```
 
-账号转换、取消授权、未同步数据阻止切换、合并重试与缓存隔离共 19 项本地测试；Rules API 模拟 14 项访问和资料写入检查，不写入用户数据。浏览器验证 Google 弹窗到达真正的 Google 登录页、取消登录、访客收藏保留、手机尺寸和键盘焦点。
+账号转换、取消授权、未同步数据阻止切换、合并重试与缓存隔离共 19 项本地测试；原 Firestore 规则测试现改为验证归档只读；新的 API 和 PostgreSQL 验证见 [数据库说明](database.md)。浏览器验证 Google 弹窗到达真正的 Google 登录页、取消登录、访客收藏保留、手机尺寸和键盘焦点。
 实际 Google 账号选择和授权需用户本人完成，自动测试不会代替第三方授权。

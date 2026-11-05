@@ -23,7 +23,8 @@ from app.intro_refinement import refine_intro
 from app.vocal_timing import beat_grid, refine_vocal_timing
 from app.fingerstyle_evidence import analyze_backing as analyze_fingerstyle_backing
 from app.ai_fingerstyle import request_review, ReviewError
-from app.song_store import SongStore
+from app.song_store import configured_song_store
+from app.runtime_records import RuntimeRecords
 from app.song_manager import SongManager
 from app.song_api import make_router
 
@@ -35,9 +36,13 @@ app.mount('/static', StaticFiles(directory=ROOT / 'app/static'), name='static')
 jobs = {}
 fingerstyle_cache = {}
 lock = threading.Lock()
-song_store = SongStore(RUNTIME)
+song_store = configured_song_store(RUNTIME)
 song_manager = SongManager(song_store, lambda job_id: find_job(job_id))
 app.include_router(make_router(song_store, song_manager))
+
+
+def legacy_records():
+    return RuntimeRecords(RUNTIME, getattr(song_store, 'engine', None))
 
 
 @app.on_event('startup')
@@ -98,7 +103,7 @@ def update(job_id, **fields):
         jobs[job_id].update(fields)
         snapshot = dict(jobs[job_id])
     if snapshot['stage'] in ('done', 'error'):
-        (RUNTIME / job_id / 'result.json').write_text(json.dumps(snapshot, ensure_ascii=False), encoding='utf-8')
+        legacy_records().write(job_id, 'result', snapshot)
 
 
 def find_job(job_id):
@@ -111,11 +116,7 @@ def find_job(job_id):
         job = jobs.get(job_id)
         if job:
             return dict(job)
-    path = RUNTIME / job_id / 'result.json'
-    try:
-        return json.loads(path.read_text(encoding='utf-8'))
-    except (OSError, ValueError):
-        return None
+    return legacy_records().read(job_id, 'result')
 
 
 def run_job(job_id, request):
@@ -318,7 +319,7 @@ def refine_existing_intro(job_id: str, request: IntroRefinement):
         new['backing_url']=f'/api/jobs/{new_id}/backing'
         if new.get('intro_info'):
             new['intro_info']=dict(new['intro_info'],count=sum(n.get('source')=='instrumental_intro' for n in notes))
-        (folder/'result.json').write_text(json.dumps(new,ensure_ascii=False),encoding='utf-8')
+        legacy_records().write(new_id, 'result', new)
         with lock: jobs[new_id]=new
     except Exception:
         shutil.rmtree(folder,ignore_errors=True)
@@ -349,7 +350,7 @@ def refine_existing_vocal_timing(job_id: str):
         new=dict(job,id=new_id,notes=notes,rhythm_info=rhythm,timing_fixes=fixes,refined_from=job_id)
         for kind in ('vocals','original','backing'):
             new[('vocal' if kind=='vocals' else kind)+'_url']=f'/api/jobs/{new_id}/{kind}' if (folder/f'{kind}.wav').exists() else None
-        (folder/'result.json').write_text(json.dumps(new,ensure_ascii=False),encoding='utf-8')
+        legacy_records().write(new_id, 'result', new)
         with lock:jobs[new_id]=new
     except Exception:
         shutil.rmtree(folder,ignore_errors=True)
@@ -420,13 +421,7 @@ def ai_fingerstyle(job_id: str, body: FingerstyleReview, request: Request):
     try:
         result=request_review(key,job.get('notes',[]),job.get('duration',0),extras,slides,job.get('accompaniment'),evidence,title=job.get('title'),legato_enabled=body.legato_enabled)
         review={'result':result,'notes':job.get('notes',[]),'extras':extras,'slides':slides,'legato_enabled':body.legato_enabled}
-        folder=RUNTIME/job_id
-        tmp=folder/f'.ai-review-{uuid.uuid4().hex}.tmp'
-        try:
-            tmp.write_text(json.dumps(review,ensure_ascii=False),encoding='utf-8')
-            os.replace(tmp,folder/'ai-fingerstyle-review.json')
-        finally:
-            tmp.unlink(missing_ok=True)
+        legacy_records().write(job_id, 'ai-fingerstyle-review', review)
         return result
     except ReviewError as exc:
         raise HTTPException(400,str(exc)) from None
@@ -436,10 +431,7 @@ def ai_fingerstyle(job_id: str, body: FingerstyleReview, request: Request):
 def get_fingerstyle_review(job_id: str):
     job=find_job(job_id)
     if not job or job.get('stage')!='done':raise HTTPException(404,'结果不存在。')
-    try:
-        review=json.loads((RUNTIME/job_id/'ai-fingerstyle-review.json').read_text(encoding='utf-8'))
-    except (OSError,ValueError):
-        return {'review':None}
+    review = legacy_records().read(job_id, 'ai-fingerstyle-review')
     return {'review':review}
 
 
@@ -452,7 +444,7 @@ def delete_fingerstyle_review(job_id: str,request: Request):
             raise HTTPException(403,'请从本机页面恢复原指弹。')
     job=find_job(job_id)
     if not job or job.get('stage')!='done':raise HTTPException(404,'结果不存在。')
-    (RUNTIME/job_id/'ai-fingerstyle-review.json').unlink(missing_ok=True)
+    legacy_records().delete(job_id, 'ai-fingerstyle-review')
     return {'ok':True}
 
 
@@ -485,7 +477,7 @@ def edit_notes(job_id: str, edits: PitchEdits):
         item['pitch'] = pitch
         entries.append(item)
     job['notes'] = to_tab(entries)
-    (RUNTIME / job_id / 'result.json').write_text(json.dumps(job, ensure_ascii=False), encoding='utf-8')
+    legacy_records().write(job_id, 'result', job)
     with lock:
         jobs[job_id] = job
     return job

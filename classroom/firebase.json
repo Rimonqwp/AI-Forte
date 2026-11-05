@@ -4,7 +4,10 @@
     "site": "puyadao-75dd0",
     "public": "dist/firebase",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "rewrites": [{ "source": "**", "destination": "/index.html" }],
+    "rewrites": [
+      { "source": "/api/account/**", "run": { "serviceId": "puyadao-data", "region": "asia-east1" } },
+      { "source": "**", "destination": "/index.html" }
+    ],
     "headers": [
       { "source": "/", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
       { "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
