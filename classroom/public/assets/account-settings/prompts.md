@@ -1,0 +1,12 @@
+# 账号资料 · 岛屿留白
+
+Selected mock: `/Users/rimon/.codex/generated_images/01a1ab93-87c4-7753-ac6b-918ad387f288/exec-f9a32181-d6af-4337-906f-914ea81c071a.png` (third displayed concept, selected by the user).
+Both assets were generated independently with this selected mock as reference and `transparent_background: true`. UI text, avatar, data, brand name, icons and interactive controls remain React elements.
+
+## score-sprout.png
+
+Create ONLY the standalone decorative illustration from the upper-right of the attached selected UI mock: a delicate open music-score book resting on a tiny island, with a slender sprout growing upward from the open pages, two pale sage leaves and a few tiny grasses on island edges. Match reference precisely: elegant very thin warm sand/gold pencil outlines, extremely pale sage leaf fills, cream-tinted watercolor touches, no dark bold outlines, no saturated colors, no shadows or glow. Wide airy composition, book centered slightly right, low elliptical island and faint water contour lines beneath. Transparent background with real alpha, no cream rectangle, no UI, no labels, no avatar, no text. Target asset canvas 960 x 540 pixels. The whole object and leaves must fit fully inside canvas with minimal 5% transparent margin. This will be placed at 340x190 CSS pixels in a calm cream account-settings header. Provide one isolated cohesive illustration, not a screenshot.
+
+## staff-flourish.png
+
+Create only the standalone bottom ornamental musical-staff flourish from attached selected interface reference. ONE very long narrow horizontal asset canvas 1600 x 180 pixels, transparent background with real alpha. Exactly five continuous thin subtly hand-drawn warm sand beige parallel music-staff lines, gently undulating together from left to right, with a single small elegant treble clef close to the far left. No notes, no words, no other illustrations, no UI, no borders. Hairline delicate pencil/ink in muted sand #d3bd9d, faint and low contrast against a future ivory surface. Lines naturally taper softly toward both ends. Keep the entire long flowing staff motif within the central height, full width with small margins, no clipping. This is a discreet decorative signature at the bottom of a warm paper account settings page. Match attached mock's bottom flourish, not the book illustration. No white or cream rectangle; background must be fully transparent. Output a single horizontal ornament asset, not a screenshot or collage.

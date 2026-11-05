@@ -196,3 +196,23 @@ final result: passed
 - Follow-up polish: 浏览历史暂为本浏览器数据；没有把它描述成跨设备云端同步。未增加上传乐谱功能。
 
 final result: passed
+
+## 账号资料装饰：已选方案 3（2026-11-05）
+
+- Source visual truth path: `/Users/rimon/.codex/generated_images/01a1ab93-87c4-7753-ac6b-918ad387f288/exec-f9a32181-d6af-4337-906f-914ea81c071a.png`，第三张实际展示的方案，用户回复“3”选择。源图 1529 × 1029 px。
+- Implementation screenshots: `/Users/rimon/.codex/visualizations/2026/11/05/01a1ab93-87c4-7753-ac6b-918ad387f288/settings-option3-desktop.png`（1845 × 1242）；同目录 `settings-option3-reference-size.png`（1529 × 1029，与源图同尺寸）；`settings-option3-mobile.png`（360 × 844）。均为实际浏览器渲染，DPR 1，截图像素与 CSS 视口一致，未作密度缩放。手机使用 CDP 原始截图，避免通用截图的缩略显示。
+- State: 已登录、账号资料分区、邮箱遮挡，其他导航保留原账户数据。
+- Full-view comparison: 已在同次图像输入中查看源图和最终桌面实现，并查看参考尺寸实现。采用相同的无底色身份行、右上乐谱生芽岛屿、资料图标、底部五线谱和细分隔线。保留用户上一步指定的 1440 × 960 最大窗口，因此参考尺寸下的窗口比生成图占用更多屏幕；这是明确的既有尺寸约束，不以外围留白差异判断设计偏离。
+- Focused comparison: 同尺寸截图中的标题/身份行、资料标签与值、底部纹样清楚可读；逐项核对，不需要再放大小图。左侧导航保留透明背景与细边框。
+- Fonts and typography: 资料标题使用 Songti SC/STSong 衬线字体（34px），主体继续使用现有中文无衬线字体（14–15px），身份名称 23px；手机 28px 标题、13px 资料值。与生成图一致的衬线标题和编辑式层次，保留实际产品字号以维持可读性。
+- Spacing and layout rhythm: 取消身份区域填色/外框；桌面 72px 头像、品牌签名和竖分隔线；资料行图标与标签对齐；安全说明保持独立一行。内容最大宽度 1100px，手机单列、装饰缩小，正文不横向溢出。
+- Colors and tokens: 保留暖纸底、深棕正文、浅沙色线条、淡鼠尾草绿。装饰仅用低对比色，操作仍使用可读的品牌棕色。
+- Image quality and assets: 两张独立透明 PNG，通过 image_gen 以已选方案为参考生成；实际头像与 Phosphor 图标继续使用原来源。无整页截图替代组件、无自绘 SVG 或渐变伪造插画。五线谱仅裁掉源图上下透明留白，不拉伸图案。
+- Copy and content: 保留真实账号资料、邮箱遮挡/显示、登录方式、安全入口；新增品牌字样使用已有语言翻译，无新功能、指标或示例账户数据。
+- Iteration P2: 第一轮岛屿插画在宽窗口中偏小；放大桌面插画容器到 440 × 250，使视觉占比接近已选方案；最终两张桌面截图记录修正结果。
+- Browser interactions: 手机资料无横向溢出；邮箱显示→隐藏正常；安全入口切换到登录与安全；非资料分区不渲染资料装饰；切回账号资料正常。最后浏览器错误日志为空，桌面视口已恢复并保留预览。
+- Validation: 同步当前修改的本地预览副本生产构建通过。未为纯样式/素材改动新增镜像测试。
+- Implementation checklist: 无待处理 P0/P1/P2。
+- Follow-up polish: 生成的独立插画保留原参考题材和线稿风格，细节不是逐像素复制；现有产品品牌图标与生成图略有不同，属于 P3，可后续微调。
+
+final result: passed

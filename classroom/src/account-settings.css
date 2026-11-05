@@ -29,3 +29,31 @@
 .settings-empty{text-align:center;padding:48px 20px;border:1px dashed var(--settings-border);border-radius:12px}.settings-empty>svg{color:#ba9479;margin-bottom:18px}.settings-empty h3{font-size:17px}.settings-empty p{font-size:13px;color:var(--settings-muted);line-height:1.8;margin:8px 0 22px}.settings-empty button{border-radius:20px;background:#ef896f;color:#fffaf4;min-height:38px;padding:8px 22px;font-size:13px}.settings-library-note{font-size:11px;line-height:1.8;color:var(--settings-muted);margin-top:18px}
 .settings-library-tabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}.settings-library-tabs button{padding:7px 12px;border:1px solid var(--settings-border);border-radius:18px;font-size:12px}.settings-library-tabs button[aria-pressed=true]{background:#f6d9c8;color:#93442f;border-color:#dfb89f}
 @media(max-width:600px){.account-settings .settings-navigation{flex-wrap:nowrap}.settings-navigation>button{flex:0 0 auto}.settings-navigation>button>span{font-size:10px}.settings-score-row{padding:11px;gap:7px}.settings-score-open{gap:10px}.settings-score-open>img{width:66px;height:54px}.settings-score-copy strong{font-size:13px}.settings-score-copy small{font-size:10px}.settings-library-toolbar{gap:8px}.settings-empty{padding:32px 14px}}
+
+/* Selected profile direction: 岛屿留白. */
+.settings-profile-content{position:relative;display:flex;flex-direction:column;min-height:100%;max-width:1100px;padding:52px 64px 18px}
+.settings-profile-content .settings-page-heading{position:relative;min-height:96px;padding-right:360px}
+.settings-profile-content h2{font-family:'Songti SC','STSong',serif;font-size:34px;line-height:1.35;font-weight:700;letter-spacing:1px;margin-bottom:12px}
+.settings-profile-content .settings-description{font-size:14px;margin:0;line-height:1.8}
+.settings-profile-art{position:absolute;top:-28px;right:-24px;width:440px;height:250px;object-fit:contain;pointer-events:none;user-select:none}
+.settings-profile-content .settings-profile-summary{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:16px;min-height:80px;margin:34px 0 22px;padding:0;border:0;border-radius:0;background:transparent;max-width:calc(100% - 230px)}
+.settings-profile-content .settings-profile-summary>img{width:72px;height:72px}
+.settings-profile-content .settings-profile-summary strong{font-size:23px;font-weight:600}
+.settings-profile-content .settings-profile-summary>div>span{font-size:14px}
+.settings-profile-content .settings-status{margin-left:14px;font-size:13px}
+.settings-profile-brand{display:inline-flex;align-items:center;gap:7px;min-height:46px;padding-left:28px;margin-left:12px;border-left:1px solid #e6d4c4;color:#89604a;font-family:'Songti SC','STSong',serif;font-size:21px;letter-spacing:3px;white-space:nowrap}
+.settings-profile-brand>svg{color:#9ba17c}
+.settings-profile-content .settings-details{margin:8px 0 36px}
+.settings-profile-content .settings-details>div{grid-template-columns:155px minmax(0,1fr);padding:23px 0;font-size:15px}
+.settings-profile-content .settings-details dt{display:flex;align-items:center;gap:18px;font-weight:600}
+.settings-profile-content .settings-details dt>svg{color:#a87e66}
+.settings-profile-content .settings-text-button{font-size:13px}
+.settings-profile-content .settings-section-link{gap:18px;align-items:flex-start;padding:4px 0 0}
+.settings-security-icon{margin-top:3px;color:#9d755d}
+.settings-profile-content .settings-section-link>div{flex:1}
+.settings-profile-content .settings-section-link h3{font-size:19px;line-height:1.5;font-weight:600}
+.settings-profile-content .settings-section-link p{font-size:13px}
+.settings-profile-content .settings-section-link>button{align-self:center;min-height:38px;background:transparent;border-color:#d5a78b;font-size:13px;padding:7px 15px}
+.settings-profile-staff{display:block;flex-shrink:0;width:100%;height:90px;object-fit:cover;object-position:center;margin-top:auto;padding-top:28px;pointer-events:none;user-select:none;opacity:.65}
+@media(max-width:1100px) and (min-width:601px){.settings-profile-content{padding:36px 30px 16px}.settings-profile-content .settings-page-heading{padding-right:240px;min-height:116px}.settings-profile-art{width:230px;height:155px;top:0;right:0}.settings-profile-content h2{font-size:30px}.settings-profile-content .settings-profile-summary{max-width:100%;margin-top:18px}.settings-profile-content .settings-profile-summary>img{width:60px;height:60px}.settings-profile-brand{font-size:18px;padding-left:16px;margin-left:0}.settings-profile-content .settings-details>div{grid-template-columns:130px minmax(0,1fr)}}
+@media(max-width:600px){.settings-profile-content{padding:26px 20px 12px;max-width:100%;min-height:100%}.settings-profile-content .settings-page-heading{min-height:145px;padding-right:0}.settings-profile-content h2{font-size:28px}.settings-profile-content .settings-description{font-size:12px;max-width:180px}.settings-profile-art{width:150px;height:110px;top:50px;right:-6px;opacity:.85}.settings-profile-content .settings-profile-summary{max-width:100%;margin:16px 0 12px;gap:12px;min-height:56px}.settings-profile-content .settings-profile-summary>img{width:48px;height:48px}.settings-profile-content .settings-profile-summary strong{font-size:18px}.settings-profile-content .settings-profile-summary>div>span{font-size:12px}.settings-profile-content .settings-status{margin-left:auto;font-size:11px}.settings-profile-brand{width:100%;margin:8px 0 0 60px;min-height:25px;border:0;padding:0;font-size:16px;letter-spacing:2px}.settings-profile-brand>svg{width:20px;height:20px}.settings-profile-content .settings-details{margin:8px 0 26px}.settings-profile-content .settings-details>div{grid-template-columns:1fr;gap:8px;padding:18px 0;font-size:13px}.settings-profile-content .settings-details dt{gap:10px}.settings-profile-content .settings-details dd{padding-left:31px}.settings-profile-content .settings-details dt>svg{width:20px;height:20px}.settings-profile-content .settings-section-link{gap:10px;flex-wrap:wrap}.settings-security-icon{width:20px;height:20px}.settings-profile-content .settings-section-link h3{font-size:16px}.settings-profile-content .settings-section-link p{font-size:12px}.settings-profile-content .settings-section-link>button{margin-left:30px;min-height:36px}.settings-profile-staff{height:70px;padding-top:20px;margin-top:24px}}
