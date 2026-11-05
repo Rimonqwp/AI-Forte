@@ -209,3 +209,39 @@ No remaining actionable P0/P1/P2 findings in the requested visual prototype. Thi
 - [x] Primary bounded frontend interactions verified in browser.
 - [x] Production build and existing package checks pass.
 - [x] Local preview remains running, final screenshot and source assets saved.
+
+
+## 2026-11-05 — 搜索卡片：已选方案 1「纸感书签」
+
+final result: passed
+
+### 对照范围与证据
+
+用户选择本轮第一张生成图；原图保存为 `classroom/design-reference/score-card-bookmark-selected.png`，对应生成文件 `exec-1da8756b-5961-4f26-8e3b-d88a903d7ccc.png`。仅修改搜索结果卡片，保持原五列网格、歌曲封面、数据来源及功能。
+
+目标图为 1642×958 的三卡片概念图；组件对照裁取第一张卡片的 502×637 区域，统一缩放到 275px 宽。实现截图来自当前 Codex 内置浏览器，CSS 视口 2024×1242、DPR 1；原始截图 2013×1235，按实际截图/视口比例裁取对应卡片。当前卡片 DOM 尺寸为 266.59×336.59px。未将整页与三卡片概念图比较。
+
+并排证据位于 `docs/classroom/qa/score-card-bookmark/comparison-v1.png` 和 `comparison-final.png`，左为目标、右为实际；配套 `reference-card.png`、`card-v1.jpg`、`card-final.jpg` 和 `mobile.jpg`。已打开并检查最终对照及手机截图。完整浏览器调试截图保留在私有 `.runtime/qa/score-card-bookmark/`。
+
+### 修正与复核
+
+1. P2：第一轮标题、歌手字号和纵向留白偏小，卡片高度约 310px。调整衬线标题、字号、行高与信息/按钮间距后，达到约 337px，与等宽参考约 338px 接近；最终并排图已复核。
+2. P2：原有 `score-reference.css` 的同优先级规则覆盖了局部尺寸。将规则限定在搜索页卡片内，提高选择器精度，恢复选定方案的封面比例、间距与按钮高度。
+3. P2：纸边的三值 mask-position 在内置浏览器中被丢弃，手机操作区曾被裁切。改为有效的双值位置 `0 calc(100% + 24px)` 后重新截图，28px 手机按钮完整显示；桌面边缘也重新对照。
+
+### 必查视觉项
+
+- 字体：真实中文 UI 文本；Songti SC / STSong 衬线歌曲名，正文沿用现有字体。桌面标题 27px，窄屏 18px；元数据不再挤成单行小字。长标题用省略号保留卡片高度。生成图与系统字体的字形/抗锯齿差异列为 P3。
+- 布局：横向封面、标题/歌手/收藏、细横线、乐器与总次数间的竖线、等高双按钮顺序一致。桌面内边距和约 2.25 的封面比例接近等宽目标。手机将总次数标签和值堆叠，保持阅读和按钮空间。
+- 颜色：暖纸底 #fffaf3、深棕标题 #58281a、珊瑚主按钮 #f1876d、细暖色分隔线。实际主按钮 computed background 为 rgb(241,135,109)。生成图曝光/纹理及截图色彩观感有 P3 差异，没有逐像素一致的声明。
+- 图片：保留每首歌已有的插画与谱面，没有将生成方案截图作为界面。新增独立透明 PNG 纸边，使用真实 alpha 遮罩及已有不透明纸纹完成自然轮廓；精确提示保存在 `classroom/public/assets/score-card/paper-edge.prompt.md`。自然纸边曲线与生成图不完全相同，属于 P3。
+- 内容：歌曲名、歌手、收藏、乐器、总次数和两个操作均保留；示例标识在歌手旁；数据仍为原演示次数，没有重新加入难度星级。
+
+### 功能、响应式与构建
+
+- 在当前内置浏览器验证：开始练习打开所选歌曲弹窗，关闭后查询 URL 不变；预览进入对应歌曲详情，返回恢复原搜索 URL。
+- 收藏独立切换，不触发练习弹窗；验证后恢复原收藏状态。键盘 Tab 可进入两项操作。
+- 2024px、1024px、390px、360px 均检查了元数据及操作区；十张卡片均无横向溢出，360px 页面 scrollWidth=360。
+- Vite 生产构建通过，四项 Sites 包装/静态路由测试通过；浏览器错误日志为空。现有 Vite 大包/静态和动态混合导入提示不影响本次页面运行。
+
+没有遗留 P0/P1/P2 问题。P3：生成图与系统字形、纸边和图片色彩呈现的细微差异；手机布局为选定桌面方案的响应式适配。

@@ -14,6 +14,7 @@ export function SearchScoreCard({song,saved,onSave,onOpen}) {
   return <article className="score-card results-practice-card" onClick={event=>{
     if(!event.target.closest('button,a,input,select'))practice();
   }}>
+    <div className="score-paper-surface" style={{maskImage:`url(${assets}score-library/paper-texture.png),url(${assets}score-card/paper-edge.png)`}}>
     <button className="score-cover" onClick={practice} aria-label={`开始练习${song.title}`}>
       <img src={assets+`score-${song.id}.png`} alt={`${song.title}的插画与乐谱`}/>
       {song.badge&&<span className={`score-badge ${color}`}><BadgeIcon size={12} weight="fill" aria-hidden="true"/>{song.badge}</span>}
@@ -23,6 +24,7 @@ export function SearchScoreCard({song,saved,onSave,onOpen}) {
       <p className="score-artist"><span>{song.artist}</span>{practiceStats.demo&&<small className="score-data-example">示例</small>}</p>
       <div className="score-meta"><span className={`instrument-badge ${song.instrument==='吉他'?'orange':'purple'}`}><Instrument size={14}/>{song.instrument}</span><span className="score-practice-total" title={`总练习次数：${practiceStats.total.toLocaleString('zh-CN')}次${practiceStats.demo?'（示例数据）':''}`}><span className="score-practice-label">总次数</span><span className="score-practice-value"><strong>{formatPracticeTotal(practiceStats.total)}</strong><small>次</small></span></span></div>
       <div className="card-actions"><button className="outline-button" onClick={()=>onOpen({type:'preview',song})}><Play size={12}/>预览</button><button className="coral-button" onClick={practice}>开始练习</button></div>
+    </div>
     </div>
   </article>;
 }
