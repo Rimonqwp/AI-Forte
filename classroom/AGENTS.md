@@ -149,3 +149,5 @@ The user requested gentle transitions on the main header navigation. Keep subtle
 ## Search card practice totals
 
 Show 总次数 on the right of the instrument badge in search score cards, replacing the difficulty label and stars. Keep only this one practice-count display, without a separate count row above the action buttons. Share the count source with song details, implement selected generated option 1 (纸感书签): keep the landscape cover, warm cream paper and serif song titles, then a thin divider, an instrument badge and inline total count separated by a vertical rule, and equal-height outline Preview / coral Start Practice pills. Use the generated paper-edge raster for the subtle irregular bottom edge. Place 示例 beside the artist, preserve all interactions, and keep the five-column results grid. At narrow widths the count may stack its label above the value to stay readable without overflow.
+
+Keep the paper-card information area compact as clarified by the user: reduce vertical padding and gaps around the artist, divider and buttons, keeping the landscape cover, existing type sizes and button hit areas.
