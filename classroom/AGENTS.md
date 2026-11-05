@@ -144,3 +144,8 @@ Account menus must omit the signed-in learning-record sync status sentence; keep
 ## Navigation transitions
 
 The user requested gentle transitions on the main header navigation. Keep subtle hover and focus feedback, smooth active-item changes, and a fading/sliding instrument-course menu with a rotating chevron. Preserve the compact navigation layout, keyboard dismissal and inert closed-menu controls, and disable motion for prefers-reduced-motion.
+
+
+## Search card practice totals
+
+Show total practice sessions on search score cards between instrument/difficulty and the action buttons. Share the count source with song details, distinguish illustrative counts with a visible 示例 label until real totals are supplied, and keep the row fitting on desktop and phone.

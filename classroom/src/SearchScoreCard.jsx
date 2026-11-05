@@ -1,6 +1,7 @@
 import React from 'react';
 import { Fire, Guitar, Heart, PianoKeys, Play, Star } from '@phosphor-icons/react';
 import './search-score-card.css';
+import { formatPracticeTotal, songPracticeStats } from './song-practice-stats.js';
 
 const assets = import.meta.env.BASE_URL + 'assets/';
 
@@ -9,6 +10,7 @@ export function SearchScoreCard({song,saved,onSave,onOpen}) {
   const color=song.color||(song.badge==='热门'?'coral':'purple');
   const BadgeIcon=color==='purple'?Star:Fire;
   const Instrument=song.instrument==='钢琴'?PianoKeys:Guitar;
+  const practiceStats=songPracticeStats(song);
   return <article className="score-card results-practice-card" onClick={event=>{
     if(!event.target.closest('button,a,input,select'))practice();
   }}>
@@ -20,6 +22,7 @@ export function SearchScoreCard({song,saved,onSave,onOpen}) {
       <div className="score-title"><h3>{song.title}</h3><button className={`save-button ${saved.includes(song.id)?'is-saved':''}`} aria-label={`${saved.includes(song.id)?'取消收藏':'收藏'}${song.title}`} aria-pressed={saved.includes(song.id)} onClick={()=>onSave(song.id)}><Heart size={18} weight={saved.includes(song.id)?'fill':'regular'}/></button></div>
       <p className="score-artist">{song.artist}</p>
       <div className="score-meta"><span className={`instrument-badge ${song.instrument==='吉他'?'orange':'purple'}`}><Instrument size={14}/>{song.instrument}</span><span className="difficulty">难度：<span className="rating" aria-label={`难度 ${song.level} 星`}>{Array.from({length:5},(_,i)=><Star key={i} size={12} weight={i<song.level?'fill':'regular'} className={i<song.level?'filled':''}/>)}</span></span></div>
+      <p className="score-practice-total"><span>总练习次数</span><strong>{formatPracticeTotal(practiceStats.total)}</strong>{practiceStats.demo&&<small>示例</small>}</p>
       <div className="card-actions"><button className="outline-button" onClick={()=>onOpen({type:'preview',song})}><Play size={12}/>预览</button><button className="coral-button" onClick={practice}>开始练习</button></div>
     </div>
   </article>;
