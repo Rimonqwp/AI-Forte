@@ -139,3 +139,8 @@ The user requested account login from the header profile entry, backed by the ex
 Google sign-in must use `puyadao.top` as the Firebase `authDomain`, so the Google account chooser displays the site domain instead of the Firebase project hostname. Keep the matching Google OAuth redirect URI `https://puyadao.top/__/auth/handler` configured before changing or deploying the frontend.
 
 Account menus must omit the signed-in learning-record sync status sentence; keep the user name, email and account actions.
+
+
+## Navigation transitions
+
+The user requested gentle transitions on the main header navigation. Keep subtle hover and focus feedback, smooth active-item changes, and a fading/sliding instrument-course menu with a rotating chevron. Preserve the compact navigation layout, keyboard dismissal and inert closed-menu controls, and disable motion for prefers-reduced-motion.
