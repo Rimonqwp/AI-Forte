@@ -1,14 +1,28 @@
 .results-score-grid .results-practice-card{cursor:pointer}
 .results-score-grid .results-practice-card:focus-within{outline:2px solid #e99779;outline-offset:2px}
-.results-score-grid .score-practice-total{display:inline-flex;align-items:center;gap:3px;margin-left:auto;font-size:10px;line-height:18px;color:#9a7765;white-space:nowrap}
-.results-score-grid .score-practice-total strong{font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;color:#b77755;white-space:nowrap}
-.results-score-grid .score-practice-total small{font-size:9px;line-height:14px;color:#aa8b77;white-space:nowrap}
+/* Separate song identity, secondary metadata, and the two actions. */
+.results-score-grid .results-practice-card .score-info{padding:11px 12px 12px}
+.results-score-grid .results-practice-card .score-title{min-height:25px;gap:8px}
+.results-score-grid .results-practice-card .score-artist{display:flex;align-items:center;gap:6px;margin:3px 0 10px;min-height:18px;font-size:11px;line-height:18px;color:#987560}
+.results-score-grid .score-data-example{display:inline-flex;align-items:center;padding:0 4px;border:1px solid #ecdfd2;border-radius:4px;background:#f9f2e8;color:#9b826e;font-size:9px;line-height:13px;font-weight:400;white-space:nowrap}
+.results-score-grid .results-practice-card .score-meta{align-items:center;min-height:31px;margin:0 0 10px;gap:8px}
+.results-score-grid .score-practice-total{display:flex;flex-direction:column;align-items:flex-end;gap:1px;margin-left:auto;line-height:1.25;white-space:nowrap}
+.results-score-grid .score-practice-label{font-size:9px;color:#a18a78;letter-spacing:.3px}
+.results-score-grid .score-practice-value{display:inline-flex;align-items:baseline;gap:3px;color:#86604b}
+.results-score-grid .score-practice-value strong{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:.1px}
+.results-score-grid .score-practice-value small{font-size:10px;color:#a18a78}
+.results-score-grid .results-practice-card .card-actions{gap:8px}
+.results-score-grid .results-practice-card .card-actions>button{height:29px;font-size:11px}
 /* Match the home page paper labels, including its responsive spacing. */
 .results-score-grid .results-practice-card .score-badge{top:8px;left:8px;padding:4px 7px;font-size:11px;line-height:14px}
 @media(max-width:600px){
-  .results-score-grid .score-practice-total{display:grid;grid-template-columns:auto auto;column-gap:2px;row-gap:0;font-size:9px;line-height:12px}
-  .results-score-grid .score-practice-total strong{font-size:10px}
-  .results-score-grid .score-practice-total small{grid-column:1/-1;justify-self:end;font-size:8px;line-height:8px}
+  .results-score-grid .results-practice-card .score-info{padding:9px 8px 10px}
+  .results-score-grid .results-practice-card .score-artist{font-size:10px;margin:2px 0 8px;gap:5px}
+  .results-score-grid .results-practice-card .score-meta{gap:5px;margin-bottom:8px}
+  .results-score-grid .score-practice-value strong{font-size:12px}
+  .results-score-grid .score-practice-value small{font-size:9px}
+  .results-score-grid .results-practice-card .card-actions{gap:6px}
+  .results-score-grid .results-practice-card .card-actions>button{height:27px;font-size:10px}
   .results-score-grid .results-practice-card .score-badge{top:6px;left:6px;padding:3px 6px;font-size:10px;gap:3px}
   .results-score-grid .results-practice-card .score-badge svg{width:11px;height:11px}
 }

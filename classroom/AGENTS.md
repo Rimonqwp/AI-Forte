@@ -148,4 +148,4 @@ The user requested gentle transitions on the main header navigation. Keep subtle
 
 ## Search card practice totals
 
-Show 总次数 on the right of the instrument badge in search score cards, replacing the difficulty label and stars. Keep only this one practice-count display, without a separate count row above the action buttons. Share the count source with song details, distinguish illustrative counts with a visible 示例 label until real totals are supplied, and keep the row fitting on desktop and phone.
+Show 总次数 on the right of the instrument badge in search score cards, replacing the difficulty label and stars. Keep only this one practice-count display, without a separate count row above the action buttons. Share the count source with song details, show the muted 总次数 label above a larger numeric value at the right of the instrument row, and place the visible 示例 marker beside the artist credit so it does not crowd the count. Give identity, metadata, and actions consistent breathing room and keep them fitting on desktop and phone.
