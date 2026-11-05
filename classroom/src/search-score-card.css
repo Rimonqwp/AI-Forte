@@ -1,11 +1,14 @@
 .results-score-grid .results-practice-card{cursor:pointer}
 .results-score-grid .results-practice-card:focus-within{outline:2px solid #e99779;outline-offset:2px}
-.results-score-grid .score-practice-total{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:4px 0 7px;min-height:18px;font-size:10px;line-height:18px;color:#9a7765}
-.results-score-grid .score-practice-total strong{margin-left:auto;font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;color:#b77755;white-space:nowrap}
+.results-score-grid .score-practice-total{display:inline-flex;align-items:center;gap:3px;margin-left:auto;font-size:10px;line-height:18px;color:#9a7765;white-space:nowrap}
+.results-score-grid .score-practice-total strong{font-size:11px;font-weight:600;font-variant-numeric:tabular-nums;color:#b77755;white-space:nowrap}
 .results-score-grid .score-practice-total small{font-size:9px;line-height:14px;color:#aa8b77;white-space:nowrap}
 /* Match the home page paper labels, including its responsive spacing. */
 .results-score-grid .results-practice-card .score-badge{top:8px;left:8px;padding:4px 7px;font-size:11px;line-height:14px}
 @media(max-width:600px){
+  .results-score-grid .score-practice-total{display:grid;grid-template-columns:auto auto;column-gap:2px;row-gap:0;font-size:9px;line-height:12px}
+  .results-score-grid .score-practice-total strong{font-size:10px}
+  .results-score-grid .score-practice-total small{grid-column:1/-1;justify-self:end;font-size:8px;line-height:8px}
   .results-score-grid .results-practice-card .score-badge{top:6px;left:6px;padding:3px 6px;font-size:10px;gap:3px}
   .results-score-grid .results-practice-card .score-badge svg{width:11px;height:11px}
 }

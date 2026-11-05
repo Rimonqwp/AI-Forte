@@ -148,4 +148,4 @@ The user requested gentle transitions on the main header navigation. Keep subtle
 
 ## Search card practice totals
 
-Show total practice sessions on search score cards between instrument/difficulty and the action buttons. Share the count source with song details, distinguish illustrative counts with a visible 示例 label until real totals are supplied, and keep the row fitting on desktop and phone.
+Show 总次数 on the right of the instrument badge in search score cards, replacing the difficulty label and stars. Keep only this one practice-count display, without a separate count row above the action buttons. Share the count source with song details, distinguish illustrative counts with a visible 示例 label until real totals are supplied, and keep the row fitting on desktop and phone.
