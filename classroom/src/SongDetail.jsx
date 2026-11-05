@@ -1,3 +1,6 @@
+import { songCatalog, versions } from './library-catalog.js';
+import { useAccount } from './account-context.js';
+import { recordScoreVisit } from './score-history.js';
 import { useCloudState } from './useCloudState.js';
 import { formatPracticeTotal, songPracticeStats } from './song-practice-stats.js';
 import { AccountShortcut } from './AccountShortcut.jsx';
@@ -11,21 +14,7 @@ const ScorePractice = lazy(()=>import('./ScorePractice.jsx'));
 
 const assets = import.meta.env.BASE_URL + 'assets/';
 const detailAssets = assets + 'song-detail/';
-const songCatalog = [
-  {id:'rice',title:'稻香',artist:'周杰伦',date:'2008-10-15',key:'C',cover:'rice-cover.png',tags:['流行','校园','治愈','励志']},
-  {id:'sunny',title:'晴天',artist:'周杰伦',date:'2003-07-31',key:'G',cover:'sunny-cover.png',tags:['流行','校园','抒情','青春']},
-  {id:'confession',title:'告白气球',artist:'周杰伦',date:'2016-06-24',key:'B',tags:['流行','浪漫','弹唱']},
-  {id:'fireworks',title:'烟花易冷',artist:'周杰伦',key:'C'},
-  {id:'windmill',title:'七里香',artist:'周杰伦',key:'G'},
-  {id:'nocturne',title:'夜曲',artist:'周杰伦',key:'C'},
-  {id:'secret',title:'不能说的秘密',artist:'周杰伦',key:'G'},
-  {id:'north',title:'一路向北',artist:'周杰伦',key:'G'},
-  {id:'simple',title:'简单爱',artist:'周杰伦',key:'C'},
-  {id:'clock',title:'反方向的钟',artist:'周杰伦',key:'F'},
-  {id:'star',title:'小星星',artist:'传统儿歌',key:'C'},
-  {id:'night',title:'夜空中最亮的星',artist:'逃跑计划',key:'C'},
-  {id:'castle',title:'天空之城',artist:'久石让',key:'C'},
-];
+
 const defaultFilters = {singer:'all',instrument:'全部乐器',level:'难度',type:'谱子类型',key:'调性'};
 // Performer identity is separate from the community arranger. Cover data is illustrative.
 const demoPerformances = [
@@ -33,16 +22,7 @@ const demoPerformances = [
   {id:'cover-xia',kind:'翻唱',singer:'小夏',demo:true},
   {id:'cover-chen',kind:'翻唱',singer:'阿辰',demo:true},
 ];
-const versions = [
-  {id:'piano-easy',performanceId:'original',author:'小谱老师',avatar:'teacher',instrument:'钢琴',type:'五线谱',level:2,key:'C',subtitle:'钢琴简化版（入门友好）',badge:'官方推荐',certified:true,description:'简单旋律与和弦，适合钢琴入门。',plays:'56.8',demoFavoriteCount:3920,rating:4.9,days:3,sheet:'piano'},
-  {id:'guitar-sing',performanceId:'original',author:'阿泽 Acous',avatar:'acous',instrument:'吉他',type:'和弦谱',level:3,key:'G',subtitle:'吉他弹唱版（原版和弦）',badge:'热门',authorLevel:5,description:'保留原曲和弦，适合自弹自唱。',plays:'42.3',demoFavoriteCount:2860,rating:4.8,days:5,sheet:'guitar'},
-  {id:'ukulele-easy',performanceId:'cover-xia',author:'星星同学',avatar:'star',instrument:'尤克里里',type:'简谱',level:2,key:'C',subtitle:'尤克里里弹唱版（超简单）',badge:'新上架',authorLevel:7,description:'三个常用和弦，新手轻松弹唱。',plays:'8.7',demoFavoriteCount:680,rating:4.9,days:1,sheet:'ukulele-v2'},
-  {id:'guitar-finger',performanceId:'cover-chen',author:'指弹小林',avatar:'lin',instrument:'吉他',type:'吉他谱',level:4,key:'D',subtitle:'吉他指弹版（进阶独奏）',badge:'进阶精选',authorLevel:6,description:'旋律结合分解和弦，适合进阶。',plays:'6.2',demoFavoriteCount:520,rating:4.8,days:4,sheet:'fingerstyle'},
-  {id:'piano-lyric',performanceId:'cover-xia',author:'小谱老师',avatar:'teacher',instrument:'钢琴',type:'五线谱',level:3,key:'G',subtitle:'钢琴抒情版（完整练习）',badge:'精选',certified:true,description:'分手慢练，逐步完成抒情演奏。',plays:'5.6',demoFavoriteCount:430,rating:4.7,days:8,sheet:'piano'},
-  {id:'guitar-beginner',performanceId:'original',author:'阿泽 Acous',avatar:'acous',instrument:'吉他',type:'和弦谱',level:1,key:'C',subtitle:'吉他入门版（基础和弦）',badge:'新手友好',authorLevel:5,description:'简化和弦转换，先练稳节奏。',plays:'3.8',demoFavoriteCount:310,rating:4.6,days:2,sheet:'guitar'},
-  {id:'uke-melody',performanceId:'original',author:'星星同学',avatar:'star',instrument:'尤克里里',type:'简谱',level:1,key:'G',subtitle:'尤克里里旋律版（单音练习）',badge:'轻松练习',authorLevel:7,description:'单音旋律练习，弹得清晰连贯。',plays:'2.1',demoFavoriteCount:180,rating:4.7,days:6,sheet:'ukulele-v2'},
-  {id:'fingerstyle-full',performanceId:'cover-chen',author:'指弹小林',avatar:'lin',instrument:'吉他',type:'吉他谱',level:5,key:'G',subtitle:'指弹挑战版（丰富编配）',badge:'进阶精选',authorLevel:6,description:'融合旋律与低音，挑战丰富编配。',plays:'1.9',demoFavoriteCount:160,rating:4.9,days:7,sheet:'fingerstyle'},
-];
+
 
 function Rating({level}) {
   return <span className="detail-rating" aria-label={`难度 ${level} 星`}>{Array.from({length:5},(_,i)=><Star key={i} size={15} weight={i<level?'fill':'regular'} className={i<level?'filled':''}/>)}</span>;
@@ -78,13 +58,13 @@ function VersionBadge({label}) {
 export function ClassroomApp() {
   const [hash,setHash]=useState(window.location.hash);
   const [overlayId,setOverlayId]=useState(null);
-  useEffect(()=>{const update=()=>{setHash(window.location.hash);setOverlayId(null);};const open=event=>setOverlayId(event.detail.id);window.addEventListener('hashchange',update);window.addEventListener('classroom:open-song',open);return()=>{window.removeEventListener('hashchange',update);window.removeEventListener('classroom:open-song',open);};},[]);
+  useEffect(()=>{const update=()=>{setHash(window.location.hash);setOverlayId(null);};const open=event=>setOverlayId({id:event.detail.id,versionId:event.detail.versionId});window.addEventListener('hashchange',update);window.addEventListener('classroom:open-song',open);return()=>{window.removeEventListener('hashchange',update);window.removeEventListener('classroom:open-song',open);};},[]);
   const isDetail=hash.startsWith('#song?');
   const params=new URLSearchParams(hash.split('?')[1]);
-  return <><div hidden={isDetail} inert={overlayId?true:undefined}><App/></div>{isDetail&&<SongDetail key={params.get('id')} song={songCatalog.find(song=>song.id===params.get('id'))||songCatalog[0]}/>} {overlayId&&<SongDetail key={`overlay-${overlayId}`} song={songCatalog.find(song=>song.id===overlayId)||songCatalog[0]} modal onClose={()=>setOverlayId(null)}/>}</>;
+  return <><div hidden={isDetail} inert={overlayId?true:undefined}><App/></div>{isDetail&&<SongDetail key={params.get('id')} song={songCatalog.find(song=>song.id===params.get('id'))||songCatalog[0]}/>} {overlayId&&<SongDetail key={`overlay-${overlayId.id}-${overlayId.versionId || 'list'}`} song={songCatalog.find(song=>song.id===overlayId.id)||songCatalog[0]} modal initialVersionId={overlayId.versionId} onClose={()=>setOverlayId(null)}/>}</>;
 }
 
-function SongDetail({song,modal=false,onClose}) {
+function SongDetail({song,modal=false,onClose,initialVersionId}) {
   const practiceStats=songPracticeStats(song);
   const [filters,setFilters]=useState(defaultFilters);
   const [sort,setSort]=useState('最热推荐');
@@ -95,7 +75,10 @@ function SongDetail({song,modal=false,onClose}) {
   const songSaved=songFavorites.includes(song.id);
   const setSongSaved=next=>setSongFavorites(values=>(typeof next==='function'?next(values.includes(song.id)):next)?[...new Set([...values,song.id])]:values.filter(id=>id!==song.id));
   const [section,setSection]=useState('versions');
-  const [selected,setSelected]=useState(null);
+  const [selected,setSelected]=useState(()=>versions.find(version=>version.id===initialVersionId)||null);
+  const { user } = useAccount();
+  useEffect(()=>{ if(user?.uid) recordScoreVisit(user.uid, 'recent', song.id); },[user?.uid,song.id]);
+  useEffect(()=>{ if(user?.uid && selected) recordScoreVisit(user.uid, 'practiced', song.id, selected.id); },[user?.uid,song.id,selected?.id]);
   const [tempo,setTempo]=useState(80);
   const [playing,setPlaying]=useState(false);
   const [toast,setToast]=useState('');

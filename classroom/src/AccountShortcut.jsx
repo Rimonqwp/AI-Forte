@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { CaretDown, SignOut, UserCircle, GearSix } from '@phosphor-icons/react';
-import { useAccount } from './AuthContext.jsx';
+import { useAccount } from './account-context.js';
 import { shortenName } from './ClassroomHeader.jsx';
 import { tr } from './language.js';
 

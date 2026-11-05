@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { onIdTokenChanged } from 'firebase/auth';
 import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData } from './firebase.js';
 import { flushCloudStates } from './cloud-stores.js';
@@ -6,8 +6,8 @@ import { AuthDialog } from './AuthDialog.jsx';
 import { AccountSettings } from './AccountSettings.jsx';
 import './auth.css';
 
-const AccountContext = createContext(null);
-export function useAccount() { return useContext(AccountContext); }
+import { AccountContext } from './account-context.js';
+export { useAccount } from './account-context.js';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null), [ready, setReady] = useState(false);

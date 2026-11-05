@@ -173,3 +173,26 @@ Visual comparison: warm paper, coral accents, thin warm outlines, rounded corner
 Browser verification: notation menu selection, keyboard opening/Home/Enter, mode selection, Escape dismissing only the menu, mutual exclusion/outside dismissal, BPM slider Home/End (40/180), separate metronome start/stop, and real wheel adjustment (40 → 41). Continuous score has 10 engraved systems and no page/font controls. Manual wheel scroll reaches later systems (scrollTop 702); automatic following during later playback also reaches scrollTop 702 with total content height 1583 and viewport height 881. Stop returns the score to the top. Removed mood text and duplicate singer badge confirmed from DOM. Final browser warnings/errors: none. Production build passes.
 
 final result: passed
+
+## 账号中心、个人乐谱与浏览记录（2026-11-05）
+
+- Source visual truth path: 本聊天 Comment 1 附加的 Discord 设置截图（1282 × 794 px）；用户只要求采用左侧导航、右侧内容的结构，保留谱芽岛已有主题，并随后增加收藏、乐谱、浏览记录。
+- Implementation evidence directory: `/Users/rimon/.codex/visualizations/2026/11/05/01a1ab93-87c4-7753-ac6b-918ad387f288/`。
+- Full-view comparison: `settings-reference-size.png` 为与附件相同的 1282 × 794 CSS viewport，截图同尺寸、DPR 1。对照聊天附件检查：236px 左侧身份/分组导航，右侧独立内容栏，顶部常驻关闭按钮、横向资料行和分割线。暖纸底、较圆窗口、已有背景与非 Discord 功能内容是本产品的有意适配。
+- Desktop evidence: `settings-desktop.png`，1845 × 1242 CSS px，截图同尺寸、DPR 1；设置窗口 1160 × 800，内部可滚动，最近浏览为实际打开的歌曲。
+- Mobile evidence: `settings-mobile.png`，360 × 844 CSS px，截图同尺寸、DPR 1。导航横向滚动，内容和窗口 clientWidth/scrollWidth 均为 327px，关闭按钮完整可见。
+- Focused comparison: 同尺寸账户页截图中的侧栏、资料区均可清楚阅读，无需另裁缩略图；检查 42px 导航项、资料行标签/值的对齐与邮件遮挡按钮。手机截图单独检查导航滑动、搜索框、列表操作和长说明换行。
+- Fonts/typography: 保留 PingFang SC/Microsoft YaHei，25px 内容标题，14px 导航/资料值，11–13px 辅助说明。手机号/密码等未接入字段未从参考图移植成虚假设置。
+- Spacing/layout: 侧栏 236px，内容最大 780px，桌面内容 padding 48px，资料分隔与操作区域清晰。手机顶部导航、内容独立滚动，恢复桌面视口后布局正常。
+- Colors/tokens: 暖纸底、棕色文字、珊瑚色动作、浅暖边线、叶绿色状态；复用现有产品配色，与 Discord 的灰白配色有意不同。
+- Image quality: 复用实际账号头像/现有头像资产和独立乐谱缩略图，图标使用现有 Phosphor 库；无新增生成图或截图拼接。
+- Copy/content: 账号资料、登录与安全、收藏、编配收藏、最近练习、最近浏览和语言均有独立内容。歌曲/编配收藏来自现有账号状态；浏览/练习记录只记录实际打开行为，并明确标注本浏览器保存、按 UID 隔离及最多 50 条。保留原谱例演示说明。
+- Iteration P1: 全局 mobile `nav` 规则把新侧栏导航绝对定位到内容上方；显式重置设置导航定位、边框、阴影和换行，最终手机截图中导航与内容各自占正常布局空间。
+- Iteration P2: 加入六个导航项后，移动网格的隐式最小宽度撑大内容并裁切；改为 `minmax(0,1fr)`，侧栏/导航允许收缩，实测无横向内容溢出。早期 `/tmp/fyp-settings-layout-mobile.png` 为问题证据，最终 `settings-mobile.png` 为修正后证据。
+- Iteration P1: 账号 Provider 与消费账号状态的设置页形成循环依赖，延迟加载练习页出现空 context。将 Context/Hook 独立为 `account-context.js`，重新加载并验证搜索→版本选择→练习、个人中心→准确编配均正常。浏览器日志保留 12:18:04 UTC 修正前错误；修正后重放流程没有新增错误。
+- Browser interactions: 六分区切换；搜索匹配/空结果；歌曲收藏加入和从个人中心取消（测试结束恢复原收藏）；具体编配收藏加入、列表显示和取消（恢复原收藏）；真实浏览/练习记录与去重；从最近练习返回原编配；语言切换 English、刷新保留并恢复简中；Escape 关闭后焦点返回头像，原搜索 URL 保留。未清除用户既有历史。
+- Validation: 已同步当前修改至本地预览副本；副本生产构建及 27 项现有/新增 Node 测试通过，其中 4 项新增测试覆盖历史顺序、去重、账号/类型隔离、50 条上限和存储失败。
+- Implementation checklist: 无待处理 P0/P1/P2。已恢复桌面视口，保留最近浏览页供查看。
+- Follow-up polish: 浏览历史暂为本浏览器数据；没有把它描述成跨设备云端同步。未增加上传乐谱功能。
+
+final result: passed

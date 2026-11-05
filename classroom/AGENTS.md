@@ -155,3 +155,7 @@ Keep the paper-card information area compact as clarified by the user: reduce ve
 Reduce search-result card typography slightly: keep song titles, artist credits, instrument labels, practice totals and action text compact, with readable small labels on phones. This supersedes the earlier instruction to keep existing type sizes. Preserve card spacing and button hit areas.
 
 Add 账号设定 to signed-in profile menus, opening a paper-style account details and language settings dialog. Separate logout from the regular actions with an inset warm divider and balanced space above and below; keep the divider independent of the button hover background.
+
+Expand account settings using the supplied Discord reference: a wide dialog with persistent left navigation and a separate scrolling right content area, account identity at the top of the sidebar, and a persistent top-right close button. Keep the warm paper theme. Provide working Account Details, Sign-in & Security and Language sections; use compact horizontal navigation on phones. Preserve search state, focus containment, Escape closing and focus return.
+
+The settings sidebar also includes My Favorites (shared song favorites), My Scores (saved arrangement versions and recent practice) and Recently Viewed. Read actual account favorites, keep recent views/practice isolated per UID in browser storage with a 50-entry cap, and link each entry back to its song or exact arrangement. Provide library search, favorite controls, empty states and history removal. Do not invent uploaded scores or prepopulate browsing history.

@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from 'react';
 import { cloudStoreFor } from './cloud-stores.js';
-import { useAccount } from './AuthContext.jsx';
+import { useAccount } from './account-context.js';
 
 export function useCloudState(key, initial, legacyKey) {
   const { user } = useAccount();

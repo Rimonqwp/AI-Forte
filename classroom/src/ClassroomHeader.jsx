@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { MusicNotes, Globe, Bell, CaretDown, Heart, BookOpen, CheckCircle, Check, List, PianoKeys, Guitar, UserCircle, SignOut, GearSix } from '@phosphor-icons/react';
-import { useAccount } from './AuthContext.jsx';
+import { useAccount } from './account-context.js';
 import { languages, setLanguage, tr, useLanguage } from './language.js';
 import './classroom-header.css';
 
