@@ -114,7 +114,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
     };
   }, [returnFocus]);
   return createPortal(<div className="account-backdrop settings-backdrop" onPointerDown={event => { if (event.target === event.currentTarget) requestClose(); }}>
-    <section className="account-settings" role="dialog" aria-modal="true" aria-labelledby="account-settings-title" tabIndex={-1} ref={dialog}>
+    <section className={`account-settings${section === 'recent' ? ' account-settings-recent' : ''}`} role="dialog" aria-modal="true" aria-labelledby="account-settings-title" tabIndex={-1} ref={dialog}>
       <aside className="settings-sidebar">
         <div className="settings-identity"><img src={photo} alt="" referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'assets/avatar-musician.png'; }}/><div><strong>{name}</strong><span>{tr('账号设定')}</span></div></div>
         <nav className="settings-navigation" aria-label={tr('账号设定导航')}>
@@ -128,7 +128,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
       <div className="settings-workspace">
         <header className="settings-topbar"><div><span id="account-settings-title">{tr('账号设定')}</span><span className="settings-breadcrumb">/</span><strong>{tr(current.title)}</strong></div><button className="settings-close" aria-label={tr('关闭账号设定')} disabled={saving || bindingBusy} onClick={requestClose}><X size={20}/></button></header>
         <div className="settings-scroll" ref={content}>
-          <div className={`settings-content${section === 'profile' ? ' settings-profile-content' : ''}`} id="settings-content" key={section}>
+          <div className={`settings-content${section === 'profile' ? ' settings-profile-content' : section === 'recent' ? ' settings-recent-content' : ''}`} id="settings-content" key={section}>
             <div className="settings-page-heading"><h2>{tr(current.title)}</h2>
             <p className="settings-description">{tr(section === 'favorites' ? '喜欢的歌曲，随时回来继续练习。' : section === 'scores' ? '收藏编配、重拾练习，让你的乐谱井井有条。' : section === 'recent' ? '找回刚刚听见、看过的旋律。' : section === 'profile' ? '让音乐伙伴认识你。' : section === 'security' ? '查看当前会话与此浏览器保存的成功登录记录。' : '选择你习惯的语言，让每一次练习更自在。')}</p>{section === 'profile' && <img className="settings-profile-art" src={import.meta.env.BASE_URL + 'assets/account-settings/score-sprout.png'} alt="" aria-hidden="true"/>}</div>
             {['favorites', 'scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}

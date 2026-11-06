@@ -1,6 +1,7 @@
 import { songCatalog, versions } from './library-catalog.js';
 import { useAccount } from './account-context.js';
 import { recordScoreVisit } from './score-history.js';
+import { useTrackScorePreview } from './recent-preview-stats.js';
 import { useCloudState } from './useCloudState.js';
 import { formatPracticeTotal, songPracticeStats } from './song-practice-stats.js';
 import { AccountShortcut } from './AccountShortcut.jsx';
@@ -78,6 +79,7 @@ function SongDetail({song,modal=false,onClose,initialVersionId}) {
   const [section,setSection]=useState('versions');
   const [selected,setSelected]=useState(()=>versions.find(version=>version.id===initialVersionId)||null);
   const { user } = useAccount();
+  useTrackScorePreview(user?.uid, song.id, !selected);
   useEffect(()=>{ if(user?.uid) recordScoreVisit(user.uid, 'recent', song.id); },[user?.uid,song.id]);
   useEffect(()=>{ if(user?.uid && selected) recordScoreVisit(user.uid, 'practiced', song.id, selected.id); },[user?.uid,song.id,selected?.id]);
   const [tempo,setTempo]=useState(80);

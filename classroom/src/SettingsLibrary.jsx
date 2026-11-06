@@ -4,6 +4,7 @@ import { useCloudState } from './useCloudState.js';
 import { useScoreHistory } from './score-history.js';
 import { songCatalog, versions } from './library-catalog.js';
 import { tr, useLanguage } from './language.js';
+import { RecentBrowsing } from './RecentBrowsing.jsx';
 
 export function SettingsLibrary({ section, user, onClose }) {
   const language = useLanguage();
@@ -37,6 +38,7 @@ export function SettingsLibrary({ section, user, onClose }) {
     return `${day} ${new Intl.DateTimeFormat(language, { hour: '2-digit', minute: '2-digit' }).format(date)}`;
   };
   const emptyTitle = needle ? '没有找到匹配的乐谱' : section === 'favorites' ? '把喜欢的旋律留在这里' : section === 'recent' ? '从一首喜欢的歌开始' : scoreTab === 'saved' ? '收藏一个适合你的编配版本' : '你的练习足迹会出现在这里';
+  if (section === 'recent') return <RecentBrowsing user={user} entries={entries} visible={visible} query={query} setQuery={setQuery} setRecent={setRecent} favorites={favorites} setFavorites={setFavorites} open={open} browse={browse} formatVisit={formatRecentVisit}/>;
   return <>
     {section === 'scores' && <div className="settings-library-tabs" role="group" aria-label={tr('我的乐谱分类')}><button aria-pressed={scoreTab === 'saved'} onClick={() => setScoreTab('saved')}>{tr('收藏的编配')}（{savedVersions.length}）</button><button aria-pressed={scoreTab === 'practiced'} onClick={() => setScoreTab('practiced')}>{tr('最近练习')}（{practicedVersions.length}）</button></div>}
     <div className="settings-library-toolbar"><label className="settings-library-search"><MagnifyingGlass size={17}/><input aria-label={tr('搜索我的乐谱')} placeholder={tr('搜索歌名、歌手或编配')} value={query} onChange={event => setQuery(event.target.value)}/></label><span className="settings-library-total">{visible.length} {tr('首乐谱')}</span>{section === 'recent' && recent.length > 0 && <button className="settings-text-button" onClick={() => setRecent(() => [])}>{tr('清空浏览记录')}</button>}</div>
