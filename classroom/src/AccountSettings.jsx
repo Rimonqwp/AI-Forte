@@ -20,14 +20,14 @@ const sections = [
 ];
 const providerNames = { 'google.com': 'Google', 'github.com': 'GitHub', 'apple.com': 'Apple', 'phone': '手机号码', 'password': '邮箱' };
 
-export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bindings }) {
+export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bindings, initialSection = 'profile' }) {
   const language = useLanguage(), dialog = useRef(null), close = useRef(onClose), content = useRef(null);
   const [favorites] = useCloudState('favorites', []);
   const [arrangements] = useCloudState('practice-favorites', [], 'classroom.practice.saved');
   const [recent] = useScoreHistory(user.uid, 'recent');
   const [practiced] = useScoreHistory(user.uid, 'practiced');
   const counts = { favorites: favorites.length, scores: new Set([...arrangements, ...practiced.map(item => `${item.songId}:${item.versionId}`)]).size, recent: recent.length };
-  const [section, setSection] = useState('profile');
+  const [section, setSection] = useState(() => sections.some(item => item.id === initialSection) ? initialSection : 'profile');
   close.current = onClose;
   const name = user.displayName || user.providerData?.find(item => item.displayName)?.displayName || user.email?.split('@')[0] || tr('我的账号');
   const photo = user.photoURL || user.providerData?.find(item => item.photoURL)?.photoURL || import.meta.env.BASE_URL + 'assets/avatar-musician.png';

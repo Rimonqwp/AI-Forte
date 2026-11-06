@@ -240,6 +240,7 @@ const messages = {
   "你通过关联账号登录谱芽岛，无需单独设置本站密码。密码与两步验证请在对应账号中管理。":["You sign in to Puya Island with a connected account. Manage your password and two-step verification with that provider.", "你透過關聯帳號登入譜芽島，無需單獨設定本站密碼。密碼與兩步驗證請在對應帳號中管理。"],
   "管理 Google 账号安全设置":["Manage Google account security", "管理 Google 帳號安全設定"],
 
+  '设定':['Settings','設定'],
   '账号设定':['Account settings','帳號設定'], '关闭账号设定':['Close account settings','關閉帳號設定'],
   '账号资料':['Account details','帳號資料'], '显示名称':['Display name','顯示名稱'], '邮箱':['Email','信箱'],
   '登录方式':['Sign-in method','登入方式'], '界面语言':['Interface language','介面語言'],

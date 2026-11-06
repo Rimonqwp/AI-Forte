@@ -14,10 +14,10 @@ export function AuthProvider({ children }) {
   const [, refreshProfile] = useState(0);
   const [user, setUser] = useState(null), [ready, setReady] = useState(false);
   const [opened, setOpened] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState(null);
-  const [settingsOpened, setSettingsOpened] = useState(false), settingsTrigger = useRef(null);
-  const openSettings = () => {
+  const [settingsSection, setSettingsSection] = useState(null), settingsTrigger = useRef(null);
+  const openSettings = (section = 'profile') => {
     settingsTrigger.current = document.activeElement?.closest('.dropdown-wrap')?.querySelector('.profile');
-    setSettingsOpened(true);
+    setSettingsSection(section);
   };
   useEffect(() => onIdTokenChanged(auth, value => {
     setUser(value); setReady(!!value);
@@ -80,7 +80,7 @@ export function AuthProvider({ children }) {
     if (url.searchParams.get('accountSettings') !== 'profile') return;
     url.searchParams.delete('accountSettings');
     window.history.replaceState(window.history.state, '', url);
-    setSettingsOpened(true);
+    setSettingsSection('profile');
     bindings.refresh(user.uid).catch(() => {});
   }, [user?.uid, user?.isAnonymous]);
   const displayedUser = user ? { ...user, photoURL: readProfileAvatar(user.uid) || user.photoURL } : null;
@@ -97,7 +97,7 @@ export function AuthProvider({ children }) {
   }, []);
   return <AccountContext.Provider value={{ user: displayedUser, ready, busy, login, logout, openSettings, openLogin: () => { setError(null); setOpened(true); } }}>
     {ready ? <React.Fragment key={user?.uid || 'offline'}>{children}</React.Fragment> : <div className="account-bootstrap" role="status">正在打开谱芽岛…</div>}
-    {settingsOpened && user && !user.isAnonymous && <AccountSettings key={`settings-${user.uid}`} user={displayedUser} onSaveProfile={saveProfile} bindings={bindings} returnFocus={settingsTrigger.current} onClose={() => setSettingsOpened(false)}/>}
+    {settingsSection && user && !user.isAnonymous && <AccountSettings key={`settings-${user.uid}-${settingsSection}`} initialSection={settingsSection} user={displayedUser} onSaveProfile={saveProfile} bindings={bindings} returnFocus={settingsTrigger.current} onClose={() => setSettingsSection(null)}/>}
     {opened && <AuthDialog user={user} busy={busy} error={error} onLogin={login} onPasswordLogin={loginPassword} onPasswordReset={requestPasswordReset} onRetry={retry} onClose={() => { if (!busy) setOpened(false); }}/>}
   </AccountContext.Provider>;
 }
