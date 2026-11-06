@@ -216,3 +216,5 @@ The user selected an illustrated Recently Viewed dashboard reference: peach head
 The user removed the entire Recently Viewed artist recommendation strip, including its expandable recommendations. Keep it absent; place the search toolbar directly below the preview statistics banner with a comfortable gap.
 
 The Recently Viewed statistics background was regenerated for the 谱芽岛 theme: warm watercolor paper, ukulele and music books on a small island at the left, a sheet-music paper boat and sprouts at the right, with the center kept quiet for live statistics. Keep decorative artwork clear of the text and chart.
+
+Keep the Today preview-duration badge on the same header row as 近 7 天预览时长, vertically centered with that heading. Do not lift the badge with a negative top margin.
