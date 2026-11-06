@@ -192,6 +192,8 @@ The profile avatar itself is the accessible change-avatar button, with a small c
 
 Place language and display preferences in Account Details below account information; remove the separate Language sidebar entry. Provide working light/dark/system appearance, reading text size and reduced-motion controls, saved per browser with immediate feedback. Respect operating-system appearance changes when System is selected, retain readable notation and original artwork, and keep preference controls responsive.
 
+The preferences divider must follow the final account-binding row with the same bottom spacing as the preceding binding rows. Do not add a separate top margin to preferences that doubles the whitespace below Login Password.
+
 ## Custom dropdowns
 
 Use theme-matched custom dropdowns throughout the classroom instead of browser-native select menus, including filters, sorting, publishing forms, playback speed and account preferences. Preserve menus that are already custom. Keep keyboard selection, outside/focus dismissal, Escape closing only the menu, form values, light/dark appearance and narrow-screen positioning working.

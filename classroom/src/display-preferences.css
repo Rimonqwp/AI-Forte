@@ -1,4 +1,4 @@
-.profile-preferences{margin-top:36px;padding-top:28px;border-top:1px solid #e5d2c2}
+.profile-preferences{margin-top:0;padding-top:28px;border-top:1px solid #e5d2c2}
 .settings-profile-content .profile-preferences h3{font-family:'Songti SC','STSong',serif;font-size:30px;line-height:1.5;margin-bottom:8px}
 .preference-intro,.preference-storage{font-size:13px;line-height:1.8;color:#85624e}
 .preference-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid #ecdacc}
