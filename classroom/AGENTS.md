@@ -197,3 +197,8 @@ The preferences divider must follow the final account-binding row with the same 
 ## Custom dropdowns
 
 Use theme-matched custom dropdowns throughout the classroom instead of browser-native select menus, including filters, sorting, publishing forms, playback speed and account preferences. Preserve menus that are already custom. Keep keyboard selection, outside/focus dismissal, Escape closing only the menu, form values, light/dark appearance and narrow-screen positioning working.
+
+
+## Recent browsing rows
+
+The user selected a borderless recent-history row with thin warm separators, a larger landscape cover, song title and artist on the left, then browsing time, favorite heart and an outlined 查看乐谱 action on the right. Apply this only to Recently Viewed, retaining the existing settings shell and library toolbar. Show Today/Yesterday for recent dates, keep older dates explicit, and preserve opening, favorites and individual history removal. Keep the remove control available on hover, keyboard focus and touch; stack row information and actions cleanly on narrow screens.

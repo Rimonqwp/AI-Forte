@@ -224,3 +224,24 @@ final result: passed
 浏览器检查：1845 × 1242 桌面两处 PNG 均成功加载，分别为 52 × 52 和 46 × 46；360 × 844 手机身份行使用 44 × 44 图形，现有移动布局隐藏侧栏底部，内容无横向溢出。证据位于 `/Users/rimon/.codex/visualizations/2026/11/05/01a1ab93-87c4-7753-ac6b-918ad387f288/settings-icon-only-desktop.png` 和同目录 `settings-icon-only-mobile.png`。桌面视口已恢复，预览副本生产构建通过。
 
 final result: passed
+
+
+## 最近浏览条目：按用户附图实现（2026-11-06）
+
+- Source visual truth：用户本次标注附件中的横向乐谱条目；对应本聊天首张方案图 `/Users/rimon/.codex/generated_images/01a1b0a7-a5d6-7ef1-b033-9962a96cdb3f/exec-5d4a39fe-f48f-4c31-b612-611300916168.png`（1452 × 1083）。仅采用用户选择的条目区域，保留现有设置布局与搜索工具栏。
+- Evidence root：`/Users/rimon/.codex/visualizations/2026/11/06/01a1b0a7-a5d6-7ef1-b033-9962a96cdb3f/recent-row/`。
+- Full-view evidence：`desktop-final.png`，1762 × 1314 CSS px / screenshot px，DPR 1；`recent-panel-final.png` 为包含标题、工具栏、条目和说明的局部视图。已对照用户原界面确认此次变更限于最近浏览条目。
+- Focused comparison：同次图像输入中打开 `reference-row.png` 与 `desktop-row-final.png`。前者从对应方案原图裁出 876 × 130，再统一到 904 × 134；后者为实际浏览器行的 904 × 132 裁图。生成图与实现的比例差已经归一；没有把截图作为 UI 素材。
+- State：现有登录账号、最近浏览、实际歌曲《晴天》，原收藏状态在交互测试后恢复。测试打开歌曲会更新真实浏览时间，因此最终截图为今天 19:53，参考图为今天 19:38，属预期内容变化。
+- Fonts/typography：24px 加粗产品字体歌名、18px 歌手和时间、17px 操作文本。第一轮发现 P2：宋体歌名与参考图的粗体不一致，已改为继承产品中文字体并重拍 `desktop-row-final.png`。最终无待处理 P0/P1/P2。
+- Spacing/layout rhythm：904 × 132 条目，116 × 80 现有封面，28px 主要横向间距，44px 按钮高度，上下细分隔线，无卡片外框。窄屏将元信息与操作放第二行。
+- Colors/tokens：继承暖纸底、棕色主体、浅暖分隔线与珊瑚棕操作色；最近浏览专属 CSS，其他收藏/乐谱条目仍使用原样式；提供夜间主题操作色。
+- Image quality/assets：复用当前歌曲真实缩略图与 Phosphor 心形/箭头图标。封面原素材的乐谱细节与生成方案有轻微不同，属保留产品素材的预期差异。
+- Copy/content：查看乐谱、今天/昨天提供简中/繁中/英文；旧日期按用户语言显示，跨年显示年份，精确浏览日期保留在 time 标记和提示中。
+- Responsive evidence：`mobile-final.png` 为 390 × 844 CSS px / screenshot px，DPR 1，通过当前浏览器 CDP 原始截图保存。320px 内容/条目为 287/247px，390px 为 357/317px，900px 为 647/591px，各元素 scrollWidth 均等于 clientWidth；手机截图已打开检查。
+- Browser interactions：收藏→取消收藏恢复初态；无匹配历史搜索→清空输入恢复条目；查看乐谱打开《晴天》版本选择，再回到最近浏览。单条移除保留键盘/悬停/触屏入口，未删除用户现有记录。浏览器 error 日志为空。
+- Validation：变更同步到正在运行的本地预览副本；最终生产构建通过，现有 score-history 测试 4/4 通过。构建保留既有 chunk 大小及 Firebase 导入提示。
+- Implementation checklist：无待处理 P0/P1/P2；保留当前最近浏览预览，未部署。
+- Follow-up polish：不同系统的中文字体渲染可能有细微差别；未为纯样式更改新增实现镜像测试。
+
+final result: passed
