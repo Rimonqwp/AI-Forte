@@ -43,7 +43,7 @@ export function RecentBrowsing({ user, entries, visible, query, setQuery, setRec
   const maxDay = Math.max(60, ...stats.week.map(day => day.seconds));
   const weekLabels = ['日', '一', '二', '三', '四', '五', '六'];
   return <div className="recent-browsing">
-    <section className="recent-overview" style={{ '--recent-banner': `url(${assets}recent-browsing/preview-banner.png)` }} aria-label={tr('乐谱预览统计')}>
+    <section className="recent-overview" style={{ '--recent-banner': `url(${assets}recent-browsing/preview-banner-island-v2.png)` }} aria-label={tr('乐谱预览统计')}>
       <div className="recent-total">
         <h3>{tr('总预览时长')}<span className="recent-info" tabIndex={0} role="img" aria-label={tr('仅统计当前浏览器中的乐谱页面前台停留时长。')}><Info size={19}/><span role="tooltip">{tr('仅统计当前浏览器中的乐谱页面前台停留时长。')}</span></span></h3>
         <p className="recent-total-value">{hours > 0 && <><strong>{hours}</strong>{tr('小时')}</>}<strong>{minutes}</strong>{tr('分')}</p>

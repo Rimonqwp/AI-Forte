@@ -1,5 +1,11 @@
 # 最近浏览统计插画
 
+## 谱芽岛主题第二版
+
+使用内置 image_gen 全新生成，输出 `preview-banner-island-v2.png`（2103 × 748）。当前横幅使用此版本；保留初版素材。
+
+Use case: illustration-story. Asset type: a single panoramic decorative background for the preview statistics banner in Puya Island (谱芽岛), a warm friendly music learning app whose brand idea is 'songs coming ashore at your fingertips', combining music, sprouts and a tiny island. Generate a BRAND NEW illustration, not a UI mockup. Output very wide landscape banner, ideally 2880 x 640 pixels, 4.5:1 horizontal composition. Soft refined hand-painted watercolor and colored-pencil storybook illustration on light ivory paper, delicate warm apricot, cream, honey wood, dusty sage green, restrained peach shading, cozy daylight. At the far LEFT edge only, a miniature honey-colored ukulele leaning against a low stack of cream music notebooks on a tiny gently curved sandy island, a small two-leaf sprout and a few rounded sage leaves beside it. Entire left vignette confined to x=1%..18%, centered vertically, with ALL essential illustrated detail inside the middle 45% of image height so it survives a wide banner crop. At the far RIGHT edge only, a small open cream sheet-music booklet folded like a little sailboat resting by the soft island shore, a fresh two-leaf sprout and delicate leaves; right vignette confined to x=85%..99%, centered vertically, all essential detail inside middle 45% height. A faint peach shoreline ribbon along the lower edge joins the two islands. The entire middle area x=20%..83% is extremely quiet near-solid warm ivory (#fff6ec) with only subtle watercolor paper texture, leaving a LARGE absolutely unobstructed blank area for editable live dark brown statistics. Keep artwork small, balanced and gentle; less decoration than a full scene. A few true engraved music notes may appear ONLY on the far-right booklet paper. No headphones, people, character, text, lettering, logos, numbers, charts, progress bars, buttons, borders, rounded UI corners, watermark, or scattered floating music notes. This is a background asset only, not a screenshot.
+
 使用内置 image_gen 生成。参考本次用户第二张附件，仅提取统计横幅插画。
 输出 preview-banner.png：1920 × 819，CSS cover 裁切。
 
