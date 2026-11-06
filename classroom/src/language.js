@@ -31,6 +31,10 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  '已自动保存。':['Saved automatically.','已自動儲存。'],
+  '头像已保存。':['Avatar saved.','頭像已儲存。'],
+  '头像保存失败，请重新选择图片。':['Could not save your avatar. Choose the image again.','頭像儲存失敗，請重新選擇圖片。'],
+  '保存未完成，请检查网络后重试。':['Could not save. Check your connection and retry.','儲存未完成，請檢查網路後重試。'],
   '登录记录':['Login history','登入紀錄'],
   '重试':['Retry','重試'],
   '查看当前会话与此浏览器保存的成功登录记录。':['View your current session and successful sign-ins saved in this browser.','查看目前工作階段與此瀏覽器儲存的成功登入紀錄。'],

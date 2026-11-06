@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BookOpen, Camera, CaretRight, Check, ClockCounterClockwise, Globe, GoogleLogo, Heart, SignIn, UserCircle, X } from '@phosphor-icons/react';
+import { BookOpen, Camera, Check, ClockCounterClockwise, Globe, GoogleLogo, Heart, SignIn, UserCircle, X } from '@phosphor-icons/react';
 import { languages, setLanguage, tr, useLanguage } from './language.js';
 import { SettingsLibrary } from './SettingsLibrary.jsx';
 import { useCloudState } from './useCloudState.js';
@@ -36,46 +36,63 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
   const [draftName, setDraftName] = useState(name), [draftPhoto, setDraftPhoto] = useState(photo);
   const [saving, setSaving] = useState(false), [readingPhoto, setReadingPhoto] = useState(false);
   const [bindingBusy, setBindingBusy] = useState(false);
-  const [feedback, setFeedback] = useState(null);
+  const [nameFeedback, setNameFeedback] = useState(null), [photoFeedback, setPhotoFeedback] = useState(null);
   const fileInput = useRef(null), fileRequest = useRef(0), savePending = useRef(false);
-  const dirty = draftName !== name || draftPhoto !== photo;
-  const resetDraft = () => {
-    fileRequest.current++;
-    setReadingPhoto(false); setDraftName(name); setDraftPhoto(photo); setFeedback(null);
-    if (fileInput.current) fileInput.current.value = '';
+  const savedName = useRef(name), readingPending = useRef(false), deferredAction = useRef(null);
+  const finishAction = success => {
+    const action = deferredAction.current; deferredAction.current = null;
+    if (success) action?.();
   };
-  const selectSection = id => {
-    if (savePending.current || bindingBusy) return;
-    resetDraft(); setSection(id); content.current?.scrollTo({ top: 0 });
+  const leaveProfile = action => {
+    if (bindingBusy) return;
+    if (savePending.current || readingPending.current) { deferredAction.current = action; return; }
+    const value = draftName.trim();
+    if (section === 'profile' && value && value.length <= 100 && value !== savedName.current) {
+      deferredAction.current = action; void saveName(); return;
+    }
+    action();
   };
-  const requestClose = () => { if (!savePending.current && !bindingBusy) onClose(); };
+  const selectSection = id => leaveProfile(() => { setSection(id); content.current?.scrollTo({ top: 0 }); });
+  const requestClose = () => leaveProfile(onClose);
   close.current = requestClose;
   const choosePhoto = async event => {
     const file = event.target.files?.[0];
     event.target.value = '';
     if (!file) return;
     const request = ++fileRequest.current;
-    setReadingPhoto(true); setFeedback(null);
+    readingPending.current = true; setReadingPhoto(true); setPhotoFeedback(null);
     try {
       const result = await prepareAvatar(file);
-      if (request === fileRequest.current) setDraftPhoto(result);
+      if (request !== fileRequest.current) return;
+      readingPending.current = false; setReadingPhoto(false);
+      savePending.current = true; setSaving(true); setPhotoFeedback({text:'正在保存…'});
+      await onSaveProfile({displayName:savedName.current, photoURL:result});
+      setDraftPhoto(result); setPhotoFeedback({text:'头像已保存。'});
+      savePending.current = false; setSaving(false); finishAction(true);
     } catch (error) {
-      if (request === fileRequest.current) setFeedback({ error: true, text: error.message });
-    } finally { if (request === fileRequest.current) setReadingPhoto(false); }
-  };
-  const saveProfile = async event => {
-    event.preventDefault();
-    if (savePending.current || bindingBusy || readingPhoto) return;
-    if (!draftName.trim() || draftName.trim().length > 100) {
-      setFeedback({ error: true, text: '请输入 1–100 个字符的显示名称。' }); return;
+      if (request === fileRequest.current) {
+        setPhotoFeedback({error:true,text:savePending.current ? '头像保存失败，请重新选择图片。' : error.message});
+        finishAction(false);
+      }
+    } finally {
+      if (request === fileRequest.current) { readingPending.current = false; savePending.current = false; setReadingPhoto(false); setSaving(false); }
     }
-    savePending.current = true; setSaving(true); setFeedback(null);
+  };
+  const saveName = async () => {
+    if (savePending.current || bindingBusy || readingPending.current) return;
+    const value = draftName.trim();
+    if (!value || value.length > 100) {
+      setNameFeedback({error:true,text:'请输入 1–100 个字符的显示名称。'}); return;
+    }
+    if (value === savedName.current) { setDraftName(value); return; }
+    savePending.current = true; setSaving(true); setNameFeedback({text:'正在保存…'});
+    let success = false;
     try {
-      const result = await onSaveProfile({ displayName: draftName.trim(), photoURL: draftPhoto === photo ? undefined : draftPhoto });
-      setDraftName(draftName.trim());
-      setFeedback({ text: result?.syncPending ? '资料已保存，账号信息将在下次登录时重试同步。' : '资料已保存。' });
-    } catch { setFeedback({ error: true, text: '保存未完成，请检查网络或浏览器存储后重试。' }); }
-    finally { savePending.current = false; setSaving(false); }
+      const result = await onSaveProfile({displayName:value});
+      savedName.current = value; setDraftName(value); success = true;
+      setNameFeedback({text:result?.syncPending ? '资料已保存，账号信息将在下次登录时重试同步。' : '已自动保存。'});
+    } catch { setNameFeedback({error:true,text:'保存未完成，请检查网络后重试。',retry:true}); }
+    finally { savePending.current = false; setSaving(false); finishAction(success); }
   };
   useEffect(() => {
     const overflow = document.body.style.overflow;
@@ -115,21 +132,19 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
             <div className="settings-page-heading"><h2>{tr(current.title)}</h2>
             <p className="settings-description">{tr(section === 'favorites' ? '喜欢的歌曲，随时回来继续练习。' : section === 'scores' ? '收藏编配、重拾练习，让你的乐谱井井有条。' : section === 'recent' ? '找回刚刚听见、看过的旋律。' : section === 'profile' ? '让音乐伙伴认识你。' : section === 'security' ? '查看当前会话与此浏览器保存的成功登录记录。' : '选择你习惯的语言，让每一次练习更自在。')}</p>{section === 'profile' && <img className="settings-profile-art" src={import.meta.env.BASE_URL + 'assets/account-settings/score-sprout.png'} alt="" aria-hidden="true"/>}</div>
             {['favorites', 'scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}
-            {section === 'profile' && <form className="profile-editor" noValidate onSubmit={saveProfile} aria-busy={saving}>
+            {section === 'profile' && <div className="profile-editor" aria-busy={saving || readingPhoto}>
               <div className="profile-avatar-row">
                 <img className="profile-avatar" src={draftPhoto} alt={tr('我的头像')} referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'assets/avatar-musician.png'; }}/>
-                <div className="profile-avatar-controls"><button type="button" className="profile-avatar-button" disabled={saving || bindingBusy || readingPhoto} onClick={() => fileInput.current?.click()}><Camera size={22}/>{tr(readingPhoto ? '正在读取…' : '更换头像')}</button><span>{tr('支持 JPG、PNG，最大 5 MB')}</span><small>{tr('头像仅保存在当前浏览器，按账号分别保存。')}</small></div>
+                <div className="profile-avatar-controls"><button type="button" className="profile-avatar-button" disabled={saving || bindingBusy || readingPhoto} onClick={() => fileInput.current?.click()}><Camera size={22}/>{tr(readingPhoto ? '正在读取…' : '更换头像')}</button><span>{tr('支持 JPG、PNG，最大 5 MB')}</span><small>{tr('头像仅保存在当前浏览器，按账号分别保存。')}</small>{photoFeedback && <p className={`profile-field-feedback${photoFeedback.error ? ' is-error' : ''}`} role={photoFeedback.error ? 'alert' : 'status'}>{tr(photoFeedback.text)}</p>}</div>
                 <input ref={fileInput} className="profile-file-input" type="file" accept="image/jpeg,image/png" aria-label={tr('选择头像')} onChange={choosePhoto} tabIndex={-1}/>
               </div>
-              <div className="profile-name-row"><label htmlFor="profile-display-name">{tr('显示名称')}</label><div><input id="profile-display-name" value={draftName} onChange={event => { setDraftName(event.target.value); setFeedback(null); }} maxLength={100} required disabled={saving || bindingBusy} aria-describedby="profile-name-help"/><p id="profile-name-help">{tr('将显示在你的演奏作品和社区互动中。')}</p></div></div>
+              <div className="profile-name-row"><label htmlFor="profile-display-name">{tr('显示名称')}</label><div><input id="profile-display-name" value={draftName} onChange={event => { setDraftName(event.target.value); setNameFeedback(null); }} onBlur={saveName} onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) { event.preventDefault(); event.currentTarget.blur(); } }} maxLength={100} required disabled={saving || bindingBusy || readingPhoto} aria-invalid={nameFeedback?.error || undefined} aria-describedby="profile-name-help profile-name-status"/><p id="profile-name-help">{tr('将显示在你的演奏作品和社区互动中。')}</p><div id="profile-name-status" className={`profile-field-feedback${nameFeedback?.error ? ' is-error' : ''}`} role={nameFeedback?.error ? 'alert' : 'status'}>{nameFeedback && tr(nameFeedback.text)}{nameFeedback?.retry && <button type="button" disabled={saving} onClick={saveName}>{tr('重试')}</button>}</div></div></div>
               <section className="profile-account-info" aria-labelledby="profile-account-heading">
                 <h3 id="profile-account-heading">{tr('账号信息')}</h3>
                 <div className="profile-provider-line">{providers.includes('google.com') ? <GoogleLogo size={28} weight="bold" aria-hidden="true"/> : <SignIn size={24} aria-hidden="true"/>}<strong>{providers.filter(id => !['phone', 'password'].includes(id)).map(id => providerNames[id] || id).join(' / ') || tr(providers.includes('password') ? '邮箱密码登录' : providers.includes('phone') ? '手机号码' : '第三方账号')}{' '}{tr('已连接')}</strong><span className="binding-verified"><Check size={14}/>{tr('已登录')}</span></div>
-                <AccountBindings user={user} service={bindings} profileSaving={saving} onBusyChange={setBindingBusy}/>
+                <AccountBindings user={user} service={bindings} profileSaving={saving || readingPhoto} onBusyChange={setBindingBusy}/>
               </section>
-              <div className={`profile-feedback${feedback?.error ? ' is-error' : ''}`} role={feedback?.error ? 'alert' : 'status'}>{feedback && tr(feedback.text)}</div>
-              <footer className="profile-editor-footer"><button type="button" className="profile-security-link" disabled={saving || bindingBusy} onClick={() => selectSection('security')}>{tr('登录记录')}<CaretRight size={18}/></button><div><button type="button" className="profile-cancel" disabled={saving || bindingBusy} onClick={resetDraft}>{tr('取消')}</button><button type="submit" className="profile-save" disabled={saving || bindingBusy || readingPhoto || !dirty}>{tr(saving ? '正在保存…' : '保存修改')}</button></div></footer>
-            </form>}
+            </div>}
             {section === 'security' && <LoginHistory uid={user.uid}/>}
             {section === 'language' && <>
               <fieldset className="settings-language-options"><legend>{tr('界面语言')}</legend>{languages.map(item => <label key={item.code} className={language === item.code ? 'selected' : ''}><span><strong>{item.label}</strong><small>{item.code === 'zh-CN' ? 'Simplified Chinese' : item.code === 'zh-TW' ? 'Traditional Chinese' : 'English'}</small></span><input type="radio" aria-label={item.label} name="settings-language" value={item.code} checked={language === item.code} onChange={() => setLanguage(item.code)}/></label>)}</fieldset>

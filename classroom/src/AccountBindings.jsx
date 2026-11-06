@@ -163,6 +163,5 @@ export function AccountBindings({ user, service, profileSaving, onBusyChange }) 
       {panel === 'password' && <PasswordFields hasPassword={hasPassword} verifiedEmail={!!user.email && user.emailVerified} busy={disabled} resetWait={resetWait} inputRef={input} onSave={savePassword} onReset={resetPassword} onCancel={() => open(null)} onEdit={() => setNotice(null)} onVerifyEmail={() => open('email')}/>}
       {feedback}
     </dialog>, document.body)}
-    <p className="binding-footnote">{tr('绑定通过验证即时生效，无需点击“保存修改”。')}</p>
   </div>;
 }
