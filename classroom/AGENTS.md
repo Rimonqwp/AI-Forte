@@ -191,3 +191,7 @@ Explain before password setup, inside the password dialog and after success that
 The profile avatar itself is the accessible change-avatar button, with a small camera badge. Remove the separate avatar button and upload-help block beside the name; retain upload constraints in the avatar tooltip and keep reading/save/error feedback available. This supersedes the previous separate avatar-controls layout.
 
 Place language and display preferences in Account Details below account information; remove the separate Language sidebar entry. Provide working light/dark/system appearance, reading text size and reduced-motion controls, saved per browser with immediate feedback. Respect operating-system appearance changes when System is selected, retain readable notation and original artwork, and keep preference controls responsive.
+
+## Custom dropdowns
+
+Use theme-matched custom dropdowns throughout the classroom instead of browser-native select menus, including filters, sorting, publishing forms, playback speed and account preferences. Preserve menus that are already custom. Keep keyboard selection, outside/focus dismissal, Escape closing only the menu, form values, light/dark appearance and narrow-screen positioning working.
