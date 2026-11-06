@@ -134,10 +134,14 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
             {['favorites', 'scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}
             {section === 'profile' && <div className="profile-editor" aria-busy={saving || readingPhoto}>
               <div className="profile-avatar-row">
+                <button type="button" className="profile-avatar-trigger" aria-label={tr('更换头像')} title={`${tr('更换头像')} · ${tr('支持 JPG、PNG，最大 5 MB')} · ${tr('头像仅保存在当前浏览器，按账号分别保存。')}`} disabled={saving || bindingBusy || readingPhoto} onClick={() => fileInput.current?.click()}>
                 <img className="profile-avatar" src={draftPhoto} alt={tr('我的头像')} referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'assets/avatar-musician.png'; }}/>
+                  <span className="profile-avatar-camera" aria-hidden="true"><Camera size={18}/></span>
+                </button>
                 <div className="profile-identity-editor">
               <div className="profile-name-row"><label htmlFor="profile-display-name">{tr('显示名称')}</label><div><input id="profile-display-name" value={draftName} onChange={event => { setDraftName(event.target.value); setNameFeedback(null); }} onBlur={saveName} onKeyDown={event => { if (event.key === 'Enter' && !event.nativeEvent.isComposing) { event.preventDefault(); event.currentTarget.blur(); } }} maxLength={100} required disabled={saving || bindingBusy || readingPhoto} aria-invalid={nameFeedback?.error || undefined} aria-describedby="profile-name-help profile-name-status"/><p id="profile-name-help">{tr('将显示在你的演奏作品和社区互动中。')}</p><div id="profile-name-status" className={`profile-field-feedback${nameFeedback?.error ? ' is-error' : ''}`} role={nameFeedback?.error ? 'alert' : 'status'}>{nameFeedback && tr(nameFeedback.text)}{nameFeedback?.retry && <button type="button" disabled={saving} onClick={saveName}>{tr('重试')}</button>}</div></div></div>
-                <div className="profile-avatar-controls"><button type="button" className="profile-avatar-button" disabled={saving || bindingBusy || readingPhoto} onClick={() => fileInput.current?.click()}><Camera size={22}/>{tr(readingPhoto ? '正在读取…' : '更换头像')}</button><span>{tr('支持 JPG、PNG，最大 5 MB')}</span><small>{tr('头像仅保存在当前浏览器，按账号分别保存。')}</small>{photoFeedback && <p className={`profile-field-feedback${photoFeedback.error ? ' is-error' : ''}`} role={photoFeedback.error ? 'alert' : 'status'}>{tr(photoFeedback.text)}</p>}</div>
+                  {readingPhoto && <p className="profile-field-feedback" role="status">{tr('正在读取…')}</p>}
+                  {photoFeedback && <p className={`profile-field-feedback${photoFeedback.error ? ' is-error' : ''}`} role={photoFeedback.error ? 'alert' : 'status'}>{tr(photoFeedback.text)}</p>}
                 </div>
                 <input ref={fileInput} className="profile-file-input" type="file" accept="image/jpeg,image/png" aria-label={tr('选择头像')} onChange={choosePhoto} tabIndex={-1}/>
               </div>
