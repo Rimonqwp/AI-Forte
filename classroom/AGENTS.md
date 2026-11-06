@@ -212,3 +212,5 @@ Keep the header profile menu limited to My Favorites, 设定 (Settings), and Sig
 ## Illustrated recent browsing dashboard
 
 The user selected an illustrated Recently Viewed dashboard reference: peach headphone-and-score statistics banner, total preview time and goal progress, streak/count/average metrics with a seven-day chart, a compact artist recommendation strip, and rounded score rows with cover/title, sound demo, duration, timestamp, favorite and View Score. This supersedes the earlier borderless recent-row treatment only for Recently Viewed. Keep the shared settings shell and real account-isolated browser history; never seed example visits or fabricated statistics into a real account. Track foreground score-detail viewing time locally, label synthesized audio as a sound demonstration, and preserve search, recommendations, favorites, individual removal, clearing and responsive layouts.
+
+The user removed the entire Recently Viewed artist recommendation strip, including its expandable recommendations. Keep it absent; place the search toolbar directly below the preview statistics banner with a comfortable gap.

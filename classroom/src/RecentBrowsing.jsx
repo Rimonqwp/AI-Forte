@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ArrowRight, Clock, ClockCounterClockwise, Crown, Fire, Headphones, Heart, Info, MagnifyingGlass, MusicNotes, Pause, Play, Target, Waveform, X } from '@phosphor-icons/react';
-import { songCatalog } from './library-catalog.js';
+import { ArrowRight, Clock, ClockCounterClockwise, Fire, Headphones, Heart, Info, MagnifyingGlass, MusicNotes, Pause, Play, Target, Waveform, X } from '@phosphor-icons/react';
 import { tr, useLanguage } from './language.js';
 import { clearPreviewTime, summarizePreviewTime, usePreviewTime } from './recent-preview-stats.js';
 import './recent-browsing.css';
@@ -39,11 +38,6 @@ export function RecentBrowsing({ user, entries, visible, query, setQuery, setRec
       setPlaying(song.id); timer.current = setTimeout(stop, 3500);
     } catch { stop(); setAudioError(tr('暂时无法播放，请稍后重试。')); }
   };
-  const artistCounts = entries.reduce((counts, { song }) => ({ ...counts, [song.artist]: (counts[song.artist] || 0) + 1 }), {});
-  const topArtist = Object.keys(artistCounts).sort((a, b) => artistCounts[b] - artistCounts[a])[0];
-  const recommendations = songCatalog.filter(song => !entries.some(entry => entry.song.id === song.id))
-    .sort((a, b) => Number(b.artist === topArtist) - Number(a.artist === topArtist)).slice(0, 3);
-  const [showRecommendations, setShowRecommendations] = useState(false);
   const hours = Math.floor(stats.total / 3600), minutes = Math.floor(stats.total % 3600 / 60);
   const goal = Math.max(7200, Math.ceil((stats.total + 1) / 7200) * 7200), progress = Math.min(100, Math.floor(stats.total / goal * 100));
   const maxDay = Math.max(60, ...stats.week.map(day => day.seconds));
@@ -69,14 +63,6 @@ export function RecentBrowsing({ user, entries, visible, query, setQuery, setRec
         </div>
       </div>
     </section>
-    <section className="recent-recommendation" aria-label={tr('为你推荐')}>
-      <Crown className="recent-crown" size={32} weight="duotone"/>
-      <strong>{topArtist ? <>{tr('你最近常听')}<em>{topArtist}</em></> : tr('遇见下一首喜欢的旋律')}</strong>
-      <p>{tr('为你推荐')} {recommendations.length} {tr('首相似风格的乐谱，继续探索吧～')}</p>
-      <div className="recent-recommend-covers" aria-hidden="true">{recommendations.map(song => <img key={song.id} src={assets + `score-library/cover-${song.id}.png`} alt=""/>)}</div>
-      <button className="settings-recent-view" aria-expanded={showRecommendations} aria-controls="recent-recommended-scores" onClick={() => setShowRecommendations(value => !value)}>{tr(showRecommendations ? '收起推荐' : '查看推荐')}<ArrowRight size={20}/></button>
-    </section>
-    {showRecommendations && <div className="recent-recommended-scores" id="recent-recommended-scores">{recommendations.map(song => <button key={song.id} onClick={() => open({ song })}><img src={assets + `score-library/cover-${song.id}.png`} alt=""/><span><strong>{song.title}</strong><small>{song.artist}</small></span><ArrowRight size={19}/></button>)}</div>}
     <div className="settings-library-toolbar"><label className="settings-library-search"><MagnifyingGlass size={20}/><input aria-label={tr('搜索我的乐谱')} placeholder={tr('搜索歌名、歌手或编配')} value={query} onChange={event => setQuery(event.target.value)}/></label><span className="settings-library-total">{tr('共')} {visible.length} {tr('首乐谱')}</span>{entries.length > 0 && <button className="settings-text-button" onClick={() => { stop(); setRecent(() => []); clearPreviewTime(user.uid); }}>{tr('清空浏览记录')}</button>}</div>
     {visible.length ? <div className="settings-score-list settings-recent-list">{visible.map(entry => {
       const { song } = entry, saved = favorites.includes(song.id);
