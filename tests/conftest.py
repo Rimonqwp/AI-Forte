@@ -22,6 +22,7 @@ def relational_database():
         yield translated
     finally:
         with engine.begin() as db:
+            db.execute(text(f'DROP SCHEMA IF EXISTS "{schema}_archive" CASCADE'))
             db.execute(text(f'DROP SCHEMA IF EXISTS "{schema}" CASCADE'))
         engine.dispose()
         connector = getattr(engine, 'cloud_sql_connector', None)

@@ -150,3 +150,41 @@ transcription_strums = snapshot_child('transcription_strums', {
 
 RELATIONAL_TABLES = [t for t in metadata.sorted_tables if t.name not in
     {'jobs', 'revisions', 'visitor_states', 'user_profiles', 'runtime_records'}]
+
+# v2 keeps ten active tables. The definitions above for the fourteen retired
+# tables exist only so the migration/rolling-deployment adapter can read v1.
+account_profiles.append_column(Column('providers', ARRAY(Text), nullable=False, server_default='{}'))
+for column in (Column('elapsed_seconds', Float), Column('scroll_top', Float), Column('bpm', Float)):
+    state_versions.append_column(column)
+state_versions.append_constraint(CheckConstraint('elapsed_seconds IS NULL OR (elapsed_seconds >= 0 AND elapsed_seconds <= 86400)', name='state_elapsed_bounds'))
+state_versions.append_constraint(CheckConstraint('scroll_top IS NULL OR (scroll_top >= 0 AND scroll_top <= 1000000)', name='state_scroll_bounds'))
+state_versions.append_constraint(CheckConstraint('bpm IS NULL OR (bpm >= 40 AND bpm <= 180)', name='state_bpm_bounds'))
+
+account_items = state_table('account_items', Column('position', Integer, primary_key=True),
+    Column('target_id', Text), Column('related_id', Text), Column('checkin_date', Date), checks=(
+        CheckConstraint('position >= 0'),
+        CheckConstraint("(state_key = 'checkins' AND checkin_date IS NOT NULL AND target_id IS NULL AND related_id IS NULL) OR "
+            "(state_key = 'practice-favorites' AND target_id IS NOT NULL AND related_id IS NOT NULL AND checkin_date IS NULL) OR "
+            "(state_key <> 'checkins' AND state_key <> 'practice-favorites' AND target_id IS NOT NULL AND related_id IS NULL AND checkin_date IS NULL)"),
+        UniqueConstraint('uid', 'state_key', 'target_id', 'related_id', 'checkin_date', postgresql_nulls_not_distinct=True)))
+
+EMBEDDED_FIELDS = {
+    'request': ('request', REQUEST_FIELDS),
+    'settings': ('settings', SETTING_FIELDS),
+    'arrangement.settings': ('arrangement_settings', SETTING_FIELDS),
+}
+for prefix, mapping in EMBEDDED_FIELDS.values():
+    for column, kind in mapping.values():
+        snapshots.append_column(Column(f'{prefix}_{column}', kind))
+    snapshots.append_column(Column(f'{prefix}_present_fields', ARRAY(Text)))
+    snapshots.append_column(Column(f'{prefix}_extensions', json_type))
+
+EVENT_FIELDS = {}
+for table in (transcription_overrides, transcription_slides, transcription_chords, transcription_strums):
+    EVENT_FIELDS.update(table.info['field_mapping'])
+transcription_events = snapshot_child('transcription_events', EVENT_FIELDS, scoped=True, ordered=True)
+
+CURRENT_TABLES = [schema_versions, account_profiles, state_versions, account_items,
+    snapshots, transcription_jobs, transcription_revisions, transcription_records,
+    transcription_notes, transcription_events]
+RETIRED_TABLES = [t for t in RELATIONAL_TABLES if t not in CURRENT_TABLES]

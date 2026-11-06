@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from uuid import uuid4
 
-from sqlalchemy import func, select, text
+from sqlalchemy import func, inspect, select, text
 
 from app.sql_database import jobs, revisions, states, profiles, runtime_records, metadata, make_engine
 from app import relational_schema as s
@@ -53,6 +53,10 @@ def verify_import(db, data):
 def prepare(engine, roles=()):
     # Create only the new tables; leave all existing tables/constraints untouched.
     with engine.begin() as db:
+        schema = db.get_execution_options().get('schema_translate_map', {}).get(None, 'public')
+        if inspect(db).has_table(s.schema_versions.name, schema=schema):
+            if db.execute(select(s.schema_versions.c.version).where(s.schema_versions.c.version >= 2)).first():
+                raise RuntimeError('Relational v2 is active; use scripts.compact_cloud_sql instead')
         metadata.create_all(db, tables=s.RELATIONAL_TABLES)
         for _, table in LEGACY_TABLES:
             db.execute(text(f"COMMENT ON TABLE {qualified(db, table.name)} IS "

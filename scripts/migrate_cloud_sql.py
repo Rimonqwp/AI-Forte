@@ -14,6 +14,7 @@ from sqlalchemy import select, text
 from sqlalchemy.dialects.postgresql import insert
 from app.sql_database import jobs, revisions, states, profiles, runtime_records, metadata, make_engine
 from app.relational_storage import relational_enabled, import_legacy_row, get_imported_row
+from app.relational_schema import CURRENT_TABLES
 
 
 def export(folder, runtime):
@@ -69,7 +70,7 @@ def transfer(snapshot, apply=False, baseline=None, tables=None, engine=None):
     engine = make_engine() if owns_engine else engine
     try:
         if apply:
-            metadata.create_all(engine)
+            metadata.create_all(engine, tables=CURRENT_TABLES)
         with engine.begin() as db:
             normalized = relational_enabled(db)
             for name, table in (('jobs', jobs), ('revisions', revisions), ('states', states), ('profiles', profiles), ('runtime_records', runtime_records)):

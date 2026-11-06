@@ -16,7 +16,7 @@ class PostgresSongStore:
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
         self.engine = engine if engine is not None else make_engine()
-        metadata.create_all(self.engine)
+        metadata.create_all(self.engine, tables=relational.CURRENT_TABLES)
 
     def get(self, job_id):
         with self.engine.connect() as db:

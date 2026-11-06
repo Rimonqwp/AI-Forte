@@ -1,5 +1,6 @@
 """Firebase-authenticated account storage API. No browser database credentials."""
 import json
+import hashlib
 import math
 import re
 from contextlib import asynccontextmanager
@@ -7,15 +8,17 @@ from datetime import date, datetime, timezone
 
 import firebase_admin
 from firebase_admin import auth
-from fastapi import Depends, FastAPI, HTTPException, Request
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi.responses import JSONResponse
+from starlette.middleware.gzip import GZipMiddleware
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import select, text
 from sqlalchemy.dialects.postgresql import insert
 
 from app.sql_database import make_engine, metadata, profiles, states
 from app import relational_schema as relational
-from app.relational_storage import (relational_enabled, read_state_value, write_state_value,
-                                    put_profile, get_profile)
+from app.relational_storage import (relational_enabled, storage_version, read_states, values_for_rows, write_state_value,
+                                    patch_state_value, put_profile, get_profile)
 
 
 @asynccontextmanager
@@ -23,7 +26,7 @@ async def lifespan(app):
     if not firebase_admin._apps:
         firebase_admin.initialize_app(options={'projectId': 'puyadao-75dd0'})
     app.state.engine = make_engine()
-    metadata.create_all(app.state.engine)
+    metadata.create_all(app.state.engine, tables=relational.CURRENT_TABLES)
     yield
     app.state.engine.dispose()
     connector = getattr(app.state.engine, 'cloud_sql_connector', None)
@@ -32,6 +35,17 @@ async def lifespan(app):
 
 
 app = FastAPI(title='谱芽岛数据服务', lifespan=lifespan)
+app.add_middleware(GZipMiddleware, minimum_size=1024, compresslevel=5)
+
+
+@app.middleware('http')
+async def account_cache_control(request, call_next):
+    response = await call_next(request)
+    # Account responses must never be shared by Firebase Hosting/CDN or users.
+    response.headers.setdefault('Cache-Control', 'private, no-cache')
+    response.headers['Vary'] = ', '.join(dict.fromkeys(
+        [x.strip() for x in response.headers.get('Vary', '').split(',') if x.strip()] + ['Authorization']))
+    return response
 
 
 def identity(request: Request):
@@ -86,21 +100,33 @@ class StateWrite(BaseModel):
 @app.get('/api/account/health')
 def health(request: Request):
     with request.app.state.engine.connect() as db:
-        db.execute(text('SELECT 1'))
-        normalized = relational_enabled(db)
-    return {'storage': 'cloud-sql', 'schema': 'relational-v1' if normalized else 'legacy-json', 'ok': True}
+        mode = storage_version(db)
+    return {'storage': 'cloud-sql', 'schema': f'relational-v{mode}' if mode else 'legacy-json', 'ok': True}
 
 
 @app.get('/api/account/state')
 def list_states(request: Request, user=Depends(identity)):
     with request.app.state.engine.begin() as db:
         if relational_enabled(db):
-            rows = db.execute(select(relational.state_versions.c.key).where(
-                relational.state_versions.c.uid == user['uid']).order_by(relational.state_versions.c.key)
-                .with_for_update(read=True)).all()
-            return [{'key': r.key, 'value': read_state_value(db, user['uid'], r.key)} for r in rows]
+            return [{'key': key, 'value': record['value']} for key, record in read_states(db, user['uid']).items()]
         rows = db.execute(select(states.c.key, states.c.body).where(states.c.uid == user['uid']))
         return [{'key': r.key, 'value': json.loads(r.body)} for r in rows]
+
+
+class StateBatch(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    keys: list[str] = Field(min_length=1, max_length=32)
+
+
+@app.post('/api/account/state:batchGet')
+def batch_states(body: StateBatch, request: Request, user=Depends(identity)):
+    if len(set(body.keys)) != len(body.keys) or any(not valid_key(key) for key in body.keys):
+        raise HTTPException(422, '记录类型无效或重复。')
+    with request.app.state.engine.begin() as db:
+        if not relational_enabled(db):
+            raise HTTPException(503, '数据服务升级中。')
+        values = read_states(db, user['uid'], body.keys)
+        return {'states': [dict(key=key, **values.get(key, {'version': 0})) for key in body.keys]}
 
 
 @app.get('/api/account/state/{key}')
@@ -109,12 +135,59 @@ def read_state(key: str, request: Request, user=Depends(identity)):
         raise HTTPException(422, '不支持的记录类型。')
     with request.app.state.engine.begin() as db:
         if relational_enabled(db):
-            version = db.execute(select(relational.state_versions.c.version).where(
+            row = db.execute(select(relational.state_versions).where(
                 relational.state_versions.c.uid == user['uid'], relational.state_versions.c.key == key)
-                .with_for_update(read=True)).scalar_one_or_none()
-            return {'value': read_state_value(db, user['uid'], key), 'version': version} if version else {'version': 0}
+                .with_for_update(read=True)).mappings().first()
+            version = row['version'] if row else 0
+            etag = 'W/"' + hashlib.sha256(f'{user["uid"]}\0{key}\0{version or 0}'.encode()).hexdigest()[:32] + '"'
+            # Hosting rewrites may consume standard conditional request headers.
+            # This explicit opt-in survives the proxy and avoids a
+            # full payload while retaining ordinary HTTP 304 for direct clients.
+            if request.headers.get('x-state-if-none-match') == etag:
+                return JSONResponse({'notModified': True}, headers={'ETag': etag, 'Cache-Control': 'private, no-store'})
+            tags = [value.strip().removeprefix('W/') for value in request.headers.get('if-none-match', '').split(',')]
+            if etag.removeprefix('W/') in tags or '*' in tags:
+                return Response(status_code=304, headers={'ETag': etag})
+            record = values_for_rows(db, user['uid'], [row])[key] if row else {'version': 0}
+            return JSONResponse(record, headers={'ETag': etag})
         row = db.execute(select(states.c.body, states.c.version).where(states.c.uid == user['uid'], states.c.key == key)).first()
     return {'value': json.loads(row.body), 'version': row.version} if row else {'version': 0}
+
+
+def advance_version(db, uid, key, version):
+    table = relational.state_versions
+    if version == 0:
+        result = db.execute(insert(table).values(uid=uid, key=key, version=1)
+            .on_conflict_do_nothing().returning(table.c.version)).first()
+    else:
+        result = db.execute(table.update().where(table.c.uid == uid, table.c.key == key,
+            table.c.version == version).values(version=version + 1).returning(table.c.version)).first()
+    if result is None:
+        raise HTTPException(409, '记录已更新，请重新读取。')
+    return result.version
+
+
+class StatePatch(BaseModel):
+    model_config = ConfigDict(extra='forbid')
+    version: int = Field(ge=0)
+    add: list[str] = Field(default_factory=list, max_length=1000)
+    remove: list[str] = Field(default_factory=list, max_length=1000)
+
+
+@app.patch('/api/account/state/{key}')
+def patch_state(key: str, body: StatePatch, request: Request, user=Depends(identity)):
+    if key.startswith('progress-'):
+        raise HTTPException(422, '练习进度请使用完整数值更新。')
+    validate_state(key, body.add)
+    validate_state(key, body.remove)
+    if set(body.add) & set(body.remove):
+        raise HTTPException(422, '同一编号不能同时添加和删除。')
+    with request.app.state.engine.begin() as db:
+        if not relational_enabled(db):
+            raise HTTPException(503, '数据服务升级中。')
+        version = advance_version(db, user['uid'], key, body.version)
+        patch_state_value(db, user['uid'], key, body.add, body.remove, validate_state)
+    return {'version': version}
 
 
 @app.put('/api/account/state/{key}')
@@ -122,17 +195,9 @@ def write_state(key: str, body: StateWrite, request: Request, user=Depends(ident
     validate_state(key, body.value)
     with request.app.state.engine.begin() as db:
         if relational_enabled(db):
-            table = relational.state_versions
-            if body.version == 0:
-                result = db.execute(insert(table).values(uid=user['uid'], key=key, version=1)
-                    .on_conflict_do_nothing().returning(table.c.version)).first()
-            else:
-                result = db.execute(table.update().where(table.c.uid == user['uid'], table.c.key == key,
-                    table.c.version == body.version).values(version=body.version + 1).returning(table.c.version)).first()
-            if result is None:
-                raise HTTPException(409, '记录已更新，请重新读取。')
+            version = advance_version(db, user['uid'], key, body.version)
             write_state_value(db, user['uid'], key, body.value)
-            return {'value': body.value, 'version': result.version}
+            return {'value': body.value, 'version': version}
         values = dict(uid=user['uid'], key=key, body=json.dumps(body.value), version=body.version + 1)
         if body.version == 0:
             result = db.execute(insert(states).values(**values).on_conflict_do_nothing().returning(states.c.version)).first()
