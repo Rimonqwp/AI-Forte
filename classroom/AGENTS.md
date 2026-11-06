@@ -185,3 +185,5 @@ The former Sign-in & Security section is now Login History (登录记录), inclu
 Account Details now saves profile edits automatically, superseding the former Cancel/Save footer. Remove the entire profile footer (including its Login History shortcut) and the binding footnote about not needing Save Changes. Save valid display names on blur or Enter and save avatars immediately after decoding; show saving/saved/error feedback next to each field, with name-save retry. If leaving during an in-flight save, complete the requested navigation/close only after success and retain failed edits. Keep the sidebar Login History entry and existing verified phone/email/password dialogs.
 
 Keep the display-name field and its inline editing/automatic-save feedback beside the avatar, above the avatar change controls, as one responsive identity row. Do not repeat a separate name editor below it.
+
+Explain before password setup, inside the password dialog and after success that the verified linked email plus the new password can sign into the same account; Google sign-in remains available.
