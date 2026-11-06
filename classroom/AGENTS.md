@@ -202,3 +202,5 @@ Use theme-matched custom dropdowns throughout the classroom instead of browser-n
 ## Recent browsing rows
 
 The user selected a borderless recent-history row with thin warm separators, a larger landscape cover, song title and artist on the left, then browsing time, favorite heart and an outlined 查看乐谱 action on the right. Apply this only to Recently Viewed, retaining the existing settings shell and library toolbar. Show Today/Yesterday for recent dates, keep older dates explicit, and preserve opening, favorites and individual history removal. Keep the remove control available on hover, keyboard focus and touch; stack row information and actions cleanly on narrow screens.
+
+The user requested smaller Account Details heading/subtitle text and more compact Recently Viewed rows. Reduce recent-row cover size, title/artist/time/action typography, icon size and vertical spacing across desktop and phone layouts, while preserving the existing row structure and comfortable action hit areas. This supersedes the earlier larger-cover sizing preference.

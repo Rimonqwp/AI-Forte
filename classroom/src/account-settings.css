@@ -33,8 +33,8 @@
 /* Selected inline profile editor. Existing settings shell stays shared. */
 .settings-profile-content{position:relative;min-height:100%;max-width:1100px;padding:48px 64px 40px}
 .settings-profile-content .settings-page-heading{position:relative;min-height:140px;padding-right:330px}
-.settings-profile-content h2{font-family:'Songti SC','STSong',serif;font-size:46px;line-height:1.35;font-weight:700;letter-spacing:1px;margin-bottom:12px}
-.settings-profile-content .settings-description{font-size:22px;line-height:1.8;margin:0;color:#85624e}
+.settings-profile-content h2{font-family:'Songti SC','STSong',serif;font-size:36px;line-height:1.35;font-weight:700;letter-spacing:1px;margin-bottom:12px}
+.settings-profile-content .settings-description{font-size:16px;line-height:1.8;margin:0;color:#85624e}
 .settings-profile-art{position:absolute;top:-20px;right:-14px;width:420px;height:220px;object-fit:contain;pointer-events:none;user-select:none}
 .profile-editor{display:flex;flex-direction:column;min-height:0}
 .profile-avatar-row{position:relative;display:flex;align-items:flex-start;gap:38px;margin:18px 0 40px}
@@ -65,8 +65,8 @@
 
 .profile-editor :is(button,input):focus-visible{outline:2px solid #ad5538;outline-offset:4px}
 .profile-editor button:disabled{cursor:default;opacity:.7}
-@media(max-width:1100px) and (min-width:601px){.settings-profile-content{padding:36px 30px}.settings-profile-content .settings-page-heading{padding-right:200px;min-height:125px}.settings-profile-art{width:230px;height:155px;top:-5px;right:-8px}.settings-profile-content h2{font-size:32px}.settings-profile-content .settings-description{font-size:16px}.profile-avatar{width:96px;height:96px}.profile-avatar-row{gap:24px}.profile-name-row{grid-template-columns:minmax(0,1fr);gap:8px}.profile-editor{min-height:0}}
-@media(max-width:600px){.settings-profile-content{padding:26px 20px 28px;max-width:100%;min-height:100%}.settings-profile-content .settings-page-heading{min-height:115px;padding-right:100px}.settings-profile-content h2{font-size:28px}.settings-profile-content .settings-description{font-size:14px;max-width:180px}.settings-profile-art{width:140px;height:110px;top:20px;right:-12px}.profile-editor{min-height:0}.profile-avatar-row{gap:18px;margin:14px 0 30px;align-items:flex-start}.profile-avatar{width:68px;height:68px}.profile-name-row{grid-template-columns:1fr;gap:8px;margin:0}.profile-name-row>label{font-size:16px;padding:0}.profile-name-row input{font-size:16px}.profile-name-row p{font-size:12px}.settings-profile-content .profile-account-info h3{font-size:23px;margin-bottom:12px}.profile-provider-line{font-size:14px;gap:8px 12px}.profile-provider-line strong{flex:1;min-width:calc(100% - 44px)}.profile-provider-email{flex-basis:auto;max-width:calc(100% - 50px);border:0;padding-left:36px}.profile-provider-line .settings-text-button{margin-left:0}.profile-account-info>p{margin-left:36px;font-size:12px}}
+@media(max-width:1100px) and (min-width:601px){.settings-profile-content{padding:36px 30px}.settings-profile-content .settings-page-heading{padding-right:200px;min-height:125px}.settings-profile-art{width:230px;height:155px;top:-5px;right:-8px}.settings-profile-content h2{font-size:28px}.settings-profile-content .settings-description{font-size:14px}.profile-avatar{width:96px;height:96px}.profile-avatar-row{gap:24px}.profile-name-row{grid-template-columns:minmax(0,1fr);gap:8px}.profile-editor{min-height:0}}
+@media(max-width:600px){.settings-profile-content{padding:26px 20px 28px;max-width:100%;min-height:100%}.settings-profile-content .settings-page-heading{min-height:115px;padding-right:100px}.settings-profile-content h2{font-size:24px}.settings-profile-content .settings-description{font-size:13px;max-width:180px}.settings-profile-art{width:140px;height:110px;top:20px;right:-12px}.profile-editor{min-height:0}.profile-avatar-row{gap:18px;margin:14px 0 30px;align-items:flex-start}.profile-avatar{width:68px;height:68px}.profile-name-row{grid-template-columns:1fr;gap:8px;margin:0}.profile-name-row>label{font-size:16px;padding:0}.profile-name-row input{font-size:16px}.profile-name-row p{font-size:12px}.settings-profile-content .profile-account-info h3{font-size:23px;margin-bottom:12px}.profile-provider-line{font-size:14px;gap:8px 12px}.profile-provider-line strong{flex:1;min-width:calc(100% - 44px)}.profile-provider-email{flex-basis:auto;max-width:calc(100% - 50px);border:0;padding-left:36px}.profile-provider-line .settings-text-button{margin-left:0}.profile-account-info>p{margin-left:36px;font-size:12px}}
 
 /* Icon-only version of the selected sprout-and-note logo. */
 .settings-brand-logo{display:block;width:52px;height:52px;object-fit:contain;object-position:center;flex-shrink:0}
@@ -78,21 +78,22 @@
 
 /* Recent-history rows follow the selected cover / title / time / heart / score-action reference. */
 .settings-recent-list{--recent-accent:#b95e42;gap:0;border-top:1px solid var(--settings-border)}
-.settings-recent-list .settings-recent-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto 44px auto;column-gap:28px;min-height:132px;padding:24px 14px;border:0;border-bottom:1px solid var(--settings-border);border-radius:0;background:transparent}
-.settings-recent-row .settings-score-open{gap:28px;padding:0;color:inherit;font:inherit}
-.settings-recent-row .settings-score-open>img{width:116px;height:80px;border-radius:10px}
+.settings-recent-list .settings-recent-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto 44px auto;column-gap:20px;min-height:104px;padding:16px 14px;border:0;border-bottom:1px solid var(--settings-border);border-radius:0;background:transparent}
+.settings-recent-row .settings-score-open{gap:20px;padding:0;color:inherit;font:inherit}
+.settings-recent-row .settings-score-open>img{width:94px;height:64px;border-radius:8px}
 .settings-recent-row .settings-score-copy{gap:3px}
-.settings-recent-row .settings-score-copy strong{font-family:inherit;font-size:24px;line-height:1.4;font-weight:700}
-.settings-recent-row .settings-score-copy small{font-size:18px;line-height:1.5}
-.settings-recent-time{font-size:18px;line-height:1.5;color:var(--settings-muted)}
+.settings-recent-row .settings-score-copy strong{font-family:inherit;font-size:20px;line-height:1.4;font-weight:700}
+.settings-recent-row .settings-score-copy small{font-size:14px;line-height:1.5}
+.settings-recent-time{font-size:14px;line-height:1.5;color:var(--settings-muted)}
 .settings-recent-row .settings-score-favorite{width:44px;height:44px;color:var(--recent-accent)}
-.settings-recent-view{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:8px 18px;border:1px solid var(--recent-accent);border-radius:15px;background:transparent;color:var(--recent-accent);font:inherit;font-size:17px;font-weight:500;line-height:1.5;white-space:nowrap}
-.settings-recent-view>svg{flex-shrink:0}
+.settings-recent-row .settings-score-favorite:not(.settings-recent-remove)>svg{width:24px;height:24px}
+.settings-recent-view{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 14px;border:1px solid var(--recent-accent);border-radius:15px;background:transparent;color:var(--recent-accent);font:inherit;font-size:14px;font-weight:500;line-height:1.5;white-space:nowrap}
+.settings-recent-view>svg{width:18px;height:18px;flex-shrink:0}
 .settings-recent-view:hover{background:#c46c5010}
 .settings-recent-row .settings-recent-remove{position:absolute;top:2px;right:0;width:24px;height:24px;opacity:0;pointer-events:none}
 .settings-recent-row:hover .settings-recent-remove,.settings-recent-row:focus-within .settings-recent-remove{opacity:1;pointer-events:auto}
 .settings-recent-row button:focus-visible{outline:2px solid var(--recent-accent);outline-offset:4px}
 :root[data-theme=dark] .settings-recent-list{--recent-accent:#f1ad8c}
-@media(max-width:1100px){.settings-recent-list .settings-recent-row{grid-template-columns:minmax(0,1fr) 40px auto;gap:4px 16px;padding:20px 0;min-height:128px}.settings-recent-row .settings-score-open{grid-column:1;grid-row:1;gap:16px}.settings-recent-row .settings-score-open>img{width:94px;height:72px}.settings-recent-row .settings-score-copy strong{font-size:22px}.settings-recent-row .settings-score-copy small{font-size:16px}.settings-recent-time{grid-column:1;grid-row:2;padding-left:110px;font-size:14px}.settings-recent-row .settings-score-favorite:not(.settings-recent-remove){grid-column:2;grid-row:1 / 3;width:40px;height:40px}.settings-recent-view{grid-column:3;grid-row:1 / 3;font-size:14px;padding:8px 14px}}
-@media(max-width:760px){.settings-recent-list .settings-recent-row{gap:14px 10px;padding:20px 0}.settings-recent-row .settings-score-open{grid-column:1 / -1;grid-row:1;padding-right:24px}.settings-recent-time{grid-column:1;grid-row:2;padding-left:0;font-size:13px}.settings-recent-row .settings-score-favorite:not(.settings-recent-remove){grid-column:2;grid-row:2}.settings-recent-view{grid-column:3;grid-row:2;padding:8px 12px}.settings-recent-row .settings-score-copy strong{font-size:22px}.settings-recent-row .settings-score-copy small{font-size:16px}}
+@media(max-width:1100px){.settings-recent-list .settings-recent-row{grid-template-columns:minmax(0,1fr) 40px auto;gap:4px 14px;padding:16px 0;min-height:104px}.settings-recent-row .settings-score-open{grid-column:1;grid-row:1;gap:14px}.settings-recent-row .settings-score-open>img{width:80px;height:60px}.settings-recent-row .settings-score-copy strong{font-size:18px}.settings-recent-row .settings-score-copy small{font-size:13px}.settings-recent-time{grid-column:1;grid-row:2;padding-left:94px;font-size:13px}.settings-recent-row .settings-score-favorite:not(.settings-recent-remove){grid-column:2;grid-row:1 / 3;width:40px;height:40px}.settings-recent-view{grid-column:3;grid-row:1 / 3;font-size:13px;padding:8px 12px}}
+@media(max-width:760px){.settings-recent-list .settings-recent-row{gap:10px;padding:14px 0}.settings-recent-row .settings-score-open{grid-column:1 / -1;grid-row:1;padding-right:24px}.settings-recent-row .settings-score-open>img{width:72px;height:50px}.settings-recent-time{grid-column:1;grid-row:2;padding-left:0;font-size:12px}.settings-recent-row .settings-score-favorite:not(.settings-recent-remove){grid-column:2;grid-row:2}.settings-recent-view{grid-column:3;grid-row:2;padding:8px 12px}.settings-recent-row .settings-score-copy strong{font-size:18px}.settings-recent-row .settings-score-copy small{font-size:13px}}
 @media(hover:none){.settings-recent-row .settings-recent-remove{opacity:1;pointer-events:auto}}
