@@ -20,11 +20,20 @@ async function accountRequest(user, path, options = {}) {
   if (auth.currentUser?.uid !== user.uid) throw new Error('auth/session-changed');
   const token = await user.getIdToken();
   const response = await fetch(`${apiBase}${path}`, {
-    ...options, headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    ...options, headers: { ...options.headers, 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
   });
   if (auth.currentUser?.uid !== user.uid) throw new Error('auth/session-changed');
+  if (response.status === 304) return {notModified: true};
   if (!response.ok) { const error = new Error('storage/request-failed'); error.status = response.status; throw error; }
-  return response.json();
+  const data = await response.json();
+  const etag = response.headers.get('ETag');
+  return etag && data && !Array.isArray(data) && ('version' in data || data.notModified)
+    ? {...data, etag} : data;
+}
+const clients = new WeakMap();
+function clientFor(user) {
+  if (!clients.has(user)) clients.set(user, stateClient((path, options) => accountRequest(user, path, options)));
+  return clients.get(user);
 }
 let session;
 export async function ensureVisitor() {
@@ -39,10 +48,10 @@ export async function connectState(key, expectedUid) {
     if (auth.currentUser?.uid !== user.uid || (expectedUid && expectedUid !== user.uid)) throw new Error('auth/session-changed');
   };
   assertSession();
-  const client = stateClient((path, options) => { assertSession(); return accountRequest(user, path, options); });
+  const client = clientFor(user);
   return {
-    async read() { return (await client.read(key)).value; },
-    update(change) { return client.update(key, change); },
+    async read() { assertSession(); const result = await client.read(key); assertSession(); return result.value; },
+    async update(change) { assertSession(); const value = await client.update(key, change); assertSession(); return value; },
   };
 }
 
@@ -55,7 +64,7 @@ export async function readGuestState(uid) {
 async function mergeGuestState(records, uid) {
   const user = auth.currentUser;
   if (user?.uid !== uid) throw new Error('auth/session-changed');
-  const client = stateClient((path, options) => accountRequest(user, path, options));
+  const client = clientFor(user);
   for (const { key, value } of records) {
     await client.update(key, current => mergeAccountValue(key, current, value));
   }
