@@ -1,0 +1,47 @@
+.profile-preferences{margin-top:36px;padding-top:28px;border-top:1px solid #e5d2c2}
+.settings-profile-content .profile-preferences h3{font-family:'Songti SC','STSong',serif;font-size:30px;line-height:1.5;margin-bottom:8px}
+.preference-intro,.preference-storage{font-size:13px;line-height:1.8;color:#85624e}
+.preference-row{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:22px 0;border-bottom:1px solid #ecdacc}
+.preference-label{display:flex;align-items:flex-start;gap:14px;min-width:0}.preference-label>svg{color:#a9775b}
+.preference-label label{font-size:16px;font-weight:600;line-height:1.5}.preference-label small{display:block;font-weight:400;font-size:12px;line-height:1.8;margin-top:5px;color:#85624e}
+.preference-row select{width:180px;max-width:48%;min-height:44px;padding:8px 12px;background:#fffcf7;color:#603d30;border:1px solid #b58d73;border-radius:8px}
+.preference-appearance{margin:22px 0 0;padding:0 0 22px;border:0;border-bottom:1px solid #ecdacc;min-width:0}.preference-appearance legend{font-size:16px;font-weight:600;margin-bottom:16px}
+.preference-theme-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.preference-theme-options>label{display:flex;align-items:center;justify-content:center;gap:12px;padding:18px 12px;border:1px solid #dec6b5;border-radius:10px;cursor:pointer;font-size:14px;flex-wrap:wrap}.preference-theme-options>label.selected{border-color:#ad674a;background:#f8eee3}.preference-theme-options input{accent-color:#a3583b}
+.preference-row input[role=switch]{appearance:none;width:42px;height:26px;flex-shrink:0;border-radius:20px;background:#d2c0b3;border:2px solid transparent;cursor:pointer;position:relative}.preference-row input[role=switch]:before{content:'';display:block;width:18px;height:18px;border-radius:50%;background:#fffcf7;position:absolute;top:2px;left:2px;transition:transform .15s}.preference-row input[role=switch]:checked{background:#798c69}.preference-row input[role=switch]:checked:before{transform:translateX(16px)}
+.preference-storage{margin-top:18px}.profile-preferences :is(input,select):focus-visible{outline:2px solid #ad674a;outline-offset:4px}
+@media(max-width:600px){.settings-profile-content .profile-preferences h3{font-size:23px}.preference-row{gap:12px;flex-wrap:wrap}.preference-row select{max-width:100%;width:100%}.preference-label{flex:1}.preference-theme-options{gap:6px}.preference-theme-options>label{gap:8px;padding:14px 6px;font-size:12px}.preference-theme-options>label>span{flex-basis:100%;text-align:center}.preference-intro,.preference-storage{font-size:12px}}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark;--ink:#f3d3b7;--muted:#c5ab99;--line:#675146;--search-ink:#f3d3b7;background:#201f24;color:#eedbca}
+:root[data-theme=dark] body{background:#201f24;color:#eedbca}
+:root[data-theme=dark] :is(.account-settings,.settings-content,.binding-modal,.account-dialog,.dropdown,.detail-score-modal,.detail-practice-dialog,.detail-song-info,.detail-version-card,.detail-extra-panel,.results-sidebar,.results-panel,.score-card,.scores-section,.community-section,.discussion-panel,.post-card,.search-suggestions,.search-panel,.results-search-panel,.site-footer){background:#2b282c!important;color:#eedbca!important;border-color:#655249!important;box-shadow:none}
+:root[data-theme=dark] :is(.settings-sidebar,.settings-topbar,.site-header,.detail-site-header,.binding-panel,.settings-library-item,.profile-avatar-camera,.learning-note,.learning-card,.search-form,.results-search-form,.profile,.detail-nav,.filter-group,.detail-info-panel){background:#343035!important;color:#eedbca!important;border-color:#655249!important}
+:root[data-theme=dark] :is(.account-settings,.binding-modal,.account-dialog,.dropdown,.song-detail-mode,.score-search-page,.scores-section,.community-section,.search-panel,.search-suggestions,.site-header,.learning-note,.learning-card,.site-footer) :is(h1,h2,h3,h4,p,small,strong,label,legend,span,button,a){color:inherit}
+:root[data-theme=dark] :is(.account-settings,.binding-modal,.account-dialog,.score-search-page,.song-detail-mode){color:#eedbca;--settings-border:#655249;--settings-muted:#c5ab99;--search-ink:#eedbca}
+:root[data-theme=dark] :is(.settings-description,.profile-name-row p,.binding-row-main>small,.binding-muted,.preference-intro,.preference-storage,.preference-label small,.settings-nav-group,.settings-identity span,.settings-sidebar-footer,.score-artist,.search-help){color:#c5ab99!important}
+:root[data-theme=dark] :is(input:not([type=radio]):not([type=checkbox]),select,textarea){background:#242227!important;color:#f4dfce!important;border-color:#9b7a65!important}
+:root[data-theme=dark] :is(.profile-account-info,.binding-row,.profile-preferences,.preference-row,.preference-appearance){border-color:#655249}
+:root[data-theme=dark] :is(.preference-theme-options>label.selected,.settings-navigation>button[aria-current=page]){background:#46362f;border-color:#d39c7b;color:#ffdfc0}
+:root[data-theme=dark] .preference-theme-options>label{border-color:#7f6353}
+:root[data-theme=dark] :is(.hero-art,.results-hero-art,.detail-hero-art){filter:brightness(.55) saturate(.75)}
+:root[data-theme=dark] :is(.hero-heading h1,.hero-promises,.results-title-row h1){color:#ffe1c6;text-shadow:0 1px 4px #201f24}
+:root[data-theme=dark] :is(.hero-heading em,.brand strong){color:#ffae8d}
+:root[data-theme=dark] .settings-profile-art{opacity:.6}
+:root[data-theme=dark] .binding-verified{color:#b0c99c!important}
+:root[data-theme=dark] .profile-field-feedback.is-error{color:#ffac9c!important}
+:root[data-theme=dark] .profile-field-feedback{color:#b0c99c}
+:root[data-theme=dark] :is(.detail-sheet-strip,.detail-score-modal>img){background:#fff9ee}
+:root[data-text-size=large] :is(.settings-content,.binding-modal,.account-dialog,.results-panel,.results-sidebar,.scores-section,.community-section) :is(p,small,label,legend,button,select,input,li){font-size: max(1em, 16px)}
+:root[data-text-size=large] :is(.score-title h3,.score-artist,.binding-row-main>strong,.binding-row-main>span,.settings-navigation>button,.preference-theme-options>label){font-size:18px!important}
+:root[data-text-size=large] .score-title{height:auto;min-height:32px}
+:root[data-reduced-motion=true]{scroll-behavior:auto!important}
+:root[data-reduced-motion=true] *, :root[data-reduced-motion=true] *::before, :root[data-reduced-motion=true] *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+:root[data-theme=dark] .settings-scroll{scrollbar-color:#9b7a65 #343035}
+:root[data-theme=dark] ::-webkit-scrollbar-track{background:#343035}
+:root[data-theme=dark] ::-webkit-scrollbar-thumb{background:#9b7a65;border-color:#343035}
+:root[data-theme=dark] :is(.feature-card,.hot-search button,.suggestion-chips button,.history-chip,.score-filters button,.community-tabs button,.outline-button,.instrument-badge,.score-tag,.post-meta .level,.results-type-tabs button,.filter-options button){background:#40383b!important;color:#f3d3b7!important;border-color:#806353!important;box-shadow:none!important;text-shadow:none!important}
+:root[data-theme=dark] .feature-card :is(h2,p){color:#f3d3b7!important}
+:root[data-theme=dark] .hot-search b{color:#d7ad8b}
+:root[data-theme=dark] :is(.coral-button,.search-form button,.score-filters button.selected,.community-tabs button.active){background:#a85f48!important;color:#fff5e8!important;border-color:#cb8d6e!important;box-shadow:none!important;text-shadow:none!important}
+:root[data-theme=dark] .settings-close{background:#40383b!important;color:#eedbca!important}

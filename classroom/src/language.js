@@ -31,6 +31,20 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  "让界面更适合你的阅读和练习习惯。":["Make the interface comfortable for reading and practice.", "讓介面更適合你的閱讀和練習習慣。"],
+  "外观模式":["Appearance", "外觀模式"],
+  "日间模式":["Light", "日間模式"],
+  "夜间模式":["Dark", "夜間模式"],
+  "跟随系统":["System", "跟隨系統"],
+  "阅读字号":["Reading text size", "閱讀字級"],
+  "调整设置和乐谱列表的文字大小。":["Adjust text in settings and score lists.", "調整設定和樂譜列表的文字大小。"],
+  "标准":["Standard", "標準"],
+  "大字号":["Large", "大字級"],
+  "减少动画":["Reduce motion", "減少動畫"],
+  "减少界面过渡与滚动动画。":["Reduce transitions and scrolling animations.", "減少介面過渡與捲動動畫。"],
+  "偏好自动保存在当前浏览器，适用于此设备上的所有账号。":["Preferences are saved in this browser for all accounts on this device.", "偏好自動儲存在目前瀏覽器，適用於此裝置上的所有帳號。"],
+  "偏好已应用，但当前浏览器无法保存，请检查浏览器存储权限。":["Preferences applied but could not be saved. Check browser storage permissions.", "偏好已套用，但目前瀏覽器無法儲存，請檢查瀏覽器儲存權限。"],
+
   '已自动保存。':['Saved automatically.','已自動儲存。'],
   '头像已保存。':['Avatar saved.','頭像已儲存。'],
   '头像保存失败，请重新选择图片。':['Could not save your avatar. Choose the image again.','頭像儲存失敗，請重新選擇圖片。'],

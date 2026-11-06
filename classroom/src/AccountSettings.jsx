@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BookOpen, Camera, Check, ClockCounterClockwise, Globe, GoogleLogo, Heart, SignIn, UserCircle, X } from '@phosphor-icons/react';
-import { languages, setLanguage, tr, useLanguage } from './language.js';
+import { BookOpen, Camera, Check, ClockCounterClockwise, GoogleLogo, Heart, SignIn, UserCircle, X } from '@phosphor-icons/react';
+import { tr, useLanguage } from './language.js';
 import { SettingsLibrary } from './SettingsLibrary.jsx';
 import { useCloudState } from './useCloudState.js';
 import { useScoreHistory } from './score-history.js';
@@ -9,6 +9,7 @@ import { AccountBindings } from './AccountBindings.jsx';
 import { prepareAvatar } from './profile-editor.js';
 import { LoginHistory } from './LoginHistory.jsx';
 import './account-settings.css';
+import { ProfilePreferences } from './ProfilePreferences.jsx';
 
 const sections = [
   { id: 'profile', title: '账号资料', icon: UserCircle, group: '用户设定' },
@@ -16,7 +17,6 @@ const sections = [
   { id: 'favorites', title: '我的收藏', icon: Heart, group: '我的音乐' },
   { id: 'scores', title: '我的乐谱', icon: BookOpen, group: '我的音乐' },
   { id: 'recent', title: '最近浏览', icon: ClockCounterClockwise, group: '我的音乐' },
-  { id: 'language', title: '语言', icon: Globe, group: '偏好设定' },
 ];
 const providerNames = { 'google.com': 'Google', 'github.com': 'GitHub', 'apple.com': 'Apple', 'phone': '手机号码', 'password': '邮箱' };
 
@@ -150,12 +150,10 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
                 <div className="profile-provider-line">{providers.includes('google.com') ? <GoogleLogo size={28} weight="bold" aria-hidden="true"/> : <SignIn size={24} aria-hidden="true"/>}<strong>{providers.filter(id => !['phone', 'password'].includes(id)).map(id => providerNames[id] || id).join(' / ') || tr(providers.includes('password') ? '邮箱密码登录' : providers.includes('phone') ? '手机号码' : '第三方账号')}{' '}{tr('已连接')}</strong><span className="binding-verified"><Check size={14}/>{tr('已登录')}</span></div>
                 <AccountBindings user={user} service={bindings} profileSaving={saving || readingPhoto} onBusyChange={setBindingBusy}/>
               </section>
+              <ProfilePreferences/>
             </div>}
             {section === 'security' && <LoginHistory uid={user.uid}/>}
-            {section === 'language' && <>
-              <fieldset className="settings-language-options"><legend>{tr('界面语言')}</legend>{languages.map(item => <label key={item.code} className={language === item.code ? 'selected' : ''}><span><strong>{item.label}</strong><small>{item.code === 'zh-CN' ? 'Simplified Chinese' : item.code === 'zh-TW' ? 'Traditional Chinese' : 'English'}</small></span><input type="radio" aria-label={item.label} name="settings-language" value={item.code} checked={language === item.code} onChange={() => setLanguage(item.code)}/></label>)}</fieldset>
-              <p className="settings-saved" role="status"><Check size={17}/>{tr('语言选择会自动保存在当前浏览器。')}</p>
-            </>}
+
           </div>
         </div>
       </div>

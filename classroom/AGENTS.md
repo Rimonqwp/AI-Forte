@@ -189,3 +189,5 @@ Keep the display-name field and its inline editing/automatic-save feedback besid
 Explain before password setup, inside the password dialog and after success that the verified linked email plus the new password can sign into the same account; Google sign-in remains available.
 
 The profile avatar itself is the accessible change-avatar button, with a small camera badge. Remove the separate avatar button and upload-help block beside the name; retain upload constraints in the avatar tooltip and keep reading/save/error feedback available. This supersedes the previous separate avatar-controls layout.
+
+Place language and display preferences in Account Details below account information; remove the separate Language sidebar entry. Provide working light/dark/system appearance, reading text size and reduced-motion controls, saved per browser with immediate feedback. Respect operating-system appearance changes when System is selected, retain readable notation and original artwork, and keep preference controls responsive.
