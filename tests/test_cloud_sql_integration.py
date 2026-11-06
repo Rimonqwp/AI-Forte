@@ -11,20 +11,17 @@ pytestmark = pytest.mark.skipif(os.environ.get('FYP_SQL_INTEGRATION') != '1', re
 
 
 @pytest.fixture
-def database():
-    from app.sql_database import make_engine
-    engine = make_engine()
-    yield engine
-    engine.dispose()
-    connector = getattr(engine, 'cloud_sql_connector', None)
-    if connector:
-        connector.close()
+def database(relational_database):
+    from app.relational_schema import schema_versions
+    with relational_database.begin() as db:
+        db.execute(schema_versions.insert().values(version=1, applied_at='test'))
+    return relational_database
 
 
 def test_job_revision_concurrency_and_cancellation(database, tmp_path):
     from app.postgres_song_store import PostgresSongStore
     from app.song_store import Conflict
-    from app.sql_database import jobs, revisions
+    from app.relational_schema import transcription_jobs as jobs, transcription_revisions as revisions
     store = PostgresSongStore(tmp_path, engine=database)
     job_id = 'sql-test-' + uuid4().hex
     try:
@@ -56,7 +53,8 @@ def test_job_revision_concurrency_and_cancellation(database, tmp_path):
 
 def test_account_isolation_conflicts_and_profile(database):
     from sql_service.main import app, identity
-    from app.sql_database import states, profiles
+    from app.relational_schema import state_versions as states, account_profiles as profiles
+    from app.relational_storage import get_profile
     first, other = 'sql-test-' + uuid4().hex, 'sql-test-' + uuid4().hex
     user = {'uid': first, 'email': 'verified@example.com', 'firebase': {
         'sign_in_provider': 'google.com', 'identities': {'email': ['verified@example.com'], 'google.com': ['123']}}}
@@ -70,13 +68,12 @@ def test_account_isolation_conflicts_and_profile(database):
         profile = {'displayName': '同学', 'photoURL': ''}
         assert client.put('/api/account/profile', json=profile).status_code == 200
         with database.connect() as db:
-            import json
-            saved = json.loads(db.execute(select(profiles.c.body).where(profiles.c.uid == first)).scalar_one())
+            saved = get_profile(db, first)
         assert saved['email'] == 'verified@example.com'
         assert saved['providers'] == ['google.com']
         assert client.put('/api/account/profile', json={**profile, 'displayName': '新名字'}).status_code == 200
         with database.connect() as db:
-            changed = json.loads(db.execute(select(profiles.c.body).where(profiles.c.uid == first)).scalar_one())
+            changed = get_profile(db, first)
         assert changed['createdAt'] == saved['createdAt']
         user = {'uid': other, 'firebase': {'sign_in_provider': 'anonymous'}}
         assert client.get('/api/account/state/favorites').json() == {'version': 0}
@@ -94,10 +91,10 @@ def test_legacy_metadata_persists_in_sql_without_local_json(database, tmp_path):
     records = RuntimeRecords(tmp_path, engine=database)
     job_id = 'sql-test-' + uuid4().hex
     try:
-        records.write(job_id, 'result', {'notes': [60]})
-        assert RuntimeRecords(tmp_path, engine=database).read(job_id, 'result') == {'notes': [60]}
-        records.write(job_id, 'result', {'notes': [62]})
-        assert records.read(job_id, 'result') == {'notes': [62]}
+        records.write(job_id, 'result', {'notes': [{'pitch': 60}]})
+        assert RuntimeRecords(tmp_path, engine=database).read(job_id, 'result') == {'notes': [{'pitch': 60}]}
+        records.write(job_id, 'result', {'notes': [{'pitch': 62}]})
+        assert records.read(job_id, 'result') == {'notes': [{'pitch': 62}]}
         assert not (tmp_path / job_id / 'result.json').exists()
         records.delete(job_id, 'result')
         assert records.read(job_id, 'result') is None
@@ -112,13 +109,13 @@ def test_migration_is_idempotent_and_never_overwrites_a_live_record(database, tm
     records = RuntimeRecords(tmp_path, engine=database)
     job_id = 'sql-test-' + uuid4().hex
     snapshot = tmp_path / 'snapshot.json'
-    snapshot.write_text(json.dumps({'runtime_records': [{'job_id': job_id, 'kind': 'result', 'body': '{"notes":[60]}'}]}))
+    snapshot.write_text(json.dumps({'runtime_records': [{'job_id': job_id, 'kind': 'result', 'body': '{"notes":[{"pitch":60}]}'}]}))
     try:
-        transfer(snapshot, apply=True, tables=['runtime_records'])
-        transfer(snapshot, apply=True, tables=['runtime_records'])
-        records.write(job_id, 'result', {'notes': [62]})
+        transfer(snapshot, apply=True, tables=['runtime_records'], engine=database)
+        transfer(snapshot, apply=True, tables=['runtime_records'], engine=database)
+        records.write(job_id, 'result', {'notes': [{'pitch': 62}]})
         with pytest.raises(RuntimeError, match='Destination mismatch'):
-            transfer(snapshot, apply=True, tables=['runtime_records'])
-        assert records.read(job_id, 'result') == {'notes': [62]}
+            transfer(snapshot, apply=True, tables=['runtime_records'], engine=database)
+        assert records.read(job_id, 'result') == {'notes': [{'pitch': 62}]}
     finally:
         records.delete(job_id, 'result')

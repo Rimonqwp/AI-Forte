@@ -10,9 +10,10 @@ import shutil
 import tempfile
 from pathlib import Path
 
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.dialects.postgresql import insert
 from app.sql_database import jobs, revisions, states, profiles, runtime_records, metadata, make_engine
+from app.relational_storage import relational_enabled, import_legacy_row, get_imported_row
 
 
 def export(folder, runtime):
@@ -61,18 +62,32 @@ def export(folder, runtime):
     return snapshot
 
 
-def transfer(snapshot, apply=False, baseline=None, tables=None):
+def transfer(snapshot, apply=False, baseline=None, tables=None, engine=None):
     data = json.loads(snapshot.read_text())
     previous = json.loads(baseline.read_text()) if baseline else {}
-    engine = make_engine()
+    owns_engine = engine is None
+    engine = make_engine() if owns_engine else engine
     try:
         if apply:
             metadata.create_all(engine)
         with engine.begin() as db:
+            normalized = relational_enabled(db)
             for name, table in (('jobs', jobs), ('revisions', revisions), ('states', states), ('profiles', profiles), ('runtime_records', runtime_records)):
                 if tables and name not in tables:
                     continue
                 for row in data.get(name, []):
+                    if normalized:
+                        # Old snapshot files remain importable, but never write to
+                        # the frozen JSON archives after relational cutover.
+                        if name == 'profiles':
+                            db.execute(text('SELECT pg_advisory_xact_lock(hashtextextended(:uid, 0))'), {'uid': row['uid']})
+                        current = get_imported_row(db, name, row)
+                        if current is None and apply:
+                            import_legacy_row(db, name, row)
+                            current = get_imported_row(db, name, row)
+                        if current != json.loads(row['body']):
+                            raise RuntimeError(f'Destination mismatch: {name}; import rolled back')
+                        continue
                     if apply:
                         db.execute(insert(table).values(**row).on_conflict_do_nothing())
                     key = [table.c[col.name] == row[col.name] for col in table.primary_key]
@@ -90,10 +105,11 @@ def transfer(snapshot, apply=False, baseline=None, tables=None):
                         raise RuntimeError(f'Destination mismatch: {name} {tuple(row[c.name] for c in table.primary_key)}; import rolled back')
                 print(f'Verified {name}: {len(data.get(name, []))}')
     finally:
-        engine.dispose()
-        connector = getattr(engine, 'cloud_sql_connector', None)
-        if connector:
-            connector.close()
+        if owns_engine:
+            engine.dispose()
+            connector = getattr(engine, 'cloud_sql_connector', None)
+            if connector:
+                connector.close()
 
 
 def main():

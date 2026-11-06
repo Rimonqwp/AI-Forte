@@ -19,7 +19,8 @@ def main():
         raise SystemExit('Set GCLOUD to the authenticated Google Cloud CLI executable.')
     with tempfile.TemporaryDirectory(prefix='puyadao-data-deploy-') as directory:
         stage = Path(directory)
-        for name in ('app/__init__.py', 'app/sql_database.py', 'sql_service/main.py', 'requirements-sql.txt'):
+        for name in ('app/__init__.py', 'app/sql_database.py', 'app/relational_schema.py',
+                     'app/relational_storage.py', 'sql_service/main.py', 'requirements-sql.txt'):
             target = stage / name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(root / name, target)

@@ -6,6 +6,7 @@ from sql_service.main import app, validate_state
 
 @pytest.mark.parametrize('key,value', [
     ('favorites', ['star']), ('progress-star-v1', {'elapsed': 1, 'scrollTop': 0, 'bpm': 80}),
+    ('checkins', ['2026-11-06']), ('practice-favorites', ['star:piano-easy']),
 ])
 def test_valid_values(key, value):
     validate_state(key, value)
@@ -17,6 +18,9 @@ def test_valid_values(key, value):
     ('progress-star-v1', {'elapsed': 0, 'scrollTop': 0, 'bpm': 181}),
     ('progress-star-v1', {'elapsed': float('nan'), 'scrollTop': 0, 'bpm': 80}),
     ('progress-star-v1', {'elapsed': 0, 'scrollTop': 0, 'bpm': 80, 'uid': 'other'}),
+    ('favorites', [1]), ('favorites', [{'id': 'star'}]), ('favorites', ['star', 'star']),
+    ('favorites', ['']), ('checkins', ['2026-02-30']), ('checkins', ['20261106']),
+    ('practice-favorites', ['star']), ('practice-favorites', ['star:']),
 ])
 def test_invalid_values(key, value):
     with pytest.raises(HTTPException):
