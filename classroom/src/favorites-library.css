@@ -142,3 +142,11 @@
 :root[data-reduced-motion=true] .favorites-folder-content,:root[data-reduced-motion=true] .favorites-folder-content .favorite-score-card{animation:none!important}
 :root[data-theme=dark] :is(.favorite-playlist-image.is-empty,.favorites-cover-preview,.favorites-cover-actions>button){background:#453832;border-color:#906c50;color:#d4b495}
 :root[data-theme=dark] .favorite-playlist.is-active{border-color:#c08c67;box-shadow:0 0 0 2px #a96f4c55}
+
+/* The collection heading and its actions share one row. */
+.favorites-section-heading.favorites-topline{justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;min-height:42px}
+.settings-content .favorites-topline h3{flex:1;min-width:0;margin:0}
+.favorites-topline .favorites-heading-label{white-space:nowrap}
+.favorites-topline>.favorites-top-actions{margin-left:auto}
+.favorites-library.is-managing{padding-bottom:108px}
+@media(max-width:600px){.favorites-section-heading.favorites-topline{flex-wrap:wrap;gap:9px;min-height:38px;margin-bottom:16px}.settings-content .favorites-topline h3{flex:1 1 100px;flex-wrap:wrap;gap:4px 5px}.favorites-topline h3>small{margin-left:0}.favorites-topline>.favorites-top-actions{gap:6px}.favorites-topline .favorites-top-actions>.favorites-section-more{font-size:10px;padding-inline:2px}.favorites-library.is-managing{padding-bottom:190px}}

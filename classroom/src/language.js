@@ -31,6 +31,8 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  '批量操作':['Batch actions','批次操作'], '目标收藏夹':['Destination folder','目標收藏夾'],
+  '添加':['Add','加入'], '移出':['Remove','移出'], '退出批量管理':['Exit batch management','退出批次管理'],
   '创建收藏夹':['Create folder','建立收藏夾'], '编辑收藏夹':['Edit folder','編輯收藏夾'], '打开收藏夹':['Open folder','開啟收藏夾'],
   '收藏夹选项':['Folder options','收藏夾選項'], '查看收藏夹':['View folder','查看收藏夾'], '收起收藏夹':['Show fewer folders','收起收藏夾'],
   '收藏夹名称':['Folder name','收藏夾名稱'], '输入收藏夹名称':['Enter a folder name','輸入收藏夾名稱'], '请输入收藏夹名称。':['Enter a folder name.','請輸入收藏夾名稱。'],

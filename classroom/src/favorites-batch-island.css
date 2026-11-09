@@ -1,0 +1,32 @@
+.favorites-batch-island{position:fixed;inset:auto;left:50%;bottom:calc(var(--island-bottom,20px) + env(safe-area-inset-bottom,0px));transform:translateX(-50%);margin:0;display:flex;align-items:center;gap:18px;width:max-content;max-width:calc(100vw - 32px);padding:12px 14px 12px 22px;border:1px solid #96705a70;border-radius:999px;background:#443127f5;color:#fff4e8;box-shadow:0 12px 42px #3b241747,0 3px 10px #3b241733,inset 0 1px 0 #ffffff16;font:500 13px/1.5 'PingFang SC','Microsoft YaHei',sans-serif;overflow:visible;z-index:1000;box-sizing:border-box;backdrop-filter:blur(18px)}
+.favorites-batch-island:popover-open{display:flex;animation:favorites-island-enter .3s cubic-bezier(.2,.85,.25,1.15) both}
+.favorites-batch-island.is-closing{animation:favorites-island-leave .16s ease-in both;pointer-events:none}
+.favorites-batch-island button{font-family:inherit;color:#fff4e8;white-space:nowrap;cursor:pointer}
+.favorites-batch-island :is(button,input):focus-visible{outline:2px solid #ffbc9a;outline-offset:4px}
+.favorites-island-select-all{display:flex;align-items:center;gap:8px;flex-shrink:0;cursor:pointer;color:#f7e4d3}
+.favorites-island-select-all>input{width:17px;height:17px;margin:0;accent-color:#ed967d;cursor:pointer}
+.favorites-batch-island .favorites-island-count{display:flex;align-items:center;gap:7px;color:#d9bfa9;white-space:nowrap;min-width:83px}
+.favorites-batch-island .favorites-island-count>strong{color:#fff6ed;font-size:21px;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums}
+.favorites-island-actions{display:flex;align-items:center;gap:8px;border-left:1px solid #ffffff26;padding-left:18px}
+.favorites-island-actions>button{display:flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:7px 13px;border:1px solid #ffffff29;border-radius:999px;background:#ffffff0a;font-size:12px;line-height:1.5}
+.favorites-island-actions>.favorites-island-add{background:#ee957b;border-color:#f3b298;color:#432d24;font-weight:650;box-shadow:inset 0 1px 0 #ffd6bc80}
+.favorites-island-actions>.favorites-island-unsave{color:#f6c4b7}
+.favorites-island-actions>button:disabled{opacity:.38;cursor:default}
+.favorites-batch-island .favorites-island-close{display:grid;place-items:center;width:32px;height:32px;padding:0;flex-shrink:0;border:0;border-radius:50%;background:#ffffff0b;color:#dcc5b2}
+.favorites-island-close:hover{background:#ffffff18}
+.favorites-batch-island .custom-select{max-width:185px}
+.favorites-batch-island .custom-select .custom-select-trigger{min-height:36px;background:#ffffff0b;border-color:#ffffff2e;border-radius:999px;color:#fff4e8;font-size:12px;max-width:185px}
+.favorites-batch-island .custom-select .custom-select-trigger>svg{color:#d9b496}
+.custom-select-menu.favorites-island-destination{background:#49372d;border-color:#8f6c52;color:#fff1e3;box-shadow:0 10px 35px #32201855}
+.custom-select-menu.favorites-island-destination .custom-select-option{color:#fff1e3}
+.custom-select-menu.favorites-island-destination .custom-select-option:is([aria-selected=true],.is-active,:hover){background:#6b4c3b;color:#ffe5ce}
+.custom-select-menu.favorites-island-destination .custom-select-option:disabled{opacity:.5}
+@keyframes favorites-island-enter{from{opacity:0;transform:translateX(-50%) translateY(22px) scale(.92)}to{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@keyframes favorites-island-leave{from{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}to{opacity:0;transform:translateX(-50%) translateY(14px) scale(.95)}}
+@media(max-width:760px){.favorites-batch-island{gap:12px;padding-left:17px}.favorites-island-actions{padding-left:12px;gap:6px}.favorites-island-actions>button{padding-inline:10px}}
+@media(max-width:600px){.favorites-batch-island,.favorites-batch-island:popover-open{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:9px 12px;width:calc(100vw - 24px);max-width:420px;padding:12px 13px;border-radius:29px;font-size:12px}.favorites-island-count{justify-content:flex-start;min-width:0}.favorites-island-count>strong{font-size:20px}.favorites-island-actions{grid-column:1/-1;grid-row:2;flex-wrap:wrap;border-left:0;border-top:1px solid #ffffff20;padding:10px 0 0;gap:6px}.favorites-island-actions>button{min-height:34px;padding:6px 10px;font-size:11px;gap:4px}.favorites-island-actions>button>svg{width:15px;height:15px}.favorites-batch-island .custom-select{flex:1 1 104px;max-width:none}.favorites-batch-island .custom-select .custom-select-trigger{min-height:34px;font-size:11px;max-width:none;padding:6px 9px;gap:5px}.favorites-batch-island .favorites-island-close{grid-column:3;grid-row:1;width:27px;height:27px}}
+@media(prefers-reduced-motion:reduce){.favorites-batch-island:popover-open,.favorites-batch-island.is-closing{animation:none}}
+:root[data-reduced-motion=true] .favorites-batch-island{animation:none}
+:root[data-theme=dark] .favorites-batch-island{background:#2d2420fa;border-color:#9e765d;box-shadow:0 12px 42px #0007}
+:root[data-theme=dark] .favorites-batch-island .favorites-island-actions>.favorites-island-add{color:#432d24;background:#ee957b;border-color:#f3b298}
+:root[data-theme=dark] .favorites-batch-island .favorites-island-unsave{color:#f6c4b7}
