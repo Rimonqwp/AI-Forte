@@ -73,13 +73,14 @@
 .favorites-sidebar-heading{display:flex;align-items:center;gap:9px;padding:3px 7px 10px;color:#713e2d;font-size:15px}
 .favorites-sidebar-heading>svg{color:#ee8060;flex-shrink:0}
 .favorites-sidebar-heading>button{display:grid;place-items:center;width:23px;height:23px;padding:0;margin-left:auto;border:1px solid #e8c7b1;border-radius:50%;background:#fffaf5;color:#965c47;flex-shrink:0}
-.favorites-folder-link{display:flex;align-items:center;gap:9px;width:100%;padding:5px 13px;margin-bottom:0;min-height:30px;border:1px solid transparent;border-radius:20px;text-align:left;color:#745346;font-size:14px;line-height:1.35}
+.favorites-folder-link{position:relative;display:flex;align-items:center;gap:9px;width:100%;padding:5px 13px;margin-bottom:0;min-height:30px;border:1px solid transparent;border-radius:20px;text-align:left;color:#745346;font-size:14px;line-height:1.35}
 .favorites-folder-link>svg{color:#ed9b36;flex-shrink:0}
 .favorites-folder-link>strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;font-weight:550}
 .favorites-folder-link>span{margin-left:auto;font-size:12px;color:#a08272}
-.favorites-folder-link[aria-current=page]{background:transparent;border-color:#d3a589;color:#763c2b}
+.favorites-folder-link[aria-current=page]{background:transparent;color:#763c2b}
+.favorites-folder-link[aria-current=page]::before{content:"";position:absolute;left:0;top:50%;width:5px;height:24px;border-radius:2px;background:#fa7255;transform:translateY(-50%);pointer-events:none}
 .favorites-folder-link[aria-current=page]>svg{color:#fa7255}
-.favorites-folder-link:hover{border-color:#e8c5ad}
+.favorites-folder-link:hover{color:#93442f}
 .favorites-folders-more{display:flex;align-items:center;justify-content:center;gap:5px;width:100%;padding:8px;font-size:12px;color:#a27a64}
 .favorites-custom-link{padding-left:22px;font-size:12px}
 .music-footprint{position:relative;flex-shrink:0;min-height:166px;margin:22px -10px -12px;padding:15px 9px 54px;border:1px solid #fffaf4;border-radius:22px;background:#fff0e5 url('/assets/favorites/footprint-garden.png') center bottom/cover no-repeat;box-shadow:0 0 0 1px #f1d9c9;color:#783e2d}
@@ -114,7 +115,8 @@
 :root[data-theme=dark] :is(.favorites-tabs>button,.favorite-playlist-open,.favorite-playlist,.favorite-score-card,.favorites-empty,.favorite-playlist-popover,.favorites-editor,.favorites-batch,.favorites-score-filters>button,.favorites-more-scores,.favorites-manage){background:#40343a;border-color:#795a49;box-shadow:none}
 :root[data-theme=dark] .favorite-playlist-open:before,:root[data-theme=dark] .favorite-playlist:before{background:#715341;border-color:#795a49}
 :root[data-theme=dark] :is(.favorites-tabs>button[aria-pressed=true],.favorites-score-filters>button[aria-pressed=true],.favorites-create,.favorite-score-actions>button:last-child){background:#a95943;color:#fff3e3;border-color:#c48369;box-shadow:none}
-:root[data-theme=dark] .favorites-folder-link[aria-current=page]{background:transparent;border-color:#a07860;color:#ffe3cc}
+:root[data-theme=dark] .favorites-folder-link:hover{color:#ffe3cc}
+:root[data-theme=dark] .favorites-folder-link[aria-current=page]{background:transparent;color:#ffe3cc}
 :root[data-theme=dark] .favorites-sidebar-heading{color:#efc9b0}
 :root[data-theme=dark] .music-footprint{background-color:#403036;background-blend-mode:multiply;border-color:#85604d;box-shadow:none;color:#ffe0c6}
 :root[data-theme=dark] .music-footprint dd{color:#ffe0c6}
