@@ -31,6 +31,13 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  '欢迎回来！':['Welcome back!', '歡迎回來！'],
+  '继续你的音乐学习之旅':['Continue your music journey', '繼續你的音樂學習之旅'],
+  '继续使用 Google':['Continue with Google', '繼續使用 Google'],
+  '邮箱登录':['Email sign-in', '信箱登入'],
+  '开始登录':['Sign in', '開始登入'],
+  '登录后可继续练习、查看乐谱与社区内容':['Sign in to keep practicing, explore scores and join the community', '登入後可繼續練習、查看樂譜與社區內容'],
+  '夕阳照进音乐教室，女孩戴着耳机弹尤克里里，小猫在柔软的地毯上安睡':['Sunset fills a music room where a girl plays ukulele beside a sleeping cat', '夕陽照進音樂教室，女孩戴著耳機彈烏克麗麗，小貓在柔軟的地毯上安睡'],
   '音乐学习者':['Music learner', '音樂學習者'],
   '等级展示示例':['Example level', '等級展示範例'],
   '登录谱芽岛，':['Sign in, ', '登入譜芽島，'],
