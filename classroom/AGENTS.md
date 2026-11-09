@@ -46,6 +46,8 @@ Keep the vertical document scrollbar visible and slim, using warm paper and mute
 
 ## Search suggestions
 
+When the search input is empty or whitespace-only, show only popular searches and search history in the suggestions panel. Do not show recommended scores. Show matching scores only after a non-empty query is entered.
+
 Clicking or focusing the hero search field opens a panel directly below it. Keep its sections ordered as popular search terms, the user's search history, then results matched to the current input. Match song titles, artist credits and instruments as the user types. Use real browser-local search history, retain it across reloads, and provide individual deletion and clearing. Suggestion selections must fill the field and apply the search. Preserve the existing collapsed hero layout and allow the panel to overlay the content below without clipping on desktop or phone.
 
 Search suggestion rows show the song title and artist, without instrument labels such as piano or guitar on the right.

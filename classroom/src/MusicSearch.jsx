@@ -36,7 +36,7 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
   const composing = useRef(false);
   const term = query.trim();
   const isLink = /^https?:\/\//i.test(term);
-  const results = isLink ? [] : songs.filter(song => matchesSong(song, term));
+  const results = !term || isLink ? [] : songs.filter(song => matchesSong(song, term));
 
   useEffect(() => {
     try { localStorage.setItem(historyKey, JSON.stringify(history)); } catch { /* Search still works when browser storage is unavailable. */ }
@@ -132,7 +132,7 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
           onCompositionStart={() => { composing.current = true; }} onCompositionEnd={() => { composing.current = false; }}
           placeholder={tr("搜索歌曲、歌手、谱子，或粘贴音乐 URL...")} autoComplete="off" spellCheck={false}
           aria-label={tr("搜索歌曲或乐谱")} role="combobox" aria-autocomplete="list" aria-expanded={expanded}
-          aria-controls={expanded ? 'music-search-results' : undefined} aria-activedescendant={expanded && activeIndex >= 0 ? `music-search-option-${activeIndex}` : undefined}/>
+          aria-controls={expanded && term ? 'music-search-results' : undefined} aria-activedescendant={expanded && activeIndex >= 0 ? `music-search-option-${activeIndex}` : undefined}/>
         {query && <button type="button" className="search-clear" aria-label={tr("清空搜索内容")} onClick={() => {
           onQueryChange('');
           input.current?.focus();
@@ -154,8 +154,8 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
             input.current?.focus();
           }}><X size={12}/></button></span>)}</div> : <p className="search-history-empty">{tr("还没有搜索记录，搜一首喜欢的歌吧")}</p>}
         </section>
-        <section className="suggestion-section matching-section" aria-labelledby="matching-search-heading">
-          <div className="suggestion-heading"><h3 id="matching-search-heading"><MusicNotes size={17}/>{tr(term ? '匹配乐谱' : '推荐乐谱')}</h3><span className="match-count" role="status">{isLink ? tr('音乐链接') : `${results.length} ${tr('首乐谱')}`}</span></div>
+        {term && <section className="suggestion-section matching-section" aria-labelledby="matching-search-heading">
+          <div className="suggestion-heading"><h3 id="matching-search-heading"><MusicNotes size={17}/>{tr('匹配乐谱')}</h3><span className="match-count" role="status">{isLink ? tr('音乐链接') : `${results.length} ${tr('首乐谱')}`}</span></div>
           <div id="music-search-results" role="listbox" aria-labelledby="matching-search-heading">
             {results.map((song, index) => <button key={song.id} id={`music-search-option-${index}`} type="button" role="option" aria-selected={activeIndex === index}
               className={`search-result${activeIndex === index ? ' is-active' : ''}`} onClick={() => submit(song.title)}>
@@ -165,7 +165,7 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
             </button>)}
           </div>
           {isLink ? <button className="search-link-action" onClick={() => submit(term)}><Link size={19}/><span>{tr("已识别音乐链接")}<small>{tr("继续前往旋律转谱工作台")}</small></span><CaretRight size={16}/></button> : !results.length && <p className="search-no-results" role="status">{tr("没有找到相关乐谱，试试其他歌曲名、歌手或乐器")}</p>}
-        </section>
+        </section>}
       </div>}
     </div>
     <p className="search-help">{tr("支持歌曲名、歌手、乐器或粘贴音乐链接（如 YouTube / Bilibili 等）")}</p>
