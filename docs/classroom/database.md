@@ -1,5 +1,65 @@
 # 谱芽岛数据库与账号 API
 
+## 曲库与社区接入（2026-11-10）
+
+在原有账号／转谱表之外增加 7 张业务表，继续使用同一个 Cloud SQL PostgreSQL：
+
+| 表 | 内容 |
+| --- | --- |
+| `catalog_songs` | 歌曲、歌手、乐器、难度、调性、封面引用和规范化搜索文本 |
+| `catalog_arrangements` | 每首歌曲的编配版本、谱型、作者与谱面资源引用 |
+| `community_posts` | 作者 UID、歌曲外键、分类、标题、正文和时间 |
+| `community_comments` | 帖子外键、作者、回复正文及引用回复的外键 |
+| `community_post_likes` | UID 与帖子组成唯一键，每个账号至多点赞一次 |
+| `community_comment_likes` | UID 与回复组成唯一键 |
+| `community_bookmarks` | UID 与帖子组成唯一键的讨论收藏 |
+
+文本、索引和互动关系按列／行保存；图片与谱面仍通过资源引用读取。
+原有 13 首歌曲、每首 8 个编配作为明确标记的示例曲库导入，保留原来的练习谱面与音色示例属性。
+导入不会生成社区帖子、评论、点赞、评分或虚假的访问人数，也不会覆盖数据库中已经编辑过的曲库行。
+
+新增 API 统一放在 `/api/account/content`，复用 Hosting rewrite 和现有连接池：
+
+- `GET /catalog`：首页、详情和个人乐谱库共用的数据库元数据。
+- `GET /songs?q=&type=&sort=&limit=&offset=`：数据库执行歌曲／歌手／乐器搜索、谱型筛选和分页；规范化空格与全半角，转义搜索通配符。热门排序按实际关联讨论数量计算。
+- `GET /songs/{id}`：歌曲、所属编配和实际讨论数；不存在返回 404。
+- `GET /posts?song_id=&category=&q=&limit=&offset=`、`GET /posts/{id}`：分页讨论与单帖；互动数取数据库聚合。
+- `POST /posts`、`DELETE /posts/{id}`：发布／删除自己的帖子。
+- `GET /posts/{id}/comments`、`POST /posts/{id}/comments`、`DELETE /comments/{id}`：分页回复、引用回复和删除自己的回复。
+- `PUT /posts/{id}/like`、`PUT /comments/{id}/like`、`PUT /posts/{id}/bookmark`：显式 `{active:true/false}`，重试不会重复累计。
+
+公开内容可以直接读取；带令牌的读取显示当前账号的点赞、收藏和所有权状态，不返回作者 UID。
+写入要求真实 Firebase 账号，拒绝未登录和匿名身份；作者从令牌确定，客户端不能指定 UID。
+删除有所有权校验；引用回复必须属于同一帖子。删除帖子级联清理回复及互动，删除引用的回复保留后续回复并清除引用。
+长度、分类、分页上限由服务端校验，响应继续使用私有缓存头。
+
+前端首页与歌曲详情共用社区组件，提交成功后重新读取服务器记录；失败保留表单并显示错误，不声称已保存。
+搜索建议有防抖、请求取消与过期响应保护；空搜索恢复全部谱型和默认排序。
+数据库不可用时提供错误与重试，不静默切回前端示例数组。
+旧的未按 UID 区分的本机演示讨论缓存原样保留，不自动认领到当前账号或上传为公开帖子。
+现有收藏／编配收藏／打卡／课程完成／练习进度继续使用原来的账号状态 API。
+收藏夹、浏览历史、预览与练习时长、搜索历史等此前注明本机范围的功能仍保持原有存储范围；本次没有把它们描述为跨设备数据。
+
+迁移需要已有的迁移身份，运行身份只得到这 7 张表的业务读写权限：
+
+```sh
+python -m scripts.prepare_content_database \
+  --grant-role puyadao-data@puyadao-75dd0.iam --grant-role xiaorimon@gmail.com
+python -m scripts.deploy_sql_service
+```
+
+迁移是加表和幂等导入，不删除／重建原有账号与转谱表；凭证由私有环境变量提供。
+部署脚本和 Dockerfile 的源码清单包含新模块及曲库导入文件，不上传 `.env` 或运行数据。
+
+验证：`tests/test_content_api.py` 在 SQLite 与随机隔离的 PostgreSQL schema 上覆盖曲库导入幂等、真实 SQL 搜索、分页、分类、登录校验、所有权、引用约束、重复点赞与级联删除。
+通过 `FYP_SQL_INTEGRATION=1` 启用 PostgreSQL 检查；迁移身份需要 CREATE SCHEMA 权限，测试退出后清理测试 schema。
+前端原有 Node 回归及生产构建也需通过。以下旧章节保留此前账号存储迁移的历史说明。
+
+本次验证：SQLite／原账号接口 23 项、真实 PostgreSQL 3 项、前端 83 项回归通过；生产构建通过。
+Cloud Run 修订 `puyadao-data-00006-j96` 已承接 100% 流量，正式域名的健康、曲库、歌名搜索、空社区列表和未登录拒绝均已核对。
+浏览器预览验证了歌名／歌手搜索、完整曲库、8 个所属编配、讨论空状态及发帖表单，未使用当前真实账号发布测试帖子。
+前端源代码已接通并用于本地预览，本次没有发布 Firebase Hosting 前端。
+
 网站前端由 Firebase Hosting 提供，Firebase Authentication 负责身份，
 Cloud Run `puyadao-data` 提供 `/api/account/**`，Cloud SQL PostgreSQL 保存业务数据。
 项目 `puyadao-75dd0`，实例 `puyadao-postgresql`，数据库 `puyadao`，区域 `asia-east1`。

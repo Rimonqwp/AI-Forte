@@ -19,6 +19,7 @@ from app.sql_database import make_engine, metadata, profiles, states
 from app import relational_schema as relational
 from app.relational_storage import (relational_enabled, storage_version, read_states, values_for_rows, write_state_value,
                                     patch_state_value, put_profile, get_profile)
+from sql_service.content import create_router
 
 
 @asynccontextmanager
@@ -56,6 +57,9 @@ def identity(request: Request):
         return auth.verify_id_token(token, check_revoked=True)
     except (ValueError, firebase_admin.exceptions.FirebaseError):
         raise HTTPException(401, '登录身份已失效。') from None
+
+
+app.include_router(create_router(identity))
 
 
 def valid_key(key):

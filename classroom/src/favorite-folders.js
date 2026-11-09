@@ -7,11 +7,6 @@ export const contentTypes = [
   { id: 'work', name: '作品收藏', unit: '个' },
 ];
 const legacyExamples = { practice: '练习清单', sing: '轻松弹唱', sleep: '睡前听歌', piano: '钢琴入门' };
-const scoreFacts = {
-  star: ['钢琴', 1, '五线谱'], sunny: ['吉他', 2, '和弦谱'], confession: ['钢琴', 3, '五线谱'], night: ['尤克里里', 2, '和弦谱'],
-  castle: ['钢琴', 4, '五线谱'], rice: ['吉他', 3, '和弦谱'], fireworks: ['钢琴', 3, '五线谱'], windmill: ['吉他', 3, '和弦谱'],
-  nocturne: ['钢琴', 4, '五线谱'], secret: ['钢琴', 3, '五线谱'], north: ['吉他', 3, '和弦谱'], simple: ['尤克里里', 2, '简谱'], clock: ['钢琴', 4, '五线谱'],
-};
 export const safeImage = value => typeof value === 'string' && value.length <= 400000 && /^(?:data:image\/(?:jpeg|png|webp);base64,[a-z\d+/=]+$|https?:\/\/|\/(?!\/))/i.test(value) ? value : null;
 export const safeFavoriteLink = value => typeof value === 'string' && /^(?:https?:\/\/|\/(?!\/)|#)/i.test(value) ? value : null;
 
@@ -44,8 +39,8 @@ export function normalizePlaylists(value) {
 
 export function favoriteEntries({ scores = [], videos = [], courses = [], works = [] }, assets) {
   const entries = [...new Set(scores)].reverse().flatMap(id => {
-    const song = songCatalog.find(item => item.id === id), facts = scoreFacts[id];
-    return song && facts ? [{ ...song, key: `score:${id}`, kind: 'score', instrument: facts[0], level: facts[1], notation: facts[2], image: `${assets}score-${id}.png` }] : [];
+    const song = songCatalog.find(item => item.id === id);
+    return song ? [{ ...song, key: `score:${id}`, kind: 'score', notation: song.types?.[0] || '', image: `${assets}score-${id}.png` }] : [];
   });
   for (const [kind, records] of [['video', videos], ['course', courses], ['work', works]]) {
     const seen = new Set();

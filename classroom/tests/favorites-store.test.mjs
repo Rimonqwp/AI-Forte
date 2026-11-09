@@ -3,6 +3,11 @@ import assert from 'node:assert/strict';
 import { consecutiveDays, normalizePlaylists } from '../src/favorites-store.js';
 import { favoriteEntries, favoriteFolders, folderEntries, folderCover, safeImage, normalizeMediaFavorites } from '../src/favorite-folders.js';
 import { prepareFolderCover } from '../src/favorite-cover.js';
+import { readFileSync } from 'node:fs';
+import { setCatalog } from '../src/library-catalog.js';
+
+// The application hydrates this metadata from the API before rendering libraries.
+setCatalog(JSON.parse(readFileSync(new URL('../../sql_service/catalog_seed.json', import.meta.url), 'utf8')));
 
 test('playlist cache removes duplicate IDs, invalid entries and repeated songs', () => {
   const result = normalizePlaylists([null, { id: 'default', name: 'overrides default' }, { id: 'a', name: '  我的练习  ', songs: ['sunny', 7, 'sunny', 'rice'], cover: 'bad' }, { id: 'a', name: 'duplicate' }]);

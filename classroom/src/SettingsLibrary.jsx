@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { ArrowRight, BookOpen, ClockCounterClockwise, Heart, MagnifyingGlass, X } from '@phosphor-icons/react';
 import { useCloudState } from './useCloudState.js';
 import { useScoreHistory } from './score-history.js';
-import { songCatalog, versions } from './library-catalog.js';
+import { useCatalog } from './useCatalog.js';
 import { tr, useLanguage } from './language.js';
 import { RecentBrowsing } from './RecentBrowsing.jsx';
 
 export function SettingsLibrary({ section, user, onClose }) {
   const language = useLanguage();
+  const {songs: songCatalog, versions} = useCatalog();
   const [favorites, setFavorites] = useCloudState('favorites', []);
   const [arrangements, setArrangements] = useCloudState('practice-favorites', [], 'classroom.practice.saved');
   const [recent, setRecent] = useScoreHistory(user.uid, 'recent');
@@ -15,7 +16,7 @@ export function SettingsLibrary({ section, user, onClose }) {
   const [query, setQuery] = useState(''), [scoreTab, setScoreTab] = useState('saved');
   const lookup = (songId, versionId) => {
     const song = songCatalog.find(item => item.id === songId);
-    const version = versionId && versions.find(item => item.id === versionId);
+    const version = versionId && versions.find(item => item.id === versionId && item.song_id === songId);
     return song && (!versionId || version) ? { song, version, id: versionId ? `${songId}:${versionId}` : songId } : null;
   };
   const savedVersions = arrangements.map(id => lookup(...id.split(':'))).filter(Boolean);

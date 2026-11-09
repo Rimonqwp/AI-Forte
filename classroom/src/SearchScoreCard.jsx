@@ -16,7 +16,7 @@ export function SearchScoreCard({song,saved,onSave,onOpen}) {
   }}>
     <div className="score-paper-surface" style={{maskImage:`url(${assets}score-library/paper-texture.png),url(${assets}score-card/paper-edge-visible.png)`}}>
     <button className="score-cover" onClick={practice} aria-label={`开始练习${song.title}`}>
-      <img src={assets+`score-${song.id}.png`} alt={`${song.title}的插画与乐谱`}/>
+      <img src={assets+`score-${song.id}.png`} onError={event=>{if(!event.currentTarget.dataset.fallback){event.currentTarget.dataset.fallback='true';event.currentTarget.src=assets+`score-library/cover-${song.id}.png`;}}} alt={`${song.title}的插画与乐谱`}/>
       {song.badge&&<span className={`score-badge ${color}`}><BadgeIcon size={12} weight="fill" aria-hidden="true"/>{song.badge}</span>}
     </button>
     <div className="score-info">

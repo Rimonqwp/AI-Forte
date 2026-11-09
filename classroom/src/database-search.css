@@ -1,0 +1,22 @@
+.database-search { color:var(--ink); padding:4px 0 32px; }
+.database-search .results-shell { width:var(--page-width); margin:auto; display:block; }
+.database-search .results-main { width:100%; min-width:0; }
+.database-search .results-panel { padding:var(--panel-inset); }
+.database-search .results-heading-row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:22px; }
+.database-search .results-heading-row h2 { display:flex; gap:8px; align-items:center; font-size:21px; }
+.database-search .results-heading-row h2>span { font-size:14px; font-weight:400; }
+.database-search .results-heading-row em { font-style:normal; }
+.database-search .results-type-tabs { display:flex; align-items:center; gap:8px; overflow:auto; }
+.database-search .results-type-tabs button { display:flex; align-items:center; gap:5px; white-space:nowrap; padding:7px 11px; border:1px solid var(--line); border-radius:18px; font-size:13px; }
+.database-search .results-type-tabs button.selected { background:#ed745f22; border-color:var(--coral); }
+.database-search .sort-select { display:flex; align-items:center; gap:6px; font-size:13px; }
+.database-search .results-score-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:20px 16px; }
+.database-search .score-card { min-width:0; height:auto; }
+.database-search .score-info { padding:11px 12px 14px; }
+.database-search .score-title { gap:5px; }
+.database-search .score-artist { margin-top:8px; }
+.database-search .score-meta { margin:12px 0; }
+.database-search button:disabled { opacity:.6; cursor:wait; }
+@media(max-width:1100px) { .database-search .results-score-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media(max-width:850px) { .database-search .results-score-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px 10px; } }
+@media(max-width:600px) { .database-search .results-score-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .database-search .results-heading-row {gap:10px;} .database-search .results-heading-row h2 {width:100%;font-size:18px;} .database-search .results-type-tabs {max-width:100%;} .database-search .results-panel {padding:var(--panel-inset);} }

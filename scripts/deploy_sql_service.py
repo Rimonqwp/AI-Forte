@@ -20,7 +20,9 @@ def main():
     with tempfile.TemporaryDirectory(prefix='puyadao-data-deploy-') as directory:
         stage = Path(directory)
         for name in ('app/__init__.py', 'app/sql_database.py', 'app/relational_schema.py',
-                     'app/relational_storage.py', 'app/relational_v1_storage.py', 'sql_service/main.py', 'requirements-sql.txt'):
+                     'app/relational_storage.py', 'app/relational_v1_storage.py', 'sql_service/main.py',
+                     'sql_service/content.py', 'sql_service/content_schema.py', 'sql_service/catalog_seed.json',
+                     'requirements-sql.txt'):
             target = stage / name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(root / name, target)
