@@ -74,6 +74,8 @@ Do not show the related forum and discussion recommendation section on the score
 
 ## Song detail and community arrangements
 
+Opening a discussion or composer must align the discussion section with the top of the current scroll viewport, beneath the fixed practice-dialog toolbar. Give short discussion views at least the viewport height so the scroll cannot stop early with arrangement cards still above them. Keep song information and arrangements in the same scroll flow, reachable by scrolling upward; restore natural discussion-list height on return.
+
 Clicking a score result opens a responsive song detail page following `design-reference/song-detail-visible.png`: shallow illustrated instructional banner, left navigation, song cover and facts, three recommendation cards, then four arrangement cards per row on desktop. Preserve this hierarchy and the source reference proportions. Generate every new illustration, portrait, cover and notation thumbnail separately with built-in image_gen; keep each asset and its exact prompt in `public/assets/song-detail/`. Never flatten the page or use a collage as multiple assets. Keep actual UI text, selectors, sorting, favorites and navigation in React.
 
 Route song details through `#song?id=...`; titles and covers must correspond to the selected song, and return navigation preserves the search URL. Keep generated notation and community counts clearly labeled as demonstrations. The version selection flow, filter empty states and sheet preview controls must work on desktop and mobile.

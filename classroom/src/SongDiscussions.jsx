@@ -1,5 +1,5 @@
 import { CustomSelect } from './CustomSelect.jsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, BookmarkSimple, ChatCircle, CheckCircle, Heart, ListBullets, MusicNotes, PaperPlaneTilt, PencilSimple, ThumbsUp, Trash, UsersThree } from '@phosphor-icons/react';
 import './song-discussions.css';
 
@@ -84,7 +84,23 @@ export default function SongDiscussions({ song }) {
     try { localStorage.setItem(storageKey, JSON.stringify({ posts: localPosts, liked, saved })); }
     catch { setMessage('浏览器未能保存本次修改，关闭页面后可能丢失。'); }
   }, [storageKey, localPosts, liked, saved]);
-  useEffect(() => { if (viewChanged.current) { panel.current?.scrollIntoView({ block: 'start', behavior: 'smooth' }); panel.current?.querySelector('h2')?.focus({ preventScroll: true }); viewChanged.current = false; } }, [view]);
+  useLayoutEffect(() => {
+    const section = panel.current;
+    if (!view || !section) return;
+    const scroller = section.closest('.detail-overlay') ? section.closest('.song-detail-page') : null;
+    // Short threads need enough height to reach the top of the scrolling viewport.
+    const fitView = () => { section.style.minHeight = `${scroller ? scroller.clientHeight : window.innerHeight}px`; };
+    fitView();
+    const observer = scroller ? new ResizeObserver(fitView) : null;
+    observer?.observe(scroller);
+    window.addEventListener('resize', fitView);
+    return () => {
+      observer?.disconnect();
+      window.removeEventListener('resize', fitView);
+      section.style.removeProperty('min-height');
+    };
+  }, [view]);
+  useEffect(() => { if (viewChanged.current) { panel.current?.scrollIntoView({ block: 'start', behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' }); panel.current?.querySelector('h2')?.focus({ preventScroll: true }); viewChanged.current = false; } }, [view]);
   const updatePost = updated => setLocalPosts(previous => [updated, ...previous.filter(p => p.id !== updated.id)]);
   const reply = event => {
     event.preventDefault();
