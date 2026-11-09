@@ -225,6 +225,8 @@ Keep the Today preview-duration badge on the same header row as 近 7 天预览�
 
 The user designated the settings sidebar signature as the site's brand identity. Reuse `public/assets/brand/puyadao-sprout-icon.png` in the main navigation, page footer and browser favicon. In the header and footer, place the transparent sprout/note emblem to the left of two stacked lines: 谱芽岛 and 让喜欢的歌，在指尖靠岸。. Keep the warm serif wordmark, responsive icon sizes, existing navigation actions and shared content alignment; do not substitute a generic music-note icon for the brand.
 
+The shared header brand displays only the sprout/note emblem and site name, vertically centered. Omit the tagline below the name in all header instances, including login and song pages. This supersedes the header portion of the preceding guidance; footer and login-card branding retain their tagline.
+
 ## Settings identity card
 
 The settings sidebar identity follows the user's compact reference: a larger circular avatar with a pale ring, bold account name, a purple Lv.6 badge beside 音乐学习者, and a right chevron. The user explicitly approved Lv.6 as a UI example, not a real account level; identify it in its tooltip and accessible label without persisting fake level data. Keep the actual account name and photo. Make the whole identity area open Account Details through the existing save-aware navigation, preserve long-name truncation, and keep the close button clear on phones. The user's follow-up removed the card fill: keep its background transparent in normal and hover states in both themes, with no resting border or shadow; retain accessible focus feedback and the avatar/badge treatments.

@@ -53,7 +53,7 @@ export function ClassroomHeader({ idPrefix = 'header', userName = '音乐同学'
 
   return <header className="site-header" ref={header}>
     <div className="header-inner">
-      <a href="#" className="brand" aria-label={tr('谱芽岛') + ' · ' + tr('首页')} onClick={event => { event.preventDefault(); run(onHome); }}><BrandIdentity/></a>
+      <a href="#" className="brand" aria-label={tr('谱芽岛') + ' · ' + tr('首页')} onClick={event => { event.preventDefault(); run(onHome); }}><BrandIdentity showTagline={false}/></a>
       <nav aria-label={tr('主导航')} className={mobileNav ? 'open' : ''}>
         <button className={!isAuthPage && !isSearchPage ? 'nav-active' : ''} onClick={() => run(onHome)}>{tr('首页')}</button>
         <button className={isSearchPage ? 'nav-active' : ''} onClick={() => run(() => onResults())}>{tr('乐谱')}</button>
