@@ -56,7 +56,7 @@ export function ClassroomHeader({ idPrefix = 'header', userName = '音乐同学'
       <a href="#" className="brand" aria-label={tr('谱芽岛') + ' · ' + tr('首页')} onClick={event => { event.preventDefault(); run(onHome); }}><BrandIdentity showTagline={false}/></a>
       <nav aria-label={tr('主导航')} className={mobileNav ? 'open' : ''}>
         <button className={!isAuthPage && !isSearchPage ? 'nav-active' : ''} onClick={() => run(onHome)}>{tr('首页')}</button>
-        <button className={isSearchPage ? 'nav-active' : ''} onClick={() => run(() => onResults())}>{tr('乐谱')}</button>
+        <button className={isSearchPage ? 'nav-active' : ''} onClick={() => run(() => onResults(''))}>{tr('乐谱')}</button>
         <button onClick={() => run(() => onResults(''))}>{tr('乐谱练习')}</button>
         <div className="dropdown-wrap" ref={course}><button aria-expanded={menu === 'course'} aria-controls={`${idPrefix}-course-menu`} onClick={() => toggle('course')}>{tr('乐器课程')} <CaretDown size={13}/></button><div id={`${idPrefix}-course-menu`} className={`dropdown course-menu ${menu === 'course' ? 'is-open' : ''}`} aria-hidden={menu !== 'course'} inert={menu !== 'course'}>{['钢琴', '吉他', '尤克里里'].map(name => <button key={name} onClick={() => run(() => onOpen({ type: 'lesson', title: name + '入门课程' }))}>{name === '钢琴' ? <PianoKeys size={20}/> : <Guitar size={20}/>} {tr(name + '入门课程')}</button>)}</div></div>
         <button onClick={() => run(onCheckIn)}>{tr(checkedIn ? '已打卡' : '每日打卡')}</button>
