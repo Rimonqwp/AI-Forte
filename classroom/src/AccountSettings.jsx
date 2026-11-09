@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { BookOpen, Camera, Check, ClockCounterClockwise, GoogleLogo, Heart, SignIn, UserCircle, X } from '@phosphor-icons/react';
+import { BookOpen, Camera, CaretRight, Check, ClockCounterClockwise, GoogleLogo, Heart, SignIn, UserCircle, X } from '@phosphor-icons/react';
 import { tr, useLanguage } from './language.js';
 import { SettingsLibrary } from './SettingsLibrary.jsx';
 import { useCloudState } from './useCloudState.js';
@@ -116,7 +116,11 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
   return createPortal(<div className="account-backdrop settings-backdrop" onPointerDown={event => { if (event.target === event.currentTarget) requestClose(); }}>
     <section className={`account-settings${section === 'recent' ? ' account-settings-recent' : ''}`} role="dialog" aria-modal="true" aria-labelledby="account-settings-title" tabIndex={-1} ref={dialog}>
       <aside className="settings-sidebar">
-        <div className="settings-identity"><img src={photo} alt="" referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'assets/avatar-musician.png'; }}/><div><strong>{name}</strong><span>{tr('账号设定')}</span></div></div>
+        <button type="button" className="settings-identity" aria-label={`${name} · ${tr('账号资料')}`} aria-controls="settings-content" onClick={() => selectSection('profile')}>
+          <img src={photo} alt="" referrerPolicy="no-referrer" onError={event => { event.currentTarget.onerror = null; event.currentTarget.src = import.meta.env.BASE_URL + 'assets/avatar-musician.png'; }}/>
+          <span className="settings-identity-copy"><strong title={name}>{name}</strong><span className="settings-identity-meta"><span className="settings-identity-level" title={tr('等级展示示例')} aria-label={`Lv.6 · ${tr('等级展示示例')}`}>Lv.6</span><span className="settings-identity-role">{tr('音乐学习者')}</span></span></span>
+          <CaretRight className="settings-identity-arrow" size={14} aria-hidden="true"/>
+        </button>
         <nav className="settings-navigation" aria-label={tr('账号设定导航')}>
           {sections.map((item, index) => <React.Fragment key={item.id}>
             {(index === 0 || sections[index - 1].group !== item.group) && <span className="settings-nav-group">{tr(item.group)}</span>}

@@ -31,6 +31,8 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  '音乐学习者':['Music learner', '音樂學習者'],
+  '等级展示示例':['Example level', '等級展示範例'],
   "总预览时长":["Total preview time", "總預覽時長"],
   "乐谱预览统计":["Score preview statistics", "樂譜預覽統計"],
   "仅统计当前浏览器中的乐谱页面前台停留时长。":["Counts foreground time viewing scores in this browser only.", "僅統計目前瀏覽器中的樂譜頁面前台停留時長。"],
