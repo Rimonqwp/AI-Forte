@@ -1,10 +1,5 @@
 /* Reference artwork is kept in individual files. These overrides are scoped to
    the score library so the existing classroom home retains its own design. */
-@font-face {
-  font-family: ScoreBrush;
-  src: url('../public/assets/ma-shan-zheng.ttf') format('truetype');
-  font-display: swap;
-}
 .score-search-page {
   --search-ink: #63291e;
   --search-coral: #ff735e;
@@ -37,7 +32,7 @@
 .score-search-page .results-hero-content { top: 26px; }
 .score-search-page .results-title-row { margin-bottom: 12px; gap: 20px; }
 .score-search-page .results-title-row h1 {
-  font-family: ScoreBrush, 'Songti SC', serif;
+  font-family: var(--font-brush), 'Songti SC', serif;
   font-size: 39px;
   letter-spacing: 4px;
   line-height: 43px;

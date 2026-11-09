@@ -2,6 +2,7 @@ import React from "react";
 import { createRoot } from "react-dom/client";
 import { ClassroomApp } from "./SongDetail.jsx";
 import { AuthProvider } from "./AuthContext.jsx";
+import "./fonts.css";
 import "./styles.css";
 import "./score-reference.css";
 import "./display-preferences.js";

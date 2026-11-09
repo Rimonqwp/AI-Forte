@@ -1,0 +1,26 @@
+@font-face {
+  font-family: MaShan;
+  src: url('/assets/ma-shan-zheng.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+/* Loaded on demand when Traditional brush lettering is visible. */
+@font-face {
+  font-family: Bakudai;
+  src: url('/assets/fonts/bakudai-regular.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --font-brush: MaShan;
+}
+
+/* Ma Shan Zheng lacks common Traditional glyphs. Use one complete brush face
+   for the whole heading instead of mixing its glyphs with a system Kai font. */
+html[lang='zh-TW'] {
+  --font-brush: Bakudai, MaShan;
+}
