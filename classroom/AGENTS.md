@@ -56,6 +56,8 @@ Opening and closing search suggestions must keep the hero illustration and surro
 
 ## Score library reference
 
+The latest browser annotation removes the entire filter sidebar from score search results, superseding the earlier sidebar guidance below. Do not display its heading, clear action, difficulty, style or key controls at any breakpoint. Let the results panel fill the shared content width; retain score-type tabs and sorting.
+
 The score search body follows `design-reference/score-library.png`: a 250px filter sidebar, five-column score grid at the reference desktop width, without related forum recommendations below. Keep each illustration and thumbnail as a separate asset under `public/assets/score-library/`; do not flatten the page into a screenshot. The original home design is the source of truth for the library banner: preserve the home heading, promises, search panel order, note card and illustration. Match the home introduction dimensions at every breakpoint. The five learning entry cards remain on home. Counts must reflect the actual available demo data.
 
 The complete score results area (filter sidebar and score grid) must begin below the full hero artwork, never overlap it. The library hero must reserve its complete responsive art height in normal flow; keep the introduction content at its original height. Leave a 4px gap after the artwork at every breakpoint. Move the sidebar and results together with their top edges aligned.

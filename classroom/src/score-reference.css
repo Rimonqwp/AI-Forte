@@ -203,14 +203,8 @@
   .score-search-page .sort-select { grid-column: 2; }
 }
 
-/* Keep only the requested sidebar filters, with star-only difficulty choices. */
-.score-search-page .results-sidebar { min-height: 0; }
-.score-search-page .filter-instrument,
-.score-search-page .filter-sort { display: none; }
-.score-search-page .filter-level .filter-options > button:not(:first-child) { font-size: 0; gap: 0; }
-.score-search-page .filter-key { border-bottom: 0; padding-bottom: 0; }
-@media (max-width: 760px) {
-  .score-search-page .filter-level { grid-column: 1 / -1; }
-}
+/* Remove the filter sidebar and give the score results the full content width. */
+.score-search-page .results-sidebar { display: none; }
+.score-search-page .results-shell { grid-template-columns: minmax(0, 1fr); }
 
 .score-search-page .results-community { display: none; }
