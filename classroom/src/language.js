@@ -31,6 +31,22 @@ export function useLanguage() {
 
 // Keys remain independent of translated display text, so filters and searches retain their state.
 const messages = {
+  '创建收藏夹':['Create folder','建立收藏夾'], '编辑收藏夹':['Edit folder','編輯收藏夾'], '打开收藏夹':['Open folder','開啟收藏夾'],
+  '收藏夹选项':['Folder options','收藏夾選項'], '查看收藏夹':['View folder','查看收藏夾'], '收起收藏夹':['Show fewer folders','收起收藏夾'],
+  '收藏夹名称':['Folder name','收藏夾名稱'], '输入收藏夹名称':['Enter a folder name','輸入收藏夾名稱'], '请输入收藏夹名称。':['Enter a folder name.','請輸入收藏夾名稱。'],
+  '收藏夹数量已达到上限。':['Folder limit reached.','收藏夾數量已達到上限。'], '收藏夹已保存。':['Folder saved.','收藏夾已儲存。'],
+  '收藏夹已创建，可通过批量管理添加内容。':['Folder created. Use Manage to add content.','收藏夾已建立，可透過批次管理加入內容。'],
+  '浏览器空间不足，收藏夹仅保留在本次会话。':['Browser storage is full. This folder is available for this session only.','瀏覽器空間不足，收藏夾僅保留在本次工作階段。'],
+  '封面图片（可选）':['Cover image (optional)','封面圖片（選填）'], '未上传时，使用收藏夹内第一首乐谱的图片。':['Without an upload, the first score supplies the cover.','未上傳時，使用收藏夾內第一首樂譜的圖片。'],
+  '上传图片':['Upload image','上傳圖片'], '更换图片':['Change image','更換圖片'], '移除封面':['Remove cover','移除封面'],
+  '选择收藏夹封面':['Choose folder cover','選擇收藏夾封面'], '收藏夹封面预览':['Folder cover preview','收藏夾封面預覽'],
+  '请选择 JPG、PNG 或 WebP 图片。':['Choose a JPG, PNG or WebP image.','請選擇 JPG、PNG 或 WebP 圖片。'], '无法读取这张图片，请换一张图片。':['This image could not be read. Choose another.','無法讀取這張圖片，請換一張圖片。'],
+  '添加到收藏夹':['Add to folder','加入收藏夾'], '选择收藏夹':['Choose folder','選擇收藏夾'], '已添加到收藏夹。':['Added to folder.','已加入收藏夾。'],
+  '移出收藏夹':['Remove from folder','移出收藏夾'], '已从收藏夹移除，仍保留在默认收藏。':['Removed from this folder; still in all favorites.','已從收藏夾移除，仍保留在預設收藏。'],
+  '最近收藏':['Recently saved','最近收藏'], '项':['items','項'], '封面':['cover','封面'], '查看视频':['View video','查看影片'], '查看课程':['View course','查看課程'], '查看作品':['View performance','查看作品'],
+  '这个收藏暂时没有可打开的链接。':['This favorite has no available link yet.','這個收藏暫時沒有可開啟的連結。'], '收藏夹还没有内容':['This folder is empty','收藏夾還沒有內容'],
+  '收藏乐谱、视频或课程后，会自动按类型归档。':['Saved scores, videos and courses are automatically grouped by type.','收藏樂譜、影片或課程後，會自動按類型歸檔。'],
+  '在默认收藏中使用批量管理，将喜欢的内容添加到这个收藏夹。':['Use Manage in All favorites to add content to this folder.','在預設收藏中使用批次管理，將喜歡的內容加入這個收藏夾。'],
   '欢迎回来！':['Welcome back!', '歡迎回來！'],
   '继续你的音乐学习之旅':['Continue your music journey', '繼續你的音樂學習之旅'],
   '继续使用 Google':['Continue with Google', '繼續使用 Google'],

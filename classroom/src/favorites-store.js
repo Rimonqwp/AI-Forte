@@ -1,21 +1,8 @@
 import { useEffect, useSyncExternalStore } from 'react';
 import { localDay } from './recent-preview-stats.js';
+import { normalizePlaylists, normalizeMediaFavorites } from './favorite-folders.js';
+export { normalizePlaylists } from './favorite-folders.js';
 
-export const starterPlaylists = [
-  { id: 'practice', name: '练习清单', cover: 'sunny' },
-  { id: 'sing', name: '轻松弹唱', cover: 'windmill' },
-  { id: 'sleep', name: '睡前听歌', cover: 'night' },
-  { id: 'piano', name: '钢琴入门', cover: 'piano' },
-].map(item => ({ ...item, songs: [] }));
-
-export function normalizePlaylists(value) {
-  if (!Array.isArray(value)) return starterPlaylists;
-  const ids = new Set();
-  return value.filter(item => item && typeof item.id === 'string' && item.id !== 'default' && !ids.has(item.id) && ids.add(item.id) && typeof item.name === 'string' && item.name.trim()).slice(0, 100).map(item => ({
-    id: item.id, name: item.name.trim().slice(0, 30), cover: ['sunny', 'windmill', 'night', 'piano', 'confession'].includes(item.cover) ? item.cover : 'confession',
-    songs: Array.isArray(item.songs) ? [...new Set(item.songs.filter(id => typeof id === 'string'))].slice(0, 1000) : [],
-  }));
-}
 
 export function consecutiveDays(days, now = new Date()) {
   const values = new Set(days.filter(day => typeof day === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(day)));
@@ -30,7 +17,7 @@ function localStore(uid, kind) {
   const key = `puyadao.music-library.${uid}.${kind}`;
   if (stores.has(key)) return stores.get(key);
   const listeners = new Set();
-  const normalize = value => kind === 'playlists' ? normalizePlaylists(value) : Array.isArray(value) ? value.filter(item => item && /^\d{4}-\d{2}-\d{2}$/.test(item.day) && Number.isFinite(item.seconds) && item.seconds > 0).slice(-1000) : [];
+  const normalize = value => kind === 'playlists' ? normalizePlaylists(value) : kind !== 'practice' ? normalizeMediaFavorites(value) : Array.isArray(value) ? value.filter(item => item && /^\d{4}-\d{2}-\d{2}$/.test(item.day) && Number.isFinite(item.seconds) && item.seconds > 0).slice(-1000) : [];
   let value;
   const read = () => { try { value = normalize(JSON.parse(localStorage.getItem(key) || 'null')); } catch { value = normalize(null); } };
   read();
@@ -38,7 +25,7 @@ function localStore(uid, kind) {
   const store = {
     snapshot: () => value,
     subscribe: listener => { listeners.add(listener); return () => listeners.delete(listener); },
-    update: change => { value = normalize(change(value)); try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* Keep this session usable when storage is full. */ } publish(); },
+    update: change => { value = normalize(change(value)); let persisted = true; try { localStorage.setItem(key, JSON.stringify(value)); } catch { persisted = false; } publish(); return { persisted }; },
     refresh: () => { read(); publish(); },
   };
   stores.set(key, store); return store;
@@ -46,6 +33,13 @@ function localStore(uid, kind) {
 if (typeof window !== 'undefined') window.addEventListener('storage', event => { stores.forEach((store, key) => { if (event.key === null || event.key === key) store.refresh(); }); });
 export function usePlaylists(uid) {
   const store = localStore(uid, 'playlists');
+  return [useSyncExternalStore(store.subscribe, store.snapshot), store.update];
+}
+// Media collectors share this account-isolated local store. The current account
+// API accepts score IDs; media metadata must not be sent to those score endpoints.
+export function useMediaFavorites(uid, kind) {
+  if (!['video', 'course', 'work'].includes(kind)) throw new Error('Unsupported favorite type');
+  const store = localStore(uid, `${kind}-favorites`);
   return [useSyncExternalStore(store.subscribe, store.snapshot), store.update];
 }
 export function usePracticeTime(uid) {

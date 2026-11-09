@@ -11,7 +11,8 @@ import { LoginHistory } from './LoginHistory.jsx';
 import './account-settings.css';
 import { ProfilePreferences } from './ProfilePreferences.jsx';
 import { FavoritesLibrary, FavoritesSidebar, MusicFootprint } from './FavoritesLibrary.jsx';
-import { usePlaylists } from './favorites-store.js';
+import { usePlaylists, useMediaFavorites } from './favorites-store.js';
+import { favoriteEntries, favoriteFolders } from './favorite-folders.js';
 
 const sections = [
   { id: 'profile', title: '账号资料', icon: UserCircle, group: '用户设定' },
@@ -25,13 +26,18 @@ const providerNames = { 'google.com': 'Google', 'github.com': 'GitHub', 'apple.c
 export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bindings, initialSection = 'profile' }) {
   const language = useLanguage(), dialog = useRef(null), close = useRef(onClose), content = useRef(null);
   const [favorites, setFavorites] = useCloudState('favorites', []);
+  const [videos, setVideos] = useMediaFavorites(user.uid, 'video');
+  const [courses, setCourses] = useMediaFavorites(user.uid, 'course');
+  const [works, setWorks] = useMediaFavorites(user.uid, 'work');
   const [playlists, setPlaylists] = usePlaylists(user.uid);
+  const entries = favoriteEntries({ scores: favorites, videos, courses, works }, import.meta.env.BASE_URL + 'assets/');
+  const folders = favoriteFolders(playlists, entries);
   const [favoritesExpanded, setFavoritesExpanded] = useState(initialSection === 'favorites');
   const [favoriteFolder, setFavoriteFolder] = useState('default'), [playlistEditor, setPlaylistEditor] = useState(null);
   const [arrangements] = useCloudState('practice-favorites', [], 'classroom.practice.saved');
   const [recent] = useScoreHistory(user.uid, 'recent');
   const [practiced] = useScoreHistory(user.uid, 'practiced');
-  const counts = { favorites: favorites.length, scores: new Set([...arrangements, ...practiced.map(item => `${item.songId}:${item.versionId}`)]).size, recent: recent.length };
+  const counts = { favorites: entries.length, scores: new Set([...arrangements, ...practiced.map(item => `${item.songId}:${item.versionId}`)]).size, recent: recent.length };
   const [section, setSection] = useState(() => sections.some(item => item.id === initialSection) ? initialSection : 'profile');
   close.current = onClose;
   const name = user.displayName || user.providerData?.find(item => item.displayName)?.displayName || user.email?.split('@')[0] || tr('我的账号');
@@ -59,7 +65,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
   };
   const selectSection = id => leaveProfile(() => { setSection(id); content.current?.scrollTo({ top: 0 }); });
   const selectFavoriteFolder = id => leaveProfile(() => { setFavoriteFolder(id); setSection('favorites'); setFavoritesExpanded(true); content.current?.scrollTo({ top: 0 }); });
-  const createPlaylist = () => leaveProfile(() => { setSection('favorites'); setFavoritesExpanded(true); setPlaylistEditor({}); content.current?.scrollTo({ top: 0 }); });
+  useEffect(() => { if (!folders.some(item => item.id === favoriteFolder)) setFavoriteFolder('default'); }, [favoriteFolder, folders.map(item => item.id).join('|')]);
   const requestClose = () => leaveProfile(onClose);
   close.current = requestClose;
   const choosePhoto = async event => {
@@ -132,10 +138,10 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
           {sections.map((item, index) => <React.Fragment key={item.id}>
             {(index === 0 || sections[index - 1].group !== item.group) && <span className="settings-nav-group">{tr(item.group)}</span>}
             <button aria-current={section === item.id ? 'page' : undefined} aria-controls={item.id === 'favorites' ? 'settings-content favorites-folders' : 'settings-content'} aria-expanded={item.id === 'favorites' ? favoritesExpanded && section === 'favorites' : undefined} onClick={() => item.id === 'favorites' ? leaveProfile(() => { setFavoritesExpanded(section === 'favorites' ? !favoritesExpanded : true); setSection('favorites'); content.current?.scrollTo({ top: 0 }); }) : selectSection(item.id)}><item.icon size={20}/>{tr(item.title)}{counts[item.id] !== undefined && <span>{counts[item.id]}</span>}</button>
-            {item.id === 'favorites' && section === 'favorites' && favoritesExpanded && <FavoritesSidebar favorites={favorites} playlists={playlists} active={favoriteFolder} onSelect={selectFavoriteFolder} onCreate={createPlaylist}/>}
+            {item.id === 'favorites' && section === 'favorites' && favoritesExpanded && <FavoritesSidebar folders={folders} entries={entries} active={favoriteFolder} onSelect={selectFavoriteFolder}/>}
           </React.Fragment>)}
         </nav>
-        <MusicFootprint uid={user.uid} favorites={favorites}/>
+        <MusicFootprint uid={user.uid} count={entries.length}/>
       </aside>
       <div className="settings-workspace">
         <header className="settings-topbar"><div><span id="account-settings-title">{tr('账号设定')}</span><span className="settings-breadcrumb">/</span><strong>{tr(current.title)}</strong></div><button className="settings-close" aria-label={tr('关闭账号设定')} disabled={saving || bindingBusy} onClick={requestClose}><X size={20}/></button></header>
@@ -143,7 +149,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
           <div className={`settings-content${section === 'profile' ? ' settings-profile-content' : section === 'recent' ? ' settings-recent-content' : section === 'favorites' ? ' settings-favorites-content' : ''}`} id="settings-content" key={section}>
             <div className="settings-page-heading"><h2>{tr(current.title)}</h2>
             <p className="settings-description">{tr(section === 'favorites' ? '喜欢的歌曲，随时回来继续练习。' : section === 'scores' ? '收藏编配、重拾练习，让你的乐谱井井有条。' : section === 'recent' ? '找回刚刚听见、看过的旋律。' : section === 'profile' ? '让音乐伙伴认识你。' : section === 'security' ? '查看当前会话与此浏览器保存的成功登录记录。' : '选择你习惯的语言，让每一次练习更自在。')}</p>{section === 'profile' && <img className="settings-profile-art" src={import.meta.env.BASE_URL + 'assets/account-settings/score-sprout.png'} alt="" aria-hidden="true"/>}</div>
-            {section === 'favorites' && <FavoritesLibrary favorites={favorites} setFavorites={setFavorites} playlists={playlists} setPlaylists={setPlaylists} active={favoriteFolder} setActive={selectFavoriteFolder} editor={playlistEditor} setEditor={setPlaylistEditor} onClose={onClose}/>}
+            {section === 'favorites' && <FavoritesLibrary collections={{ score: favorites, video: videos, course: courses, work: works }} setCollections={{ score: setFavorites, video: setVideos, course: setCourses, work: setWorks }} entries={entries} folders={folders} playlists={playlists} setPlaylists={setPlaylists} active={favoriteFolder} setActive={selectFavoriteFolder} editor={playlistEditor} setEditor={setPlaylistEditor} onClose={onClose}/>}
             {['scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}
             {section === 'profile' && <div className="profile-editor" aria-busy={saving || readingPhoto}>
               <div className="profile-avatar-row">
