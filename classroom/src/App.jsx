@@ -42,6 +42,7 @@ function Rating({level}) { return <span className="rating" aria-label={`难度 $
 
 export function App({ userName = '音乐同学' }) {
   useLanguage();
+  const [searchReset,setSearchReset]=useState(0);
   const [query,setQuery]=useState(''); const [search,setSearch]=useState(''); const [filter,setFilter]=useState('全部');
   const [tab,setTab]=useState('推荐'); const [saved,setSaved]=useCloudState('favorites',[]); const [liked,setLiked]=useCloudState('likes',[]);
   const [modal,setModal]=useState(null); const [menu,setMenu]=useState(null); const [checkins,setCheckins]=useCloudState('checkins',[]); const checkedIn=checkins.includes(localDay()); const setCheckedIn=()=>setCheckins(days=>[...new Set([...days,localDay()])].slice(-1000));
@@ -57,7 +58,7 @@ export function App({ userName = '音乐同学' }) {
   useEffect(()=>{ const handle=e=>{if(e.key==='Escape'){closeModal();setMenu(null);}}; window.addEventListener('keydown',handle);return()=>{window.removeEventListener('keydown',handle);clearInterval(timer.current);clearTimeout(toastTimer.current);audio.current?.close();};},[]);
   useEffect(()=>{document.body.style.overflow=modal?'hidden':''; if(!modal)return; const previous=document.activeElement;dialog.current?.focus();const trap=e=>{if(e.key!=='Tab')return;const controls=[...dialog.current.querySelectorAll('button,a[href],input,textarea,select,[tabindex="0"]')].filter(el=>!el.disabled&&el.offsetParent!==null);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&(document.activeElement===first||document.activeElement===dialog.current)){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}};document.addEventListener('keydown',trap);return()=>{document.body.style.overflow='';document.removeEventListener('keydown',trap);previous?.focus();};},[modal]);
   const scrollTo=(id)=>{document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});setMenu(null);setMobileNav(false);};
-  const find=(text)=>{setQuery(text);setSearch(text.trim());setFilter('全部');scrollTo('scores');};
+  const find=(text)=>{if(!text.trim())setSearchReset(value=>value+1);setQuery(text);setSearch(text.trim());setFilter('全部');scrollTo('scores');};
   useEffect(() => {
     const navigate = ({ detail: { action, value } }) => {
       if (action === 'scores') { find(value ?? '周杰伦'); return; }
@@ -83,7 +84,7 @@ export function App({ userName = '音乐同学' }) {
   const shownPosts=tab==='推荐'?posts:posts.filter(p=>p.category===tab);
   const lessonTitle=modal?.feature?.title||modal?.title||'零基础入门';
   const lessonSteps=modal?.feature?.id==='rhythm'?['认识四分音符与四四拍','跟着节拍器，均匀地拍手','用 60 BPM 完成四小节练习']:['认识高音谱号和五条谱线','找到中央 C，唱出 do re mi','跟着《小星星》完成第一次练习'];
-  return <>
+  return <React.Fragment key={searchReset}>
     <ClassroomHeader userName={userName} assets={assets} isSearchPage={window.location.hash.startsWith('#scores')}
       onHome={()=>{window.location.hash='';window.scrollTo({top:0,behavior:'smooth'});setSearch('');setQuery('');setFilter('全部');}}
       onResults={text=>find(text??'周杰伦')} onCommunity={()=>scrollTo('community')} onOpen={open}
@@ -142,5 +143,5 @@ export function App({ userName = '音乐同学' }) {
       {modal.type==='notification'&&<><h2 id="modal-title">{tr("学习通知")}</h2><div className="notification-card"><MusicNotes size={34} weight="duotone"/><div><h3>{tr("欢迎来到谱芽岛")}</h3><p>{tr("你的音乐旅程从这里开始。试试收藏一首喜欢的曲子，完成今天的第一段练习吧。")}</p></div></div><button className="coral-button wide-button" onClick={()=>{closeModal();scrollTo('scores');}}>{tr("发现我的第一首乐谱")}</button></>}
       {modal.type==='link'&&<><h2 id="modal-title">{tr("从音乐链接开始")}</h2><p className="modal-intro">{tr("已识别你的音乐链接，可以进入现有的旋律转谱工作台继续处理。")}</p><div className="link-preview">{modal.url}</div><a className="coral-button wide-button" href="http://127.0.0.1:8000/v2">{tr("打开整曲转谱工作台")}<CaretRight size={18}/></a><p className="modal-footnote">{tr("工作台需要项目的本地 Python 服务运行在 8000 端口。")}</p></>}
     </section></div>}
-  </>;
+  </React.Fragment>;
 }

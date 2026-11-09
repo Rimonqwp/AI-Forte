@@ -84,13 +84,13 @@ export function MusicSearch({ query, onQueryChange, songs, onSearch, onLink }) {
 
   const submit = value => {
     const next = value.trim();
-    if (!next) {
-      setExpanded(true);
-      input.current?.focus();
-      return;
-    }
     setExpanded(false);
     setActiveIndex(-1);
+    if (!next) {
+      onQueryChange('');
+      onSearch('');
+      return;
+    }
     if (/^https?:\/\//i.test(next)) {
       onLink(next);
       return;
