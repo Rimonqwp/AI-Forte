@@ -1,3 +1,20 @@
+# 小猫趴在 Google 按钮上核对（2026-11-09）
+
+final result: passed
+
+- 来源：用户本次浏览器批注要求卡片内的小猫趴在 Google 按钮上。复用原透明猫素材 `public/assets/login/cat-peek-v3.png`。
+- 实现：`http://127.0.0.1:4173/static/classroom/?login=1`。修改前 `design-reference/login-qa/cat-button-before.png`，最终 `cat-button-desktop.png`；CSS视口1704 × 1310、DPR 1，返回截图均1694 × 1302。
+- 比较：归一化到1704 × 1310生成 `cat-button-comparison.jpg`，局部并排 `cat-button-focused.jpg`；两张已打开核对。最终局部 `cat-button-detail.png` 保留副标题、小猫、完整按钮和文字。
+- 字体与文案：Google 图标、按钮标签、字体、字号及其对齐保持原样；装饰图 alt 为空、aria-hidden，不改变按钮的辅助名称。
+- 布局：小猫从卡片绝对坐标改为 Google 按钮内的绝对定位，用按钮上边缘作为基准。补偿原PNG透明底边后，实际可见爪子与边框重叠约2px，形成趴在按钮上的效果；卡片尺寸、窗口居中和左移位置保持不变。
+- 色彩与图像：复用原始RGBA图像及页面配色；依旧显示嫩芽、猫脸和两只爪子，保持自然比例。
+- 响应式：1704 × 1310桌面、390 × 844手机、1366 × 768紧凑窗口均已打开检查，证据为 `cat-button-desktop.png`、`cat-button-mobile.png`、`cat-button-laptop.png`。三种尺寸的可见爪子底边与按钮上边缘估算重叠2.14、1.92、1.83px；文字未被遮挡。手机和笔记本截图返回380 × 822、1356 × 762。
+- 交互：三个尺寸下按钮中心 elementFromPoint 均命中 Google 按钮；小猫 pointer-events:none。未触发OAuth登录。出现认证错误提示时为猫与按钮额外预留间距；该错误状态只做结构检查，没有发送失败登录请求。
+- 验证：`npm run build`通过，保留既有Firebase混合导入及bundle大小提示；浏览器error日志为空。未新增镜像实现的样式测试。预览恢复默认视口并保持打开。
+- 发现：最终完整及局部比较未发现待修正P0/P1/P2。
+
+---
+
 # 登录卡片缩小、垂直居中与左移核对（2026-11-09）
 
 final result: passed

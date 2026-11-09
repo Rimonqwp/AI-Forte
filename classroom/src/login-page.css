@@ -91,10 +91,13 @@ html:has(.login-page) { overflow-x: clip; }
 .login-subtitle { display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 4px; font-family: MaShan, 'KaiTi', serif; font-size: 21px; line-height: 30px; letter-spacing: 1px; white-space: nowrap; color: #9d583c; }
 .login-subtitle > svg { color: #ff9879; transform: rotate(-12deg); }
 .login-subtitle > svg:last-child { transform: rotate(13deg); }
-.login-cat-peek { position: absolute; z-index: 2; top: 182px; right: 20px; width: 138px; height: 80px; object-fit: contain; pointer-events: none; }
+/* The transparent asset includes bottom padding; compensate so its paws rest
+   on the button border at every size, including when an auth error appears. */
+.login-google > .login-cat-peek { position: absolute; z-index: 2; bottom: 100%; right: 10px; width: 138px; height: auto; transform: translateY(14%); pointer-events: none; user-select: none; }
 .login-form-panel { position: relative; margin-top: 56px; }
-.login-google { display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; min-height: 58px; border: 1px solid #edbea8; border-radius: 34px; background: #fffaf6b8; box-shadow: inset 0 1px 0 #fff, 0 4px 10px #cc8b5f0b; color: #5f2b20; font-size: 20px; font-weight: 650; }
+.login-google { position: relative; display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%; min-height: 58px; border: 1px solid #edbea8; border-radius: 34px; background: #fffaf6b8; box-shadow: inset 0 1px 0 #fff, 0 4px 10px #cc8b5f0b; color: #5f2b20; font-size: 20px; font-weight: 650; }
 .login-google > img { width: 29px; height: 29px; }
+.login-form-panel > .login-message + .login-google { margin-top: 64px; }
 .login-google:hover { background: #fffdf8; box-shadow: 0 5px 16px #bd775d17; }
 .login-method-divider { display: flex; align-items: center; justify-content: center; gap: 26px; height: 26px; margin: 24px 40px; font-family: 'Songti SC', 'SimSun', serif; font-size: 18px; font-weight: 700; letter-spacing: 2px; white-space: nowrap; }
 .login-method-divider::before, .login-method-divider::after { content: ''; flex: 1; height: 1px; background: #e9af94; }
@@ -181,7 +184,7 @@ html:has(.login-page) { overflow-x: clip; }
   .login-title { margin-top: 26px; font-size: 43px; line-height: 57px; letter-spacing: 2px; }
   .login-subtitle { margin-top: 1px; gap: 9px; font-size: 18px; line-height: 28px; letter-spacing: 0; }
   .login-subtitle > svg { width: 19px; }
-  .login-cat-peek { top: 183px; right: 12px; width: 111px; height: 65px; }
+  .login-google > .login-cat-peek { width: 111px; }
   .login-form-panel { margin-top: 55px; }
   .login-google { min-height: 55px; gap: 14px; font-size: 18px; }
   .login-google > img { width: 27px; height: 27px; }
@@ -212,7 +215,7 @@ html:has(.login-page) { overflow-x: clip; }
   .login-panel-brand .brand-copy > small { font-size: 11px; }
   .login-title { margin-top: 18px; font-size: 40px; line-height: 50px; }
   .login-subtitle { font-size: 18px; line-height: 26px; gap: 10px; }
-  .login-cat-peek { top: 150px; right: 18px; width: 100px; height: 58px; }
+  .login-google > .login-cat-peek { width: 100px; }
   .login-form-panel { margin-top: 36px; }
   .login-google { min-height: 50px; font-size: 18px; }
   .login-google > img { width: 26px; height: 26px; }

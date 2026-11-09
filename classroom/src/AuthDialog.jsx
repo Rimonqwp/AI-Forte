@@ -85,11 +85,10 @@ export function AuthDialog({ user, busy, error, onLogin, onPasswordLogin, onPass
           <div className="login-panel-brand brand"><BrandIdentity/></div>
           <h1 id="login-page-title" className="login-title">{tr(retry ? '完成账号同步' : '欢迎回来！')}</h1>
           <p className="login-subtitle"><Heart size={24} weight="light" aria-hidden="true"/><span>{tr('继续你的音乐学习之旅')}</span><Heart size={20} weight="light" aria-hidden="true"/></p>
-          <img className="login-cat-peek" src={artwork + 'cat-peek-v3.png'} alt=""/>
           <div className="login-form-panel">
             {error && <div className="login-message is-error" role="alert">{tr(authErrorMessage(error))}</div>}
             {retry ? <button className="login-submit" disabled={busy} onClick={onRetry}>{tr(busy ? '正在同步…' : '重试账号同步')}</button> : <>
-              <button className="login-google" disabled={busy} onClick={() => onLogin('google.com', remember)}><img src={artwork + 'google.svg'} alt=""/><span>{tr(busy ? '正在登录…' : '继续使用 Google')}</span></button>
+              <button className="login-google" disabled={busy} onClick={() => onLogin('google.com', remember)}><img className="login-cat-peek" src={artwork + 'cat-peek-v3.png'} alt="" aria-hidden="true" draggable="false"/><img src={artwork + 'google.svg'} alt=""/><span>{tr(busy ? '正在登录…' : '继续使用 Google')}</span></button>
               <div className="login-method-divider"><span>{tr('邮箱登录')}</span></div>
               <form className="login-form" onSubmit={async event => { event.preventDefault(); try { await onPasswordLogin(email, password, remember); } finally { setPassword(''); } }}>
                 <label className="login-field"><EnvelopeSimple size={29} weight="regular" aria-hidden="true"/><span className="login-sr-only">{tr('邮箱')}</span><input aria-label={tr('邮箱账号')} name="email" type="email" autoComplete="username" placeholder={tr('邮箱')} required maxLength={254} disabled={busy} value={email} onChange={event => { setEmail(event.target.value); setResetSent(false); }}/></label>
