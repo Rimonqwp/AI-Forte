@@ -1,12 +1,13 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { FolderPlus, Heart, MinusCircle, Plus, X } from '@phosphor-icons/react';
 import { CustomSelect } from './CustomSelect.jsx';
+import { FavoritesCheckbox } from './FavoritesCheckbox.jsx';
 import { tr } from './language.js';
 import './favorites-batch-island.css';
 
 export function FavoritesBatchIsland({ open, count, allSelected, partiallySelected, hasItems, onSelectAll, playlists, destination, setDestination, onAdd, onRemove, onUnsave, onCreate, onExit }) {
   const [present, setPresent] = useState(open), [closing, setClosing] = useState(false);
-  const island = useRef(null), selectAll = useRef(null);
+  const island = useRef(null);
   useEffect(() => {
     if (open) { setPresent(true); setClosing(false); return; }
     if (!present) return;
@@ -36,10 +37,9 @@ export function FavoritesBatchIsland({ open, count, allSelected, partiallySelect
       if (node.isConnected && node.matches(':popover-open')) node.hidePopover?.();
     };
   }, [present]);
-  useEffect(() => { if (selectAll.current) selectAll.current.indeterminate = partiallySelected; }, [partiallySelected, present]);
   if (!present) return null;
   return <div ref={island} id="favorites-batch-island" popover="manual" role="toolbar" aria-label={tr('批量操作')} aria-hidden={closing || undefined} inert={closing} className={`favorites-batch-island${closing ? ' is-closing' : ''}`}>
-    <label className="favorites-island-select-all"><input ref={selectAll} type="checkbox" checked={allSelected} disabled={!hasItems} onChange={event => onSelectAll(event.target.checked)}/><span>{tr('全选')}</span></label>
+    <FavoritesCheckbox className="favorites-island-select-all" checked={allSelected} indeterminate={partiallySelected} disabled={!hasItems} onChange={event => onSelectAll(event.target.checked)}>{tr('全选')}</FavoritesCheckbox>
     <div className="favorites-island-count" role="status" aria-live="polite" aria-atomic="true"><span>{tr('已选择')}</span><strong>{count}</strong><span>{tr('项')}</span></div>
     <div className="favorites-island-actions">
       {playlists.length ? <>

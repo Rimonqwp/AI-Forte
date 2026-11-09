@@ -4,6 +4,7 @@ import { consecutiveDays, usePracticeTime } from './favorites-store.js';
 import { contentTypes, folderCover, folderEntries } from './favorite-folders.js';
 import { prepareFolderCover } from './favorite-cover.js';
 import { FavoritesBatchIsland } from './FavoritesBatchIsland.jsx';
+import { FavoritesCheckbox } from './FavoritesCheckbox.jsx';
 import { useCloudState } from './useCloudState.js';
 import { tr, useLanguage } from './language.js';
 import './favorites-library.css';
@@ -16,16 +17,24 @@ function scoreImageFallback(event, id, failed = () => {}) {
   else failed();
 }
 
-export function FavoritesSidebar({ folders, entries, active, onSelect }) {
+export function FavoritesSidebar({ expanded, folders, entries, active, onSelect }) {
+  const [present, setPresent] = useState(expanded);
   const [more, setMore] = useState(false);
+  useEffect(() => {
+    if (expanded) { setPresent(true); return; }
+    if (!present) return;
+    const timer = setTimeout(() => setPresent(false), 280);
+    return () => clearTimeout(timer);
+  }, [expanded, present]);
   useEffect(() => { if (folders.findIndex(item => item.id === active) >= 6) setMore(true); }, [active, folders.length]);
-  return <div className="favorites-sidebar" id="favorites-folders">
+  if (!expanded && !present) return null;
+  return <div className={`favorites-sidebar-disclosure${expanded ? ' is-expanded' : ''}`} id="favorites-folders" inert={!expanded} aria-hidden={!expanded || undefined}><div className="favorites-sidebar-clip"><div className="favorites-sidebar">
     {(more ? folders : folders.slice(0, 6)).map(item => {
       const Icon = item.id === 'default' ? Heart : item.id === active ? FolderOpen : Folder;
       return <button key={item.id} className="favorites-folder-link" aria-current={active === item.id ? 'page' : undefined} onClick={() => onSelect(item.id)}><Icon size={20}/><strong>{item.system ? tr(item.name) : item.name}</strong><span>{folderEntries(item, entries).length}</span></button>;
     })}
     {folders.length > 6 && <button className="favorites-folders-more" aria-expanded={more} onClick={() => setMore(!more)}>{tr(more ? '收起更多' : '展开更多')}<CaretDown size={13} style={{ transform: more ? 'rotate(180deg)' : undefined }}/></button>}
-  </div>;
+  </div></div></div>;
 }
 
 export function MusicFootprint({ uid, count }) {
@@ -181,7 +190,7 @@ export function FavoritesLibrary({ collections, setCollections, entries, folders
       <div className="favorites-section-heading favorites-scores-heading"><h3 id="favorite-scores-heading"><MusicNotes size={29}/>{current.id === 'default' ? tr(scoresOnly ? '最近收藏的乐谱' : '最近收藏') : current.system ? tr(current.name) : current.name}<small>{tr('共')} {source.length} {tr(scoresOnly ? '首' : '项')}</small></h3>{scoresOnly && <><div className="favorites-score-filters" role="group" aria-label={tr('收藏乐谱类型')}>{['全部', '五线谱', '简谱', '和弦谱'].map(item => <button key={item} aria-pressed={type === item} onClick={() => { setType(item); setSelected([]); }}>{tr(item)}</button>)}</div><button className="favorites-section-more favorites-more-scores" onClick={browse}>{tr('更多乐谱')}<CaretRight size={16}/></button></>}</div>
       {visible.length ? <div className="favorites-score-grid">{visible.map((item,index) => <article className="favorite-score-card" key={item.key} style={{ '--favorite-order': Math.min(index,7) }}>
         <button className={`favorite-score-cover${item.kind !== 'score' ? ' favorite-media-cover' : ''}`} onClick={() => managing ? toggleSelected(item.key) : open(item)} aria-label={`${tr(managing ? '选择' : '打开')}《${item.title}》`}>{item.image ? <img src={item.image} alt={`${item.title}${tr(item.kind === 'score' ? '插画与乐谱' : '封面')}`} onError={event => item.kind === 'score' && scoreImageFallback(event, item.id)}/> : React.createElement(typeIcons[item.kind], { size: 38 })}{item.kind === 'score' && ['star', 'sunny'].includes(item.id) && <span className={`favorite-score-badge ${item.id === 'sunny' ? 'is-new' : ''}`}>{item.id === 'star' ? <Fire size={13} weight="fill"/> : <Star size={13} weight="fill"/>}{tr(item.id === 'star' ? '热门' : '新上')}</span>}</button>
-        {managing && <label className="favorite-score-select"><input type="checkbox" aria-label={`${tr('选择')}《${item.title}》`} checked={selected.includes(item.key)} onChange={() => toggleSelected(item.key)}/></label>}
+        {managing && <FavoritesCheckbox className="favorite-score-select" aria-label={`${tr('选择')}《${item.title}》`} checked={selected.includes(item.key)} onChange={() => toggleSelected(item.key)}/>}
         <div className="favorite-score-info"><div className="favorite-score-title"><h4><button onClick={() => open(item)}>{item.title}</button></h4><button className="favorite-score-heart" aria-label={`${tr('取消收藏')}《${item.title}》`} onClick={() => remove([item.key])}><Heart size={19}/></button></div><p>{item.artist || tr(contentTypes.find(type => type.id === item.kind).name)}</p>{item.kind === 'score' ? <><div className="favorite-score-meta"><span className={`favorite-instrument ${item.instrument === '吉他' ? 'is-guitar' : ''}`}>{item.instrument === '钢琴' ? <PianoKeys size={13}/> : <Guitar size={13}/>} {tr(item.instrument)}</span><span className="favorite-score-level" aria-label={`${tr('难度')}：${item.level}/5`}>{tr('难度')}：{Array.from({ length: 5 }, (_, index) => <Star key={index} size={12} weight={index < item.level ? 'fill' : 'regular'}/>)}</span></div><div className="favorite-score-actions"><button onClick={() => open(item, true)}><Play size={12}/>{tr('预览')}</button><button onClick={() => open(item)}>{tr('开始练习')}</button></div></> : <div className="favorite-score-actions favorite-media-actions"><button onClick={() => open(item)}>{tr({ video: '查看视频', course: '查看课程', work: '查看作品' }[item.kind])}<CaretRight size={14}/></button></div>}</div>
       </article>)}</div> : <div className="favorites-empty"><FolderOpen size={37}/><h4>{tr(type !== '全部' ? '这个分类还没有乐谱' : current.id === 'default' ? '把喜欢的旋律留在这里' : '收藏夹还没有内容')}</h4><p>{tr(current.system ? '收藏乐谱、视频或课程后，会自动按类型归档。' : '在默认收藏中使用批量管理，将喜欢的内容添加到这个收藏夹。')}</p><button onClick={current.system ? browse : () => setActive('default')}>{tr(current.system ? '发现乐谱' : '前往默认收藏')}<CaretRight size={16}/></button></div>}
     </section>

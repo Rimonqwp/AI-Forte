@@ -114,7 +114,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
     const keydown = event => {
       if (event.key === 'Escape') { event.preventDefault(); close.current(); }
       if (event.key !== 'Tab') return;
-      const controls = [...dialog.current.querySelectorAll('button:not(:disabled),select,input,a[href]')].filter(el => el.getClientRects().length);
+      const controls = [...dialog.current.querySelectorAll('button:not(:disabled),select,input:not(:disabled),a[href]')].filter(el => el.getClientRects().length && !el.closest('[inert]'));
       const first = controls[0], last = controls.at(-1);
       if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog.current)) { event.preventDefault(); last?.focus(); }
       else if (!event.shiftKey && (document.activeElement === last || document.activeElement === dialog.current)) { event.preventDefault(); first?.focus(); }
@@ -138,7 +138,7 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
           {sections.map((item, index) => <React.Fragment key={item.id}>
             {(index === 0 || sections[index - 1].group !== item.group) && <span className="settings-nav-group">{tr(item.group)}</span>}
             <button aria-current={section === item.id ? 'page' : undefined} aria-controls={item.id === 'favorites' ? 'settings-content favorites-folders' : 'settings-content'} aria-expanded={item.id === 'favorites' ? favoritesExpanded && section === 'favorites' : undefined} onClick={() => item.id === 'favorites' ? leaveProfile(() => { setFavoritesExpanded(section === 'favorites' ? !favoritesExpanded : true); setSection('favorites'); content.current?.scrollTo({ top: 0 }); }) : selectSection(item.id)}><item.icon size={20}/>{tr(item.title)}{counts[item.id] !== undefined && <span>{counts[item.id]}</span>}</button>
-            {item.id === 'favorites' && section === 'favorites' && favoritesExpanded && <FavoritesSidebar folders={folders} entries={entries} active={favoriteFolder} onSelect={selectFavoriteFolder}/>}
+            {item.id === 'favorites' && <FavoritesSidebar expanded={section === 'favorites' && favoritesExpanded} folders={folders} entries={entries} active={favoriteFolder} onSelect={selectFavoriteFolder}/>}
           </React.Fragment>)}
         </nav>
         <MusicFootprint uid={user.uid} count={entries.length}/>

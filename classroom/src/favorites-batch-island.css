@@ -3,8 +3,6 @@
 .favorites-batch-island.is-closing{animation:favorites-island-leave .16s ease-in both;pointer-events:none}
 .favorites-batch-island button{font-family:inherit;color:#fff4e8;white-space:nowrap;cursor:pointer}
 .favorites-batch-island :is(button,input):focus-visible{outline:2px solid #ffbc9a;outline-offset:4px}
-.favorites-island-select-all{display:flex;align-items:center;gap:8px;flex-shrink:0;cursor:pointer;color:#f7e4d3}
-.favorites-island-select-all>input{width:17px;height:17px;margin:0;accent-color:#ed967d;cursor:pointer}
 .favorites-batch-island .favorites-island-count{display:flex;align-items:center;gap:7px;color:#d9bfa9;white-space:nowrap;min-width:83px}
 .favorites-batch-island .favorites-island-count>strong{color:#fff6ed;font-size:21px;line-height:1.2;font-weight:700;font-variant-numeric:tabular-nums}
 .favorites-island-actions{display:flex;align-items:center;gap:8px;border-left:1px solid #ffffff26;padding-left:18px}
