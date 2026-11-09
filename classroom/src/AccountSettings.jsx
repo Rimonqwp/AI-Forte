@@ -10,6 +10,8 @@ import { prepareAvatar } from './profile-editor.js';
 import { LoginHistory } from './LoginHistory.jsx';
 import './account-settings.css';
 import { ProfilePreferences } from './ProfilePreferences.jsx';
+import { FavoritesLibrary, FavoritesSidebar, MusicFootprint } from './FavoritesLibrary.jsx';
+import { usePlaylists } from './favorites-store.js';
 
 const sections = [
   { id: 'profile', title: '账号资料', icon: UserCircle, group: '用户设定' },
@@ -22,7 +24,10 @@ const providerNames = { 'google.com': 'Google', 'github.com': 'GitHub', 'apple.c
 
 export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bindings, initialSection = 'profile' }) {
   const language = useLanguage(), dialog = useRef(null), close = useRef(onClose), content = useRef(null);
-  const [favorites] = useCloudState('favorites', []);
+  const [favorites, setFavorites] = useCloudState('favorites', []);
+  const [playlists, setPlaylists] = usePlaylists(user.uid);
+  const [favoritesExpanded, setFavoritesExpanded] = useState(initialSection === 'favorites');
+  const [favoriteFolder, setFavoriteFolder] = useState('default'), [playlistEditor, setPlaylistEditor] = useState(null);
   const [arrangements] = useCloudState('practice-favorites', [], 'classroom.practice.saved');
   const [recent] = useScoreHistory(user.uid, 'recent');
   const [practiced] = useScoreHistory(user.uid, 'practiced');
@@ -53,6 +58,8 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
     action();
   };
   const selectSection = id => leaveProfile(() => { setSection(id); content.current?.scrollTo({ top: 0 }); });
+  const selectFavoriteFolder = id => leaveProfile(() => { setFavoriteFolder(id); setSection('favorites'); setFavoritesExpanded(true); content.current?.scrollTo({ top: 0 }); });
+  const createPlaylist = () => leaveProfile(() => { setSection('favorites'); setFavoritesExpanded(true); setPlaylistEditor({}); content.current?.scrollTo({ top: 0 }); });
   const requestClose = () => leaveProfile(onClose);
   close.current = requestClose;
   const choosePhoto = async event => {
@@ -124,18 +131,20 @@ export function AccountSettings({ user, onClose, returnFocus, onSaveProfile, bin
         <nav className="settings-navigation" aria-label={tr('账号设定导航')}>
           {sections.map((item, index) => <React.Fragment key={item.id}>
             {(index === 0 || sections[index - 1].group !== item.group) && <span className="settings-nav-group">{tr(item.group)}</span>}
-            <button aria-current={section === item.id ? 'page' : undefined} aria-controls="settings-content" onClick={() => selectSection(item.id)}><item.icon size={20}/>{tr(item.title)}{counts[item.id] !== undefined && <span>{counts[item.id]}</span>}</button>
+            <button aria-current={section === item.id ? 'page' : undefined} aria-controls={item.id === 'favorites' ? 'settings-content favorites-folders' : 'settings-content'} aria-expanded={item.id === 'favorites' ? favoritesExpanded && section === 'favorites' : undefined} onClick={() => item.id === 'favorites' ? leaveProfile(() => { setFavoritesExpanded(section === 'favorites' ? !favoritesExpanded : true); setSection('favorites'); content.current?.scrollTo({ top: 0 }); }) : selectSection(item.id)}><item.icon size={20}/>{tr(item.title)}{counts[item.id] !== undefined && <span>{counts[item.id]}</span>}</button>
+            {item.id === 'favorites' && section === 'favorites' && favoritesExpanded && <FavoritesSidebar favorites={favorites} playlists={playlists} active={favoriteFolder} onSelect={selectFavoriteFolder} onCreate={createPlaylist}/>}
           </React.Fragment>)}
         </nav>
-        <div className="settings-sidebar-footer"><img className="settings-brand-logo" src={import.meta.env.BASE_URL + 'assets/brand/puyadao-sprout-icon.png'} alt={tr('谱芽岛')}/><div className="settings-footer-copy"><strong>{tr('谱芽岛')}</strong><small>{tr('让喜欢的歌，在指尖靠岸。')}</small></div></div>
+        <MusicFootprint uid={user.uid} favorites={favorites}/>
       </aside>
       <div className="settings-workspace">
         <header className="settings-topbar"><div><span id="account-settings-title">{tr('账号设定')}</span><span className="settings-breadcrumb">/</span><strong>{tr(current.title)}</strong></div><button className="settings-close" aria-label={tr('关闭账号设定')} disabled={saving || bindingBusy} onClick={requestClose}><X size={20}/></button></header>
         <div className="settings-scroll" ref={content}>
-          <div className={`settings-content${section === 'profile' ? ' settings-profile-content' : section === 'recent' ? ' settings-recent-content' : ''}`} id="settings-content" key={section}>
+          <div className={`settings-content${section === 'profile' ? ' settings-profile-content' : section === 'recent' ? ' settings-recent-content' : section === 'favorites' ? ' settings-favorites-content' : ''}`} id="settings-content" key={section}>
             <div className="settings-page-heading"><h2>{tr(current.title)}</h2>
             <p className="settings-description">{tr(section === 'favorites' ? '喜欢的歌曲，随时回来继续练习。' : section === 'scores' ? '收藏编配、重拾练习，让你的乐谱井井有条。' : section === 'recent' ? '找回刚刚听见、看过的旋律。' : section === 'profile' ? '让音乐伙伴认识你。' : section === 'security' ? '查看当前会话与此浏览器保存的成功登录记录。' : '选择你习惯的语言，让每一次练习更自在。')}</p>{section === 'profile' && <img className="settings-profile-art" src={import.meta.env.BASE_URL + 'assets/account-settings/score-sprout.png'} alt="" aria-hidden="true"/>}</div>
-            {['favorites', 'scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}
+            {section === 'favorites' && <FavoritesLibrary favorites={favorites} setFavorites={setFavorites} playlists={playlists} setPlaylists={setPlaylists} active={favoriteFolder} setActive={selectFavoriteFolder} editor={playlistEditor} setEditor={setPlaylistEditor} onClose={onClose}/>}
+            {['scores', 'recent'].includes(section) && <SettingsLibrary key={section} section={section} user={user} onClose={onClose}/>}
             {section === 'profile' && <div className="profile-editor" aria-busy={saving || readingPhoto}>
               <div className="profile-avatar-row">
                 <button type="button" className="profile-avatar-trigger" aria-label={tr('更换头像')} title={`${tr('更换头像')} · ${tr('支持 JPG、PNG，最大 5 MB')} · ${tr('头像仅保存在当前浏览器，按账号分别保存。')}`} disabled={saving || bindingBusy || readingPhoto} onClick={() => fileInput.current?.click()}>

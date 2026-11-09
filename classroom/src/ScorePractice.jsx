@@ -4,6 +4,8 @@ import ABCJS from 'abcjs';
 import {ArrowLeft, MusicNotes, MusicNote, Guitar, Play, Pause, Stop, Heart, ShareNetwork, Printer, Moon, Sun, Minus, Plus, Microphone, GameController, ArrowsOut, Clock, FloppyDisk} from '@phosphor-icons/react';
 import './score-practice.css';
 import {PracticeSelect, PracticeMetronome} from './PracticeControls.jsx';
+import { useTrackPracticeTime } from './favorites-store.js';
+import { useAccount } from './account-context.js';
 
 // Original sight-reading exercises. These are deliberately not a transcription of the selected song.
 const phrases = [
@@ -35,6 +37,8 @@ function Staff({phrase,index,active}) {
   return <div className={`practice-staff ${active?'is-playing':''}`}><small>{index*4+1}</small><div ref={host}/></div>;
 }
 export default function ScorePractice({song,version,onClose,dialogRef}) {
+  const { user } = useAccount();
+  useTrackPracticeTime(user?.uid, song.id);
   const [type,setType]=useState(version.type==='和弦谱'?'和弦谱':version.type==='简谱'?'简谱':'五线谱');
   const [openControl,setOpenControl]=useState(null);
   const [zoom,setZoom]=useState(100),[dark,setDark]=useState(false),[auto,setAuto]=useState(false);
