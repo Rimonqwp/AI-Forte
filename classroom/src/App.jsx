@@ -5,6 +5,7 @@ import { tr, useLanguage } from './language.js';
 import { CustomSelect } from './CustomSelect.jsx';
 import { MusicSearch, matchesSong } from './MusicSearch.jsx';
 import { SearchBanner } from './SearchBanner.jsx';
+import { BrandIdentity } from './BrandIdentity.jsx';
 import { MusicNotes, MagnifyingGlass, Bell, CaretDown, CaretRight, CheckCircle, CheckSquare, PianoKeys, Guitar, GraduationCap, Star, Fire, Play, Pause, Heart, UsersThree, ChatsCircle, ChatCircle, CloudArrowUp, Trophy, Microphone, X, ArrowUp, ArrowLeft, Metronome, List, Headphones, BookOpen, SpeakerHigh, Check } from '@phosphor-icons/react';
 
 const assets = import.meta.env.BASE_URL + 'assets/';
@@ -105,7 +106,7 @@ export function App({ userName = '音乐同学' }) {
       <div className="footer-inner">
         <div className="footer-main">
           <div className="footer-about">
-            <a className="brand footer-brand" href="#" onClick={e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});}} aria-label={tr("谱芽岛，返回顶部")}><MusicNotes size={37} weight="duotone"/><span><strong>{tr("谱芽岛")}</strong><small>{tr("让喜欢的歌，在指尖靠岸。")}</small></span></a>
+            <a className="brand footer-brand" href="#" onClick={e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});}} aria-label={tr("谱芽岛，返回顶部")}><BrandIdentity/></a>
             <p>{tr("从第一个音符，到第一首完整的歌。")}<br/>{tr("陪你慢慢学，开心唱，自在弹。")}</p>
           </div>
           <div className="footer-links" role="navigation" aria-label={tr("页尾快捷入口")}>

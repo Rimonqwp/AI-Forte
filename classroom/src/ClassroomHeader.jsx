@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { MusicNotes, Globe, Bell, CaretDown, Heart, Check, List, PianoKeys, Guitar, UserCircle, SignOut, GearSix } from '@phosphor-icons/react';
 import { useAccount } from './account-context.js';
 import { languages, setLanguage, tr, useLanguage } from './language.js';
+import { BrandIdentity } from './BrandIdentity.jsx';
 import './classroom-header.css';
 
 export function shortenName(name) {
@@ -50,7 +51,7 @@ export function ClassroomHeader({ userName = '音乐同学', assets, isSearchPag
 
   return <header className="site-header" ref={header}>
     <div className="header-inner">
-      <a href="#" className="brand" aria-label={tr('首页')} onClick={event => { event.preventDefault(); run(onHome); }}><MusicNotes size={42} weight="duotone"/><span><strong>{tr('谱芽岛')}</strong><small>{tr('让喜欢的歌，在指尖靠岸。')} <MusicNotes size={11}/></small></span></a>
+      <a href="#" className="brand" aria-label={tr('谱芽岛') + ' · ' + tr('首页')} onClick={event => { event.preventDefault(); run(onHome); }}><BrandIdentity/></a>
       <nav aria-label={tr('主导航')} className={mobileNav ? 'open' : ''}>
         <button className={!isSearchPage ? 'nav-active' : ''} onClick={() => run(onHome)}>{tr('首页')}</button>
         <button className={isSearchPage ? 'nav-active' : ''} onClick={() => run(() => onResults())}>{tr('乐谱')}</button>

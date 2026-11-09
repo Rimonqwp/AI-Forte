@@ -1,0 +1,37 @@
+.brand .brand-logo {
+  display: block;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+}
+.brand .brand-copy { display: grid; gap: 4px; min-width: 0; }
+.brand .brand-copy > strong {
+  font-family: 'Songti SC', 'STSong', serif;
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 2px;
+}
+.brand .brand-copy > small {
+  display: block;
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .5px;
+}
+.footer-main .footer-about > p { margin-left: 56px; }
+@media (max-width: 1150px) {
+  .site-header .brand .brand-logo { width: 40px; height: 40px; }
+  .site-header .brand .brand-copy > strong { font-size: 19px; }
+  .site-header .brand .brand-copy > small { font-size: 10px; letter-spacing: 0; }
+}
+@media (max-width: 1050px) {
+  .footer-main .footer-about > p { margin-left: 0; }
+}
+@media (max-width: 600px) {
+  .site-header .brand .brand-logo { width: 36px; height: 36px; }
+  .site-header .brand .brand-copy { gap: 2px; }
+  .site-header .brand .brand-copy > strong { font-size: 18px; letter-spacing: 1px; }
+  .site-header .brand .brand-copy > small { font-size: 9px; }
+}

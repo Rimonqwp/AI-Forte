@@ -218,3 +218,7 @@ The user removed the entire Recently Viewed artist recommendation strip, includi
 The Recently Viewed statistics background was regenerated for the 谱芽岛 theme: warm watercolor paper, ukulele and music books on a small island at the left, a sheet-music paper boat and sprouts at the right, with the center kept quiet for live statistics. Keep decorative artwork clear of the text and chart.
 
 Keep the Today preview-duration badge on the same header row as 近 7 天预览时长, vertically centered with that heading. Do not lift the badge with a negative top margin.
+
+## Shared brand logo
+
+The user designated the settings sidebar signature as the site's brand identity. Reuse `public/assets/brand/puyadao-sprout-icon.png` in the main navigation, page footer and browser favicon. In the header and footer, place the transparent sprout/note emblem to the left of two stacked lines: 谱芽岛 and 让喜欢的歌，在指尖靠岸。. Keep the warm serif wordmark, responsive icon sizes, existing navigation actions and shared content alignment; do not substitute a generic music-note icon for the brand.
