@@ -9,8 +9,11 @@ import { BrandIdentity } from './BrandIdentity.jsx';
 import { useCatalog } from './useCatalog.js';
 import SongDiscussions from './SongDiscussions.jsx';
 import { HomeCommunity } from './HomeCommunity.jsx';
+import { ClassroomFooter } from './ClassroomFooter.jsx';
 import { MusicNotes, MagnifyingGlass, Bell, CaretDown, CaretRight, CheckCircle, CheckSquare, PianoKeys, Guitar, GraduationCap, Star, Fire, Play, Pause, Heart, UsersThree, ChatsCircle, ChatCircle, CloudArrowUp, Trophy, Microphone, X, ArrowUp, ArrowLeft, Metronome, List, Headphones, BookOpen, SpeakerHigh, Check } from '@phosphor-icons/react';
 
+const homeSongOrder = ['star','sunny','confession','night','castle','rice'];
+const homeRank = song => {const index=homeSongOrder.indexOf(song.id);return index<0?homeSongOrder.length:index;};
 const assets = import.meta.env.BASE_URL + 'assets/';
 const features = [
   { id:'reading', title:'识谱入门', desc:'认识音符、节拍、调号', color:'lilac' },
@@ -26,7 +29,7 @@ function Rating({level}) { return <span className="rating" aria-label={`难度 $
 export function App({ userName = '音乐同学' }) {
   useLanguage();
   const {songs: catalogSongs} = useCatalog();
-  const songs = catalogSongs.filter(song => song.home);
+  const songs = catalogSongs.filter(song => song.home).sort((a,b)=>homeRank(a)-homeRank(b));
   const [searchReset,setSearchReset]=useState(0);
   const [query,setQuery]=useState(''); const [search,setSearch]=useState(''); const [filter,setFilter]=useState('全部');
   const [tab,setTab]=useState('推荐'); const [saved,setSaved]=useCloudState('favorites',[]); const [liked,setLiked]=useCloudState('likes',[]);
@@ -56,6 +59,19 @@ export function App({ userName = '音乐同学' }) {
     window.addEventListener('classroom:login-navigation', navigate);
     return () => window.removeEventListener('classroom:login-navigation', navigate);
   });
+  useEffect(() => {
+    const value = sessionStorage.getItem('classroom.pendingHomeAction');
+    if (!value) return;
+    sessionStorage.removeItem('classroom.pendingHomeAction');
+    try {
+      const pending = JSON.parse(value);
+      if (pending.action === 'open' && pending.value?.type) open(pending.value);
+      else if (pending.action === 'community') {
+        setTab(pending.value || '推荐');
+        requestAnimationFrame(() => document.getElementById('community')?.scrollIntoView({block:'start'}));
+      }
+    } catch { /* Ignore an invalid or outdated navigation request. */ }
+  }, []);
   const toggleSaved=(id)=>{setSaved(s=>s.includes(id)?s.filter(x=>x!==id):[...s,id]);};
   const play=async()=>{
     if(playing){stopAudio();return;}
@@ -96,22 +112,7 @@ export function App({ userName = '音乐同学' }) {
         <HomeCommunity category={tab} onCategoryChange={setTab} onOpen={open} dialogOpen={!!modal}/>
       </div>
     </main>
-    <footer className="site-footer">
-      <div className="footer-inner">
-        <div className="footer-main">
-          <div className="footer-about">
-            <a className="brand footer-brand" href="#" onClick={e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'});}} aria-label={tr("谱芽岛，返回顶部")}><BrandIdentity/></a>
-            <p>{tr("从第一个音符，到第一首完整的歌。")}<br/>{tr("陪你慢慢学，开心唱，自在弹。")}</p>
-          </div>
-          <div className="footer-links" role="navigation" aria-label={tr("页尾快捷入口")}>
-            <div><h2>{tr("开始学音乐")}</h2><button onClick={()=>open({type:'lesson',title:'零基础入门'})}>{tr("零基础入门")}</button><button onClick={()=>scrollTo('scores')}>{tr("发现好乐谱")}</button><button onClick={()=>open({type:'lesson',title:'我的学习计划'})}>{tr("我的学习计划")}</button></div>
-            <div><h2>{tr("遇见音乐同好")}</h2><button onClick={()=>scrollTo('community')}>{tr("作品社区")}</button><button onClick={()=>{scrollTo('community');setTab('学习交流');}}>{tr("学习交流")}</button><button onClick={()=>open({type:'discussions'})}>{tr("音乐比赛")}</button></div>
-          </div>
-          <div className="footer-encouragement"><span className="footer-note" aria-hidden="true"><MusicNotes size={24} weight="duotone"/></span><p>{tr("每天一小段，")}<br/><strong>{tr("离喜欢的音乐近一点。")}</strong></p><button onClick={()=>scrollTo('scores')}>{tr("今天也来练一首 ")}<CaretRight size={15}/></button></div>
-        </div>
-        <div className="footer-bottom"><small>© {new Date().getFullYear()}{tr(" 谱芽岛 ")}<span>·</span>{tr(" 用音乐记录每一点进步")}</small><span className="footer-demo">{tr("谱面示例 · 社区内容随账号保存")}</span><button className="back-to-top" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})}>{tr("返回顶部 ")}<ArrowUp size={15}/></button></div>
-      </div>
-    </footer>
+    <ClassroomFooter onOpen={open} onScores={()=>scrollTo('scores')} onCommunity={category=>{scrollTo('community');if(category)setTab(category);}}/>
     {toast&&<div className="toast" role="status"><CheckCircle size={22} weight="duotone"/>{toast}</div>}
     {modal&&<div className="modal-backdrop" onClick={e=>{if(e.target===e.currentTarget)closeModal();}}><section className={'modal modal-'+modal.type} ref={dialog} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="modal-title"><button className="close-modal icon-button" aria-label={tr("关闭弹窗")} onClick={closeModal}><X size={24}/></button>
       {['preview','practice','post'].includes(modal.type)&&<><span className="eyebrow"><MusicNotes size={17}/>{tr(" PUYA ISLAND · 一起享受音乐")}</span><h2 id="modal-title">{modal.type==='post'?modal.post.title:modal.song.title}<small>{modal.type==='practice'?'跟着乐谱，慢慢弹好每一个音':modal.type==='post'?'作品欣赏 · 练习伴奏试听':'乐谱预览'}</small></h2><img className="practice-score" src={assets+`score-${modal.song.id}.png`} alt={`${modal.song.title}乐谱预览`}/><div className="practice-info"><span><Instrument name={modal.song.instrument} size={18}/>{tr(modal.song.instrument)}</span><span>{modal.song.key}</span><Rating level={modal.song.level}/></div><label className="tempo-label">{tr("练习速度 ")}<b>{tempo} BPM</b><input type="range" min="40" max="160" value={tempo} onChange={e=>{stopAudio();setTempo(Number(e.target.value));}}/></label><progress max="100" value={progress} aria-label={tr("试听进度")}/><div className="modal-actions"><button className="outline-button" onClick={()=>{toggleSaved(modal.song.id);}}><Heart size={18} weight={saved.includes(modal.song.id)?'fill':'regular'}/>{saved.includes(modal.song.id)?'已收藏':'收藏乐谱'}</button><button className="coral-button" onClick={play}>{playing?<Pause size={19} weight="fill"/>:<Play size={19} weight="fill"/>}{playing?'暂停试听':modal.song.id==='star'?'播放小星星旋律':'播放练习音阶'}</button>{modal.type==='preview'&&<button className="outline-button" onClick={()=>open({...modal,type:'practice'})}>{tr("开始练习")}<CaretRight size={16}/></button>}</div><p className="modal-footnote">{modal.song.id==='star'?'用熟悉的旋律练习识谱，按自己的节奏来。':'插画乐谱为设计演示素材，音阶试听用于练习节拍。'}</p></>}

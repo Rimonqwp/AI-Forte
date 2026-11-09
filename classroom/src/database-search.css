@@ -16,14 +16,12 @@
 :root[data-theme=dark] .score-search-page.database-search .results-type-tabs > button.selected { background:#774334!important; color:#fff0df!important; border-color:#e09b7c!important; }
 :root[data-theme=dark] .score-search-page.database-search .results-type-tabs > button > svg { color:#efb295; }
 .database-search .sort-select { display:flex; align-items:center; gap:6px; font-size:13px; }
-.database-search .results-score-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:20px 16px; }
+.database-search .results-score-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px 15px; }
 .database-search .score-card { min-width:0; height:auto; }
-.database-search .score-info { padding:11px 12px 14px; }
-.database-search .score-title { gap:5px; }
-.database-search .score-artist { margin-top:8px; }
-.database-search .score-meta { margin:12px 0; }
 .database-search button:disabled { opacity:.6; cursor:wait; }
-@media(max-width:1100px) { .database-search .results-score-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
-@media(max-width:850px) { .database-search .results-score-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px 10px; } }
-@media(max-width:600px) { .database-search .results-score-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .database-search .results-heading-row {gap:10px;} .database-search .results-heading-row h2 {width:100%;font-size:18px;} .database-search .results-type-tabs {max-width:100%;} .database-search .results-panel {padding:var(--panel-inset);} }
+@media(max-width:1250px) { .database-search .results-score-grid { grid-template-columns:repeat(4,minmax(0,1fr)); } }
+@media(max-width:1000px) { .database-search .results-score-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px 10px; } }
+@media(max-width:600px) { .database-search .results-heading-row {gap:10px;} .database-search .results-heading-row h2 {width:100%;font-size:18px;} .database-search .results-type-tabs {max-width:100%;} .database-search .results-panel {padding:var(--panel-inset);} }
 @media(max-width:600px) { .score-search-page.database-search .results-type-tabs {gap:6px;} .score-search-page.database-search .results-type-tabs > button {padding:0 10px;font-size:12px;} }
+
+@media(max-width:520px) { .database-search .results-score-grid {grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;} }

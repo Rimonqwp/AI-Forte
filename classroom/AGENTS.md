@@ -280,3 +280,7 @@ Keep selected sidebar favorite folders transparent with a small coral vertical r
 ## Preserve the homepage community design
 
 Database integration must preserve the homepage community's existing title and category tabs, left artwork-card grid, right Featured Discussions panel, shared paper styling and responsive layout. Do not replace this section with the song-detail discussion list or add a nested discussion panel. Read posts, replies and interaction counts from the database; show honest loading, error and empty states when there are no records. Post details and publishing can reuse the discussion component inside the existing dialog.
+
+## Preserve all interfaces during data integration
+
+Keep the existing header, hero, shared footer, search-card layout and responsive breakpoints, arrangement controls, discussion-card anatomy, practice toolbar and account-settings shell when connecting data sources. Preserve the latest user-approved button fixes and all pending design edits. Data changes may change counts and empty states; retain the original icon/statistic slots and use clear unavailable values instead of fabricated activity or ratings. Verify each affected surface against a pre-change render before delivery.

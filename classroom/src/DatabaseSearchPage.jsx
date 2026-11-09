@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ClassroomHeader } from './ClassroomHeader.jsx';
+import { ClassroomFooter } from './ClassroomFooter.jsx';
 import { SearchBanner } from './SearchBanner.jsx';
 import { DatabaseSearchResults } from './DatabaseSearchResults.jsx';
 import { useCatalog } from './useCatalog.js';
@@ -19,13 +20,15 @@ export function DatabaseSearchPage({hash}) {
       if (value.type === 'practice') window.dispatchEvent(new CustomEvent('classroom:open-song', {detail: {id: value.song.id}}));
       else window.location.hash = 'song?id=' + encodeURIComponent(value.song.id);
     } else {
+      sessionStorage.setItem('classroom.pendingHomeAction', JSON.stringify({action:'open', value}));
       home();
-      requestAnimationFrame(() => window.dispatchEvent(new CustomEvent('classroom:login-navigation', {detail: {action: 'open', value}})));
     }
   };
+  const community = category => {sessionStorage.setItem('classroom.pendingHomeAction', JSON.stringify({action:'community', value:category})); home();};
   return <>
-    <ClassroomHeader assets={import.meta.env.BASE_URL + 'assets/'} isSearchPage savedCount={saved.length} onHome={home} onResults={search} onCommunity={() => {home(); requestAnimationFrame(() => document.getElementById('community')?.scrollIntoView());}} onOpen={open} checkedIn={checkins.includes(localDay())} onCheckIn={() => setCheckins(items => [...new Set([...items, localDay()])].slice(-1000))}/>
+    <ClassroomHeader assets={import.meta.env.BASE_URL + 'assets/'} isSearchPage savedCount={saved.length} onHome={home} onResults={search} onCommunity={community} onOpen={open} checkedIn={checkins.includes(localDay())} onCheckIn={() => setCheckins(items => [...new Set([...items, localDay()])].slice(-1000))}/>
     <SearchBanner term={term} locationHash={hash} songs={songs} onSearch={search} onLink={url => open({type:'link', url})}/>
     <DatabaseSearchResults term={term} resetKey={resetKey} saved={saved} onSave={id => setSaved(items => items.includes(id) ? items.filter(item => item !== id) : [...items, id])} onOpen={open}/>
+    <ClassroomFooter onOpen={open} onScores={()=>document.querySelector('.database-search')?.scrollIntoView({behavior:'smooth'})} onCommunity={community}/>
   </>;
 }
