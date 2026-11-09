@@ -70,7 +70,8 @@ html:has(.login-page) { overflow-x: clip; }
   opacity: .65;
 }
 .login-close:hover, .login-close:focus-visible { background: #fae6d8; opacity: 1; }
-.login-panel-brand { justify-content: center; margin-left: 116px; gap: 14px; height: 66px; }
+.login-cherry-foreground { position: absolute; z-index: 3; top: -83px; right: -68px; width: 260px; max-width: none; height: auto; pointer-events: none; user-select: none; }
+.login-panel-brand { justify-content: center; gap: 14px; height: 66px; }
 .login-panel-brand .brand-logo { width: 64px; height: 64px; }
 .login-panel-brand .brand-copy { gap: 6px; }
 .login-panel-brand .brand-copy > strong { font-size: 34px; line-height: 1.25; letter-spacing: 3px; font-weight: 800; }
@@ -138,7 +139,7 @@ html:has(.login-page) { overflow-x: clip; }
   .login-page .site-header .brand-copy > small { font-size: 10px; }
   .login-scene { padding: 48px 28px; min-height: max(950px, calc(100dvh - 67px)); }
   .login-card { width: 505px; padding-right: 32px; padding-left: 32px; }
-  .login-panel-brand { margin-left: 95px; }
+  .login-cherry-foreground { width: 220px; top: -72px; right: -54px; }
   .login-panel-brand .brand-copy > strong { font-size: 30px; }
   .login-panel-brand .brand-copy > small { font-size: 12px; }
   .login-subtitle { font-size: 21px; gap: 10px; }
@@ -149,7 +150,7 @@ html:has(.login-page) { overflow-x: clip; }
   .login-scene { padding: 36px 24px; min-height: max(950px, calc(100dvh - 67px)); }
   .login-background { object-position: 35% center; }
   .login-card { width: 460px; padding-right: 28px; padding-left: 28px; border-radius: 48px; }
-  .login-panel-brand { margin-left: 70px; }
+  .login-cherry-foreground { width: 200px; }
   .login-panel-brand .brand-copy > strong { font-size: 28px; }
   .login-panel-brand .brand-logo { width: 55px; height: 55px; }
   .login-panel-brand .brand-copy > small { font-size: 11px; }
@@ -171,7 +172,8 @@ html:has(.login-page) { overflow-x: clip; }
   .login-scene { justify-content: center; padding: 24px 14px 38px; min-height: calc(100dvh - 64px); }
   .login-background { object-position: 35% center; }
   .login-card { width: 100%; min-height: 770px; padding: 27px 24px 42px; border-radius: 38px; }
-  .login-panel-brand { margin-left: 42px; gap: 9px; height: 56px; }
+  .login-cherry-foreground { width: 144px; top: -50px; right: -34px; }
+  .login-panel-brand { gap: 9px; height: 56px; }
   .login-panel-brand .brand-logo { width: 49px; height: 49px; }
   .login-panel-brand .brand-copy > strong { font-size: 26px; letter-spacing: 2px; }
   .login-panel-brand .brand-copy > small { font-size: 10px; }

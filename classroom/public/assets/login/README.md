@@ -4,7 +4,7 @@
 
 ## 当前使用
 
-以下三张图片于 2026-11-09 逐张调用内置 ImageGen 生成，输出复制到本目录；未使用 CLI，也未将整页截图当作界面。
+以下图片于 2026-11-09 逐张调用内置 ImageGen 生成，输出复制到本目录；未使用 CLI，也未将整页截图当作界面。
 
 | 文件 | 实际尺寸 | 格式 | 完整提示词 |
 | --- | --- | --- | --- |
@@ -12,10 +12,12 @@
 | [cat-peek-v3.png](cat-peek-v3.png) | 1683 × 935 | RGBA PNG | [提示词](cat-peek-v3.prompt.md) |
 | [card-paper-v3.png](card-paper-v3.png) | 999 × 1575 | RGB PNG | [提示词](card-paper-v3.prompt.md) |
 | [laurel-v2.png](laurel-v2.png) | 845 × 1862 | RGBA PNG | [提示词](laurel-v2.prompt.md) |
+| [cherry-foreground.png](cherry-foreground.png) | 1448 × 1086 | RGBA PNG | [提示词](cherry-foreground.prompt.md) |
 
 - `mirrored-room-v3.png` 是连续的音乐教室插画背景，包含女孩、尤克里里、睡猫、钢琴、地毯和书本；不包含导航或登录控件。
 - `cat-peek-v3.png` 是卡片上的探头小猫与嫩芽透明装饰。
 - `card-paper-v3.png` 只含纸张纹理、淡色音符线条和底部纸浪，不含文字或控件。
+- `cherry-foreground.png` 是后续按浏览器批注单独调用内置 ImageGen 生成的透明樱花枝，在镜像构图的卡片上方跨过边框；随屏幕收小，不遮挡品牌文字，也不拦截点击。
 - `laurel-v2.png` 是先前单独生成的清晰月桂枝，继续在底部说明两侧镜像复用。
 - `google.svg` 为 [FirebaseUI 官方 Google 图标](https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg)。
 - 品牌复用 `../brand/puyadao-sprout-icon.png`；界面图标使用 Phosphor，手写欢迎标题复用 Ma Shan Zheng。

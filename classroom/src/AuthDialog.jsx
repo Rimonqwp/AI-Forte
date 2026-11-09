@@ -80,6 +80,7 @@ export function AuthDialog({ user, busy, error, onLogin, onPasswordLogin, onPass
       <main className="login-scene">
         <img className="login-background" src={artwork + 'mirrored-room-v3.png'} alt={tr('夕阳照进音乐教室，女孩戴着耳机弹尤克里里，小猫在柔软的地毯上安睡')}/>
         <section className="login-card" aria-label={tr('账号登录')}>
+          <img className="login-cherry-foreground" src={artwork + 'cherry-foreground.png'} alt="" aria-hidden="true" draggable="false"/>
           <button className="login-close" aria-label={tr('关闭登录窗口')} disabled={busy} onClick={onClose}><X size={19}/></button>
           <div className="login-panel-brand brand"><BrandIdentity/></div>
           <h1 id="login-page-title" className="login-title">{tr(retry ? '完成账号同步' : '欢迎回来！')}</h1>

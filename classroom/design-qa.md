@@ -1,3 +1,21 @@
+# 登录卡片樱花前景与品牌居中核对（2026-11-09）
+
+final result: passed
+
+- 来源：用户本次浏览器批注1要求让背景樱花伸入卡片，批注2要求卡片顶部品牌整体水平居中。沿当前镜像构图和标记处背景外缘叠加花枝；原参考仍为 `design-reference/login-mirrored-reference.png`。
+- 预览：`http://127.0.0.1:4173/static/classroom/?login=1`，简体中文、浅色、空表单。修改前证据 `design-reference/login-qa/cherry-brand-before.png`；最终桌面 `cherry-brand-desktop.png`，两者 CSS viewport 均1704 × 1310、DPR 1，实际截图均1694 × 1302。
+- 对照证据：将前后截图等比例归一化至1704 × 1310后生成 `cherry-brand-comparison.jpg`；卡片上方局部并排为 `cherry-brand-focused.jpg`，两张均已打开对照。最终局部 `cherry-brand-detail.png` 保留了花枝、卡片边框、品牌和标题上下文。
+- 字体：维持品牌原有字号、字重、行距；仅移除各断点左侧补偿 margin。品牌两个子项的联合边界中心与卡片中心在桌面、768px平板和360px手机均相差0px。
+- 间距：卡片位置、尺寸、表单行距及标题位置保留。新增花枝为绝对定位，跨卡片上方边框；手机和平板同步缩小，未引入横向溢出。
+- 配色：原纸张、暖棕品牌文字和按钮配色保持一致；前景花枝沿用教室原图的粉白花瓣、暖棕树枝和橄榄绿叶片。
+- 图像：`public/assets/login/cherry-foreground.png` 单独调用内置 ImageGen 生成，1448 × 1086 RGBA，alpha范围0–255，原始提示词同目录保存。装饰图片不包含文字或控件，pointer-events:none，位于卡片之上、关闭按钮之下。
+- 文案：未改动页面文案或认证逻辑；装饰图 alt 为空并 aria-hidden，不增加屏幕阅读器噪音。
+- 响应式证据：`cherry-brand-mobile.png` 为360 × 800 CSS视口，`cherry-brand-tablet.png` 为768 × 1024 CSS视口。已检查花枝不遮品牌/标题，品牌居中，输入控件可见。桌面和平板通过 elementFromPoint 确认关闭按钮命中；浏览器 error 日志为空。
+- 验证：`npm run build` 通过；保留既有 Firebase 混合导入和bundle大小提示。此次未修改认证状态、用户资料、服务端逻辑，也未为局部可逆样式增加重复实现测试。
+- 发现：最终前后对照未发现需要修正的P0/P1/P2；花枝为参考图风格的独立重绘素材，局部笔触差异按P3记录。预览已恢复默认桌面尺寸并保持打开。
+
+---
+
 # 镜像布局登录页核对（2026-11-09）
 
 final result: passed
