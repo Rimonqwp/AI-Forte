@@ -58,6 +58,18 @@ export function App({ userName = '音乐同学' }) {
   useEffect(()=>{document.body.style.overflow=modal?'hidden':''; if(!modal)return; const previous=document.activeElement;dialog.current?.focus();const trap=e=>{if(e.key!=='Tab')return;const controls=[...dialog.current.querySelectorAll('button,a[href],input,textarea,select,[tabindex="0"]')].filter(el=>!el.disabled&&el.offsetParent!==null);const first=controls[0],last=controls.at(-1);if(e.shiftKey&&(document.activeElement===first||document.activeElement===dialog.current)){e.preventDefault();last?.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first?.focus();}};document.addEventListener('keydown',trap);return()=>{document.body.style.overflow='';document.removeEventListener('keydown',trap);previous?.focus();};},[modal]);
   const scrollTo=(id)=>{document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});setMenu(null);setMobileNav(false);};
   const find=(text)=>{setQuery(text);setSearch(text.trim());setFilter('全部');scrollTo('scores');};
+  useEffect(() => {
+    const navigate = ({ detail: { action, value } }) => {
+      if (action === 'scores') { find(value ?? '周杰伦'); return; }
+      window.location.hash = '';
+      if (action === 'home') { setSearch(''); setQuery(''); setFilter('全部'); window.scrollTo({top:0}); }
+      else if (action === 'open') open(value);
+      else if (action === 'checkin') { setCheckedIn(true); notify(checkedIn ? '今天已经打卡啦，明天继续！' : '打卡成功！今天也离音乐更近了一步。'); }
+      else if (action === 'community') requestAnimationFrame(() => document.getElementById('community')?.scrollIntoView({behavior:'smooth',block:'start'}));
+    };
+    window.addEventListener('classroom:login-navigation', navigate);
+    return () => window.removeEventListener('classroom:login-navigation', navigate);
+  });
   const toggleSaved=(id)=>{setSaved(s=>s.includes(id)?s.filter(x=>x!==id):[...s,id]);};
   const play=async()=>{
     if(playing){stopAudio();return;}

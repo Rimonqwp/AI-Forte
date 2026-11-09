@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { onIdTokenChanged, updateProfile } from 'firebase/auth';
+import { onIdTokenChanged, updateProfile, setPersistence, browserLocalPersistence, browserSessionPersistence } from 'firebase/auth';
 import { auth, ensureVisitor, readGuestState, signInProvider, signOutAccount, resumeAccountData, saveAccountProfile, accountBindingService, signInPassword, resetLoginPassword } from './firebase.js';
 import { flushCloudStates } from './cloud-stores.js';
 import { AuthDialog } from './AuthDialog.jsx';
@@ -13,7 +13,12 @@ export { useAccount } from './account-context.js';
 export function AuthProvider({ children }) {
   const [, refreshProfile] = useState(0);
   const [user, setUser] = useState(null), [ready, setReady] = useState(false);
-  const [opened, setOpened] = useState(false), [busy, setBusy] = useState(false), [error, setError] = useState(null);
+  const [opened, setOpened] = useState(() => new URLSearchParams(window.location.search).get('login') === '1'), [busy, setBusy] = useState(false), [error, setError] = useState(null);
+  const closeLogin = () => {
+    setOpened(false);
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('login')) { url.searchParams.delete('login'); window.history.replaceState(window.history.state, '', url); }
+  };
   const [settingsSection, setSettingsSection] = useState(null), settingsTrigger = useRef(null);
   const openSettings = (section = 'profile') => {
     settingsTrigger.current = document.activeElement?.closest('.dropdown-wrap')?.querySelector('.profile');
@@ -28,26 +33,28 @@ export function AuthProvider({ children }) {
     if (user && !user.isAnonymous) resumeAccountData(user).catch(value => { setError(value); setOpened(true); });
   }, [user?.uid, user?.isAnonymous]);
 
-  const login = async provider => {
+  const login = async (provider, remember = true) => {
     setBusy(true); setError(null);
     try {
       const result = await signInProvider(provider, async uid => {
         if (!await flushCloudStates(uid)) throw Object.assign(new Error(), { code: 'auth/guest-sync-pending' });
         return readGuestState(uid);
       });
-      setUser(result.user); setOpened(false);
+      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+      setUser(result.user); closeLogin();
       if (result.changedUid) window.location.reload();
     } catch (value) { setUser(auth.currentUser); setError(value); }
     finally { setBusy(false); }
   };
-  const loginPassword = async (email, password) => {
+  const loginPassword = async (email, password, remember = true) => {
     setBusy(true); setError(null);
     try {
       const result = await signInPassword(email, password, async uid => {
         if (!await flushCloudStates(uid)) throw Object.assign(new Error(), {code:'auth/guest-sync-pending'});
         return readGuestState(uid);
       });
-      setUser(result.user); setOpened(false);
+      await setPersistence(auth, remember ? browserLocalPersistence : browserSessionPersistence);
+      setUser(result.user); closeLogin();
       if (result.changedUid) window.location.reload();
     } catch (value) { setUser(auth.currentUser); setError(value); }
     finally { setBusy(false); }
@@ -98,6 +105,6 @@ export function AuthProvider({ children }) {
   return <AccountContext.Provider value={{ user: displayedUser, ready, busy, login, logout, openSettings, openLogin: () => { setError(null); setOpened(true); } }}>
     {ready ? <React.Fragment key={user?.uid || 'offline'}>{children}</React.Fragment> : <div className="account-bootstrap" role="status">正在打开谱芽岛…</div>}
     {settingsSection && user && !user.isAnonymous && <AccountSettings key={`settings-${user.uid}-${settingsSection}`} initialSection={settingsSection} user={displayedUser} onSaveProfile={saveProfile} bindings={bindings} returnFocus={settingsTrigger.current} onClose={() => setSettingsSection(null)}/>}
-    {opened && <AuthDialog user={user} busy={busy} error={error} onLogin={login} onPasswordLogin={loginPassword} onPasswordReset={requestPasswordReset} onRetry={retry} onClose={() => { if (!busy) setOpened(false); }}/>}
+    {opened && <AuthDialog user={user} busy={busy} error={error} onLogin={login} onPasswordLogin={loginPassword} onPasswordReset={requestPasswordReset} onRetry={retry} onClose={() => { if (!busy) closeLogin(); }}/>}
   </AccountContext.Provider>;
 }
