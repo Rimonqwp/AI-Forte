@@ -1,0 +1,4 @@
+.home-community .post-card>h3>button { max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left; font:inherit; }
+.home-community .home-community-empty { min-height:140px; display:flex; flex-direction:column; justify-content:center; gap:10px; padding:18px 0; color:var(--muted); font-size:12px; line-height:1.7; }
+.home-community .home-community-more { display:flex; margin:14px auto 0; }
+.home-community .post-meta>span { min-width:0; overflow:hidden; text-overflow:ellipsis; }
